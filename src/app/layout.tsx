@@ -1,9 +1,9 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import { Ubuntu_Mono } from "next/font/google";
+import { Ubuntu } from "next/font/google";
 
-const roboto = Ubuntu_Mono({
-  weight: "700",
+const roboto = Ubuntu({
+  weight: "300",
   subsets: ["latin"],
   display: "swap",
 });
@@ -20,9 +20,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body
-        className={`${roboto.className} bg-pink-50 text-black dark:bg-zinc-800 dark:text-white`}
-      >
+      <body className={`${roboto.className} bg-background text-text`}>
         {children}
       </body>
     </html>

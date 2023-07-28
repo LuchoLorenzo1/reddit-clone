@@ -39,23 +39,6 @@ CREATE TABLE posts (
 	FOREIGN KEY(reddit_id) REFERENCES reddits(id)
 );
 
-INSERT INTO reddits (name, description) VALUES
-	("tortas", "Apasionados por la pasteleria."),
-	("compus", "Nos encantan las compus."),
-	("viajes", "Conoceremos el mundo.");
-
-INSERT INTO users (name, email) VALUES
-	("juanceto01", "juanceto01@gmail.com"),
-	("momo", "momorelojero@yahoo.com"),
-	("goku", "songoku@gmail.com");
-
-INSERT INTO members (user_id, reddit_id) VALUES
-	(1, 1),
-	(1, 2),
-	(2, 1),
-	(2, 3),
-	(3, 1);
-
 DELIMITER $$
 CREATE TRIGGER joining_a_reddit
 	AFTER INSERT ON members
@@ -73,3 +56,20 @@ CREATE TRIGGER quiting_a_reddit
 		WHERE id = OLD.reddit_id;
 	END $$
 DELIMITER ;
+
+INSERT INTO reddits (name, description) VALUES
+	("tortas", "Apasionados por la pasteleria."),
+	("compus", "Nos encantan las compus."),
+	("viajes", "Conoceremos el mundo.");
+
+INSERT INTO users (name, email) VALUES
+	("juanceto01", "juanceto01@gmail.com"),
+	("momo", "momorelojero@yahoo.com"),
+	("goku", "songoku@gmail.com");
+
+INSERT INTO members (user_id, reddit_id) VALUES
+	(1, 1),
+	(1, 2),
+	(2, 1),
+	(2, 3),
+	(3, 1);

@@ -10,3 +10,16 @@
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+
+:root {
+  --color-primary-50: 248 248 247;
+  --color-primary-100: 241 242 238;
+  --color-primary-200: 220 221 214;
+  --color-primary-300: 198 201 189;
+  --color-primary-400: 156 161 139;
+  --color-primary-500: 113 120 89;
+  --color-primary-600: 102 108 80;
+  --color-primary-700: 68 72 53;
+  --color-primary-800: 51 54 40;
+  --color-primary-900: 34 36 27;
+}
