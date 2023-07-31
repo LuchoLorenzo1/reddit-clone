@@ -22,9 +22,16 @@ const Page: FC<{}> = () => {
         title: formData.get("title"),
         content: formData.get("content"),
       }),
-    }).then((r) => r.json());
+    });
+
+    if (!res.ok) {
+      const data = await res.json();
+      console.log(data.message);
+      return;
+    }
 
     setLoading(false);
+    router.push("/");
   };
 
   return (

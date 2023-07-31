@@ -1,16 +1,8 @@
 "use client";
 
-import { FC, ReactNode, useState } from "react";
+import { FC } from "react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-import {
-  HamburgerMenuIcon,
-  DotFilledIcon,
-  CheckIcon,
-  ChevronRightIcon,
-  CodeIcon,
-  VideoIcon,
-} from "@radix-ui/react-icons";
-import Link from "next/link";
+import { HamburgerMenuIcon, VideoIcon } from "@radix-ui/react-icons";
 
 interface pageProps {}
 
