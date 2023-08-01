@@ -8,7 +8,7 @@ interface pageProps {}
 
 const page: FC<pageProps> = ({}) => {
   return (
-    <div className="grid h-screen w-screen place-items-center bg-gray-300 text-white">
+    <div className="grid h-screen w-screen place-items-center bg-background text-white">
       <DropdownMenuDemo />
     </div>
   );
@@ -19,7 +19,7 @@ const DropdownMenuDemo = () => {
     <DropdownMenu.Root>
       <DropdownMenu.Trigger asChild>
         <button
-          className="focus:border- inline-flex h-10 w-10 items-center justify-center rounded bg-slate-800 shadow-xl shadow-slate-200 outline-none"
+          className="inline-flex h-10 w-10 items-center justify-center rounded bg-blue-500 shadow-xl shadow-slate-200 outline-none focus:border-blue-200"
           aria-label="Customise options"
         >
           <HamburgerMenuIcon className="h-full w-full p-[6px]" />
@@ -29,7 +29,7 @@ const DropdownMenuDemo = () => {
       <DropdownMenu.Portal>
         <DropdownMenu.Content
           sideOffset={5}
-          className="rounded-md bg-slate-100 p-1 data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade"
+          className="rounded-md bg-white p-1 data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade data-[side=right]:animate-slideLeftAndFade data-[side=top]:animate-slideDownAndFade"
         >
           <DropdownMenu.Label className="ml-1.5 opacity-50">
             Editor

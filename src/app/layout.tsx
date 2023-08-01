@@ -1,6 +1,9 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Ubuntu } from "next/font/google";
+import Link from "next/link";
+import ToggleDarkMode from "@/components/toggleDarkMode";
+import { HomeIcon, PlusIcon } from "@radix-ui/react-icons";
 
 const roboto = Ubuntu({
   weight: "300",
@@ -20,9 +23,39 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${roboto.className} bg-background text-text`}>
+      <body
+        className={`${roboto.className} box-border bg-background text-text`}
+      >
+        <Navbar />
         {children}
       </body>
     </html>
   );
 }
+
+const Navbar = () => {
+  return (
+    <nav className="flex items-center justify-center gap-5 bg-white py-2">
+      <Link
+        className="border-primary hover:bg-primary rounded-md border px-2 py-1 text-center shadow transition-all duration-75 hover:text-background"
+        href="/about"
+      >
+        ABOUT
+      </Link>
+      <Link
+        className="rounded-md p-1 text-center shadow transition-all duration-75 hover:bg-gray-100"
+        href="/post"
+      >
+        <PlusIcon width={30} height={30} />
+      </Link>
+
+      <Link
+        className="rounded-md p-1 text-center shadow transition-all duration-75 hover:bg-gray-100"
+        href="/"
+      >
+        <HomeIcon width={30} height={30} />
+      </Link>
+      <ToggleDarkMode />
+    </nav>
+  );
+};

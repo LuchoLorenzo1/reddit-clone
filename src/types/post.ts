@@ -6,5 +6,5 @@ export default interface Post {
   id: number;
   upvotes: number;
   downvotes: number;
-  created_at: Date | string;
+  created_at: Date;
 }

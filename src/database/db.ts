@@ -8,7 +8,6 @@ export const pool = createPool({
   user: "root",
   password: process.env.MYSQLDB_ROOT_PASSWORD,
   database: process.env.MYSQLDB_DATABASE,
-  maxIdle: 300,
 });
 
 export default pool;

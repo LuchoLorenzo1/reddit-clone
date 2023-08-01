@@ -1,55 +1,38 @@
 import Post from "@/types/post";
 import Reddit from "@/types/reddit";
+import { timeAgo } from "@/utils/time";
 import Link from "next/link";
+import Image from "next/image";
+import { FC } from "react";
+import Vote from "./vote";
 
 interface PropsPosts {
   posts: Post[];
   reddit?: Reddit;
 }
 
-const Posts = (props: PropsPosts) => {
-  if (props.posts.length == 0) {
-    return <h1>xd</h1>;
-  }
-
+const Posts: FC<PropsPosts> = ({ posts, reddit }) => {
   return (
-    <div className="flex w-full flex-col gap-5 bg-secondary p-5">
-      {props.posts &&
-        props.posts.map((post: Post) => (
+    <div className="flex flex-col gap-2">
+      {posts &&
+        posts.map((post: Post) => (
           <div
             key={post.id}
-            className="w-full min-w-fit rounded border border-black bg-background p-2"
+            className="min-w-fit rounded-sm border bg-white hover:border-black"
           >
-            <div className="flex items-center gap-3">
-              <h1 className="mb-2 text-xl">{post.title}</h1>
-              <Link
-                className="text-xs hover:underline"
-                href={`u/${post.username}`}
-              >
-                u/{post.username}
-              </Link>
+            <div className="flex h-full w-full">
+              <div className="rounded-bl-sm rounded-tl-sm bg-slate-100 px-2">
+                <Vote downvotes={post.downvotes} upvotes={post.upvotes} />
+              </div>
 
-              {props.reddit ? (
-                ""
-              ) : (
-                <Link
-                  className="text-xs hover:underline"
-                  href={`r/${post.reddit}`}
-                >
-                  r/{post.reddit}
-                </Link>
-              )}
-
-              <h1 className="group relative text-xs">
-                <span className="absolute bottom-6 hidden w-auto bg-black p-1 text-xs text-white opacity-90 group-hover:block">
-                  {post.created_at.toLocaleString()}
-                </span>
-                {timeAgo(post.created_at)}
-              </h1>
+              <div className="w-full rounded-sm px-2 pb-1 text-text text-opacity-70 hover:text-opacity-100">
+                <div className="flex flex-col">
+                  <PostNavbar post={post} reddit={reddit} />
+                  <h1 className="mb-1 text-xl">{post.title}</h1>
+                </div>
+                <p className="text-sm">{post.content}</p>
+              </div>
             </div>
-            <p>{post.content}</p>
-            <h1>{post.upvotes}</h1>
-            <h1>{post.downvotes}</h1>
           </div>
         ))}
     </div>
@@ -58,34 +41,41 @@ const Posts = (props: PropsPosts) => {
 
 export default Posts;
 
-function timeAgo(created_at: Date | string): string {
-  let date: Date;
-  if (typeof created_at == "string") {
-    date = new Date(created_at);
-  } else {
-    date = created_at;
-  }
-  const ms = new Date().getTime() - date.getTime();
-  const seconds = ms / 1000;
-  let interval = seconds / 31536000;
-  if (interval > 1) {
-    return Math.floor(interval) + " years";
-  }
-  interval = seconds / 2592000;
-  if (interval > 1) {
-    return Math.floor(interval) + " months";
-  }
-  interval = seconds / 86400;
-  if (interval > 1) {
-    return Math.floor(interval) + " days";
-  }
-  interval = seconds / 3600;
-  if (interval > 1) {
-    return Math.floor(interval) + " hours";
-  }
-  interval = seconds / 60;
-  if (interval > 1) {
-    return Math.floor(interval) + " minutes";
-  }
-  return Math.floor(seconds) + " seconds";
+interface PostNavbarProps {
+  post: Post;
+  reddit?: Reddit;
 }
+
+const PostNavbar: FC<PostNavbarProps> = ({ post, reddit }) => {
+  return (
+    <div className="flex gap-2 pt-1">
+      {reddit ? (
+        ""
+      ) : (
+        <>
+          <Image
+            className="rounded-full"
+            src="/devsarg.png"
+            width={20}
+            height={20}
+            alt="profile picture"
+          />
+          <Link className="text-xs hover:underline" href={`r/${post.reddit}`}>
+            r/{post.reddit}
+          </Link>
+        </>
+      )}
+
+      <Link className="text-xs hover:underline" href={`u/${post.username}`}>
+        u/{post.username}
+      </Link>
+
+      <h1 className="group relative text-xs">
+        <span className="absolute bottom-6 hidden w-auto bg-black p-1 text-xs text-white opacity-90 group-hover:block">
+          {post.created_at.toLocaleString()}
+        </span>
+        {timeAgo(post.created_at)}
+      </h1>
+    </div>
+  );
+};
