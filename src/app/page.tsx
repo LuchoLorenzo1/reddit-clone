@@ -12,13 +12,11 @@ const fetchPosts = async (): Promise<Post[] | null> => {
 		JOIN users u
 			ON posts.author_id = u.id
 		JOIN reddits r
-			ON posts.reddit_id = r.id`,
+			ON posts.reddit_id = r.id
+		ORDER BY created_at DESC`,
   );
 
-  console.log(res);
-
   const [posts] = res;
-
   return posts as Post[];
 };
 
@@ -29,8 +27,8 @@ export default async function Home() {
   }
 
   return (
-    <div className="mt-3 flex h-screen w-screen justify-center">
-      <div className="h-full max-w-5xl sm:px-5">
+    <div className="mt-3 flex justify-center">
+      <div className="max-w-4xl px-0 sm:px-5">
         <Posts posts={posts} />
       </div>
     </div>

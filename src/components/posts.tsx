@@ -13,7 +13,7 @@ interface PropsPosts {
 
 const Posts: FC<PropsPosts> = ({ posts, reddit }) => {
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex min-w-full flex-col gap-2">
       {posts &&
         posts.map((post: Post) => (
           <div
@@ -21,7 +21,7 @@ const Posts: FC<PropsPosts> = ({ posts, reddit }) => {
             className="min-w-fit rounded-sm border bg-white hover:border-black"
           >
             <div className="flex h-full w-full">
-              <div className="rounded-bl-sm rounded-tl-sm bg-slate-100 px-2">
+              <div className="rounded-bl-sm rounded-tl-sm bg-gray-50 px-2">
                 <Vote downvotes={post.downvotes} upvotes={post.upvotes} />
               </div>
 

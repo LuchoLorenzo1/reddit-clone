@@ -18,7 +18,10 @@ const ToggleDarkMode = () => {
   };
 
   return (
-    <button className="rounded-md p-1 text-center shadow transition-all duration-75 hover:bg-gray-100">
+    <button
+      className="rounded-md p-1 text-center shadow transition-all duration-75 hover:bg-gray-100"
+      onClick={() => toggleDarkMode()}
+    >
       {dark ? (
         <SunIcon width={30} height={30} />
       ) : (

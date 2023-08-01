@@ -29,14 +29,15 @@ const fetchRedditData = async (
   if (rows.length != 1) return null;
 
   const reddit: Reddit = rows[0] as Reddit;
-
   const [posts]: [RowDataPacket[], FieldPacket[]] = await pool.query<
     RowDataPacket[]
   >(
     `SELECT title, content, u.name as username, upvotes, downvotes, created_at
 		FROM posts
 		JOIN users u
-			ON posts.author_id = u.id`,
+			ON posts.author_id = u.id
+		WHERE reddit_id = ${reddit.id}
+		ORDER BY created_at DESC`,
   );
 
   const [member]: [RowDataPacket[], FieldPacket[]] = await pool.query<
@@ -66,7 +67,7 @@ const Reddit: FC<RedditProps> = async ({ params }) => {
     <div className="flex h-screen flex-col items-center">
       <RedditNavbar reddit={redditData.reddit} />
 
-      <div className="mt-3 grid max-w-5xl grid-cols-3 justify-center gap-5 sm:px-5">
+      <div className="mt-3 grid max-w-4xl grid-cols-3 justify-center gap-5 sm:px-5">
         <div className="col-span-3 lg:col-span-2">
           <Posts posts={redditData.posts} reddit={redditData.reddit} />
         </div>
@@ -79,8 +80,17 @@ const Reddit: FC<RedditProps> = async ({ params }) => {
 const RedditNavbar = ({ reddit }: { reddit: Reddit }) => {
   return (
     <div className="relative flex h-20 min-h-[30%] w-full flex-col items-center bg-white">
-      <div className="mb-5 min-h-[65%] min-w-full bg-blue-500"> </div>
-      <div className="absolute top-[60%] flex w-full max-w-5xl items-end justify-start gap-2 px-5 sm:px-5">
+      <div className="relative mb-5 min-h-[65%] min-w-full bg-blue-500">
+        <Image
+          loading="lazy"
+          layout="fill"
+          quality={100}
+          objectFit="cover"
+          src="/banner.jpeg"
+          alt="profile picture"
+        />
+      </div>
+      <div className="absolute top-[60%] flex w-full max-w-4xl items-end justify-start gap-2 px-5 sm:px-5">
         <div className="rounded-full bg-white">
           <Image
             className="rounded-full border-4 border-white fill-red-100"
@@ -101,7 +111,7 @@ const RedditNavbar = ({ reddit }: { reddit: Reddit }) => {
               Join
             </Link>
           </div>
-          <h1 className="font-bodl text-xs text-text/60">r/{reddit.name}</h1>
+          <h1 className="text-xs font-bold text-text/60">r/{reddit.name}</h1>
         </div>
       </div>
     </div>
@@ -118,7 +128,7 @@ const AboutReddit = ({ reddit }: { reddit: Reddit }) => {
         <p className="text-text/60">{reddit.description}</p>
         <p>Redditors: {reddit.member_count}</p>
         <Link
-          href={`/post/r?${reddit.name}`}
+          href={`/post`}
           className="mt-2 rounded-xl bg-blue-500 px-2 py-1 text-center text-sm font-bold text-white hover:shadow-md"
         >
           Create Post
@@ -130,27 +140,31 @@ const AboutReddit = ({ reddit }: { reddit: Reddit }) => {
 
 const Reddit404 = () => {
   return (
-    <div className="flex flex-col items-center justify-center gap-5 text-center">
+    <div className="flex h-2/3 flex-col items-center justify-center gap-5 text-center">
       <div>
-        <h1>Sorry, there aren't any communities on Reddit with that name.</h1>
+        <h1 className="font-bold">
+          Sorry, there aren't any communities on Reddit with that name.
+        </h1>
         <h2 className="opacity-60">
           {" "}
           This community may have been banned or the community name is
           incorrect.{" "}
         </h2>
       </div>
-      <Link
-        href="/r/create"
-        className="rounded-xl bg-gray-300 px-3 py-2 hover:shadow-md"
-      >
-        Create Community
-      </Link>
-      <Link
-        href="/"
-        className="rounded-xl bg-gray-300 px-3 py-2 hover:shadow-md"
-      >
-        HOME
-      </Link>
+      <div className="flex gap-5">
+        <Link
+          href="/r/create"
+          className="rounded-3xl border-2 border-background bg-blue-500 px-5 py-[0.15rem] text-sm font-bold text-white transition-all duration-100 hover:border-blue-500 hover:bg-white hover:text-blue-500 hover:shadow-md"
+        >
+          Create Community
+        </Link>
+        <Link
+          href="/"
+          className="rounded-3xl border-2 border-background bg-blue-500 px-5 py-[0.15rem] text-sm font-bold text-white transition-all duration-100 hover:border-blue-500 hover:bg-white hover:text-blue-500 hover:shadow-md"
+        >
+          Go Home
+        </Link>
+      </div>
     </div>
   );
 };
