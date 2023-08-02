@@ -13,28 +13,39 @@ interface PropsPosts {
 
 const Posts: FC<PropsPosts> = ({ posts, reddit }) => {
   return (
-    <div className="flex min-w-full flex-col gap-2">
+    <div className="flex flex-col gap-2">
       {posts &&
         posts.map((post: Post) => (
-          <div
-            key={post.id}
-            className="min-w-fit rounded-sm border bg-white hover:border-black"
-          >
-            <div className="flex h-full w-full">
-              <div className="rounded-bl-sm rounded-tl-sm bg-gray-50 px-2">
-                <Vote downvotes={post.downvotes} upvotes={post.upvotes} />
-              </div>
-
-              <div className="w-full rounded-sm px-2 pb-1 text-text text-opacity-70 hover:text-opacity-100">
-                <div className="flex flex-col">
-                  <PostNavbar post={post} reddit={reddit} />
-                  <h1 className="mb-1 text-xl">{post.title}</h1>
-                </div>
-                <p className="text-sm">{post.content}</p>
-              </div>
-            </div>
-          </div>
+          <PostComponent post={post} reddit={reddit} />
         ))}
+    </div>
+  );
+};
+
+interface PropsPost {
+  post: Post;
+  reddit?: Reddit;
+}
+
+const PostComponent: FC<PropsPost> = ({ post, reddit }) => {
+  return (
+    <div
+      key={post.id}
+      className="min-w-fit rounded-sm border bg-white hover:border-black"
+    >
+      <div className="flex h-full w-full">
+        <div className="rounded-bl-sm rounded-tl-sm bg-gray-50 px-2">
+          <Vote downvotes={post.downvotes} upvotes={post.upvotes} />
+        </div>
+
+        <div className="w-full rounded-sm px-2 pb-1 text-text text-opacity-70 hover:text-opacity-100">
+          <div className="flex flex-col">
+            <PostNavbar post={post} reddit={reddit} />
+            <h1 className="mb-1 text-xl">{post.title}</h1>
+          </div>
+          <p className="text-sm">{post.content}</p>
+        </div>
+      </div>
     </div>
   );
 };

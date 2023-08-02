@@ -28,7 +28,7 @@ export default async function Home() {
 
   return (
     <div className="mt-3 flex justify-center">
-      <div className="max-w-4xl px-0 sm:px-5">
+      <div className="w-full max-w-4xl px-0 sm:px-5">
         <Posts posts={posts} />
       </div>
     </div>

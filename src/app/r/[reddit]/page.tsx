@@ -24,7 +24,8 @@ const fetchRedditData = async (
   userId: number,
 ): Promise<RedditData | null> => {
   const [rows]: [RowDataPacket[], FieldPacket[]] = await pool.query(
-    `SELECT * FROM reddits WHERE name LIKE "${redditName}"`,
+    "SELECT * FROM reddits WHERE name LIKE ?",
+    [redditName],
   );
   if (rows.length != 1) return null;
 
@@ -36,18 +37,17 @@ const fetchRedditData = async (
 		FROM posts
 		JOIN users u
 			ON posts.author_id = u.id
-		WHERE reddit_id = ${reddit.id}
+		WHERE reddit_id = ?
 		ORDER BY created_at DESC`,
+    [reddit.id],
   );
 
   const [member]: [RowDataPacket[], FieldPacket[]] = await pool.query<
     RowDataPacket[]
-  >(
-    `SELECT * FROM members
-		WHERE
-			user_id = ${userId} AND
-			reddit_id = ${reddit.id}`,
-  );
+  >(`SELECT * FROM members WHERE user_id = ? AND reddit_id = ?`, [
+    userId,
+    reddit.id,
+  ]);
 
   const isMember = member.length > 0;
 
@@ -80,20 +80,20 @@ const Reddit: FC<RedditProps> = async ({ params }) => {
 const RedditNavbar = ({ reddit }: { reddit: Reddit }) => {
   return (
     <div className="relative flex h-20 min-h-[30%] w-full flex-col items-center bg-white">
-      <div className="relative mb-5 min-h-[65%] min-w-full bg-blue-500">
+      <div className="relative mb-5 min-h-[65%] min-w-full bg-blue-500 overflow-hidden">
         <Image
           loading="lazy"
           layout="fill"
           quality={100}
           objectFit="cover"
           src="/banner.jpeg"
-          alt="profile picture"
+          alt="Reddit Banner"
         />
       </div>
       <div className="absolute top-[60%] flex w-full max-w-4xl items-end justify-start gap-2 px-5 sm:px-5">
         <div className="rounded-full bg-white">
           <Image
-            className="rounded-full border-4 border-white fill-red-100"
+            className="rounded-full border-4 border-white"
             loading="lazy"
             src="/r.svg"
             width={80}
