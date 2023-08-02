@@ -5,15 +5,17 @@ use reddit;
 CREATE TABLE reddits (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	name VARCHAR(50) NOT NULL,
-	description VARCHAR(50) NOT NULL,
+	description VARCHAR(1000) NOT NULL,
 	member_count INT NOT NULL DEFAULT 0,
-	image_link VARCHAR(100)
+	image_link VARCHAR(100),
+	created_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE users (
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	name VARCHAR(50) NOT NULL,
-	email VARCHAR(50) NOT NULL
+	email VARCHAR(50) NOT NULL,
+	created_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE members (
@@ -39,26 +41,63 @@ CREATE TABLE posts (
 	FOREIGN KEY(reddit_id) REFERENCES reddits(id)
 );
 
-DELIMITER $$
-CREATE TRIGGER joining_a_reddit
-	AFTER INSERT ON members
-	FOR EACH ROW
-	BEGIN
-		UPDATE reddits SET member_count = member_count + 1
-		WHERE id = NEW.reddit_id;
-	END $$
+CREATE TABLE votes (
+	user_id INT NOT NULL,
+	post_id INT NOT NULL,
+	value BIT NOT NULL,
+	FOREIGN KEY(user_id) REFERENCES users(id),
+	FOREIGN KEY(post_id) REFERENCES posts(id),
+	PRIMARY KEY(user_id, post_id)
+);
 
-CREATE TRIGGER quiting_a_reddit
-	AFTER DELETE ON members
-	FOR EACH ROW
-	BEGIN
-		UPDATE reddits SET member_count = member_count - 1
-		WHERE id = OLD.reddit_id;
-	END $$
+DELIMITER $$
+CREATE TRIGGER joining_a_reddit AFTER INSERT ON members
+FOR EACH ROW
+BEGIN
+	UPDATE reddits SET member_count = member_count + 1
+	WHERE id = NEW.reddit_id;
+END $$
+
+CREATE TRIGGER quiting_a_reddit AFTER DELETE ON members
+FOR EACH ROW
+BEGIN
+	UPDATE reddits SET member_count = member_count - 1
+	WHERE id = OLD.reddit_id;
+END $$
+
+CREATE TRIGGER update_vote AFTER UPDATE ON votes
+FOR EACH ROW
+BEGIN
+		IF (NEW.value = 0 AND OLD.value = 1) THEN
+			UPDATE posts SET downvotes = downvotes + 1, upvotes = upvotes - 1 WHERE id = NEW.post_id;
+		ELSEIF (NEW.value = 1 AND OLD.value = 0) THEN
+			UPDATE posts SET upvotes = upvotes + 1, downvotes = downvotes - 1 WHERE id = NEW.post_id;
+		END IF;
+END $$
+
+CREATE TRIGGER insert_vote AFTER INSERT ON votes
+FOR EACH ROW
+BEGIN
+		IF (NEW.value = 0) THEN
+			UPDATE posts SET downvotes = downvotes + 1 WHERE id = NEW.post_id;
+		ELSE
+			UPDATE posts SET upvotes = upvotes + 1 WHERE id = NEW.post_id;
+		END IF;
+END $$
+
+CREATE TRIGGER delete_vote AFTER DELETE ON votes
+FOR EACH ROW
+BEGIN
+		IF (OLD.value = 0) THEN
+			UPDATE posts SET downvotes = downvotes - 1 WHERE id = OLD.post_id;
+		ELSE
+			UPDATE posts SET upvotes = upvotes - 1 WHERE id = OLD.post_id;
+		END IF;
+END $$
 DELIMITER ;
 
 INSERT INTO reddits (name, description) VALUES
-	("tortas", "Apasionados por la pasteleria."),
+	("devsarg", "Publica tus proyectos, dudas o busca inspiracion para acercarte a cualquier lenguaje de programacion!"),
 	("compus", "Nos encantan las compus."),
 	("viajes", "Conoceremos el mundo.");
 
@@ -73,3 +112,15 @@ INSERT INTO members (user_id, reddit_id) VALUES
 	(2, 1),
 	(2, 3),
 	(3, 1);
+
+INSERT INTO posts (author_id, reddit_id, title, content) VALUES
+	(2, 2, "que grafica me recomiendan", "quiero una grafica potente para jugar minecraft"),
+	(3, 2, "se me rompio la compu", "como puedo arreglarla? alguno me ayuda pls"),
+	(1, 3, "Alguno estuvo en roma?", "Quiero viajar a italia este 2023, pero no se donde hospedarme"),
+	(1, 1, "y esos auris de virgo momo?", "solo quiero saber cuales son los auris");
+
+
+INSERT INTO votes (user_id, post_id, value) VALUES
+	(1, 1, 1),
+	(1, 2, 1),
+	(2, 1, 1);

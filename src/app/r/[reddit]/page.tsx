@@ -33,7 +33,7 @@ const fetchRedditData = async (
   const [posts]: [RowDataPacket[], FieldPacket[]] = await pool.query<
     RowDataPacket[]
   >(
-    `SELECT title, content, u.name as username, upvotes, downvotes, created_at
+    `SELECT title, content, u.name as username, upvotes, downvotes, posts.created_at
 		FROM posts
 		JOIN users u
 			ON posts.author_id = u.id
@@ -79,8 +79,8 @@ const Reddit: FC<RedditProps> = async ({ params }) => {
 
 const RedditNavbar = ({ reddit }: { reddit: Reddit }) => {
   return (
-    <div className="relative flex h-20 min-h-[30%] w-full flex-col items-center bg-white">
-      <div className="relative mb-5 min-h-[65%] min-w-full bg-blue-500 overflow-hidden">
+    <div className="relative flex h-20 min-h-[14rem] w-full flex-col items-center bg-white">
+      <div className="relative mb-5 min-h-[10rem] min-w-full overflow-hidden bg-blue-500">
         <Image
           loading="lazy"
           layout="fill"
@@ -90,7 +90,7 @@ const RedditNavbar = ({ reddit }: { reddit: Reddit }) => {
           alt="Reddit Banner"
         />
       </div>
-      <div className="absolute top-[60%] flex w-full max-w-4xl items-end justify-start gap-2 px-5 sm:px-5">
+      <div className="absolute top-[9.5rem] flex w-full max-w-4xl items-end justify-start gap-2 px-5 sm:px-5">
         <div className="rounded-full bg-white">
           <Image
             className="rounded-full border-4 border-white"
@@ -103,7 +103,7 @@ const RedditNavbar = ({ reddit }: { reddit: Reddit }) => {
         </div>
         <div>
           <div className="flex items-center justify-center gap-3">
-            <h1 className="text-3xl">{reddit.name}</h1>
+            <h1 className="text-3xl font-bold">{reddit.name}</h1>
             <Link
               href={`/join`}
               className="rounded-3xl border-2 border-white bg-blue-500 px-5 py-[0.15rem] text-sm font-bold text-white transition-all duration-100 hover:border-blue-500 hover:bg-white hover:text-blue-500 hover:shadow-md"

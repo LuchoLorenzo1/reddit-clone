@@ -31,7 +31,7 @@ const PostComponent: FC<PropsPost> = ({ post, reddit }) => {
   return (
     <div
       key={post.id}
-      className="min-w-fit rounded-sm border bg-white hover:border-black"
+      className="min-w-fit rounded-sm border border-gray-400 bg-white hover:border-black"
     >
       <div className="flex h-full w-full">
         <div className="rounded-bl-sm rounded-tl-sm bg-gray-50 px-2">

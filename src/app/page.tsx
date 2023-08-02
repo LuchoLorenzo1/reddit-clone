@@ -7,7 +7,7 @@ const fetchPosts = async (): Promise<Post[] | null> => {
   const res: [RowDataPacket[], FieldPacket[]] = await pool.query<
     RowDataPacket[]
   >(
-    `SELECT title, content, u.name as username, upvotes, downvotes, created_at, r.name as reddit
+    `SELECT title, content, u.name as username, upvotes, downvotes, posts.created_at, r.name as reddit
 		FROM posts
 		JOIN users u
 			ON posts.author_id = u.id
