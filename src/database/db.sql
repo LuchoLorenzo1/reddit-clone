@@ -44,7 +44,7 @@ CREATE TABLE posts (
 CREATE TABLE votes (
 	user_id INT NOT NULL,
 	post_id INT NOT NULL,
-	value BIT NOT NULL,
+	is_upvote BOOLEAN NOT NULL,
 	FOREIGN KEY(user_id) REFERENCES users(id),
 	FOREIGN KEY(post_id) REFERENCES posts(id),
 	PRIMARY KEY(user_id, post_id)
@@ -68,9 +68,9 @@ END $$
 CREATE TRIGGER update_vote AFTER UPDATE ON votes
 FOR EACH ROW
 BEGIN
-		IF (NEW.value = 0 AND OLD.value = 1) THEN
+		IF (NEW.is_upvote = false AND OLD.is_upvote = true) THEN
 			UPDATE posts SET downvotes = downvotes + 1, upvotes = upvotes - 1 WHERE id = NEW.post_id;
-		ELSEIF (NEW.value = 1 AND OLD.value = 0) THEN
+		ELSEIF (NEW.is_upvote = true AND OLD.is_upvote = false) THEN
 			UPDATE posts SET upvotes = upvotes + 1, downvotes = downvotes - 1 WHERE id = NEW.post_id;
 		END IF;
 END $$
@@ -78,7 +78,7 @@ END $$
 CREATE TRIGGER insert_vote AFTER INSERT ON votes
 FOR EACH ROW
 BEGIN
-		IF (NEW.value = 0) THEN
+		IF (NEW.is_upvote = false) THEN
 			UPDATE posts SET downvotes = downvotes + 1 WHERE id = NEW.post_id;
 		ELSE
 			UPDATE posts SET upvotes = upvotes + 1 WHERE id = NEW.post_id;
@@ -88,7 +88,7 @@ END $$
 CREATE TRIGGER delete_vote AFTER DELETE ON votes
 FOR EACH ROW
 BEGIN
-		IF (OLD.value = 0) THEN
+		IF (OLD.is_upvote = false) THEN
 			UPDATE posts SET downvotes = downvotes - 1 WHERE id = OLD.post_id;
 		ELSE
 			UPDATE posts SET upvotes = upvotes - 1 WHERE id = OLD.post_id;
@@ -119,8 +119,7 @@ INSERT INTO posts (author_id, reddit_id, title, content) VALUES
 	(1, 3, "Alguno estuvo en roma?", "Quiero viajar a italia este 2023, pero no se donde hospedarme"),
 	(1, 1, "y esos auris de virgo momo?", "solo quiero saber cuales son los auris");
 
-
-INSERT INTO votes (user_id, post_id, value) VALUES
-	(1, 1, 1),
-	(1, 2, 1),
-	(2, 1, 1);
+INSERT INTO votes (user_id, post_id, is_upvote) VALUES
+	(1, 1, true),
+	(1, 2, true),
+	(2, 1, false);

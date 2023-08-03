@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { FC } from "react";
 import Vote from "./vote";
+import { TimeSpan } from "./TimeSpan";
 
 interface PropsPosts {
   posts: Post[];
@@ -16,7 +17,7 @@ const Posts: FC<PropsPosts> = ({ posts, reddit }) => {
     <div className="flex flex-col gap-2">
       {posts &&
         posts.map((post: Post) => (
-          <PostComponent post={post} reddit={reddit} />
+          <PostComponent key={post.id} post={post} reddit={reddit} />
         ))}
     </div>
   );
@@ -29,16 +30,18 @@ interface PropsPost {
 
 const PostComponent: FC<PropsPost> = ({ post, reddit }) => {
   return (
-    <div
-      key={post.id}
-      className="min-w-fit rounded-sm border border-gray-400 bg-white hover:border-black"
-    >
+    <div className="min-w-fit rounded-sm border border-gray-400 bg-white hover:border-black">
       <div className="flex h-full w-full">
-        <div className="rounded-bl-sm rounded-tl-sm bg-gray-50 px-2">
-          <Vote downvotes={post.downvotes} upvotes={post.upvotes} />
+        <div className="rounded-l-sm bg-gray-50 px-1 py-2">
+          <Vote
+            downvotes={post.downvotes}
+            upvotes={post.upvotes}
+            isUpvote={post.isUpvote}
+            postId={post.id}
+          />
         </div>
 
-        <div className="w-full rounded-sm px-2 pb-1 text-text text-opacity-70 hover:text-opacity-100">
+        <div className="w-full rounded-sm px-2 pb-1 hover:text-opacity-100">
           <div className="flex flex-col">
             <PostNavbar post={post} reddit={reddit} />
             <h1 className="mb-1 text-xl">{post.title}</h1>
@@ -82,9 +85,7 @@ const PostNavbar: FC<PostNavbarProps> = ({ post, reddit }) => {
       </Link>
 
       <h1 className="group relative text-xs">
-        <span className="absolute bottom-6 hidden w-auto bg-black p-1 text-xs text-white opacity-90 group-hover:block">
-          {post.created_at.toLocaleString()}
-        </span>
+        <TimeSpan date={post.created_at} />
         {timeAgo(post.created_at)}
       </h1>
     </div>

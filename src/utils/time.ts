@@ -20,8 +20,9 @@ export function timeAgo(created_at: Date): string {
     span = Math.floor(seconds / 60);
     text = "minutes";
   } else {
-    span = Math.floor(seconds);
-    text = "seconds";
+    // span = Math.floor(seconds);
+    // text = "seconds";
+    return "just now";
   }
 
   if (span == 1) {

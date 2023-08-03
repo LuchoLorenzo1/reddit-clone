@@ -7,4 +7,5 @@ export default interface Post {
   upvotes: number;
   downvotes: number;
   created_at: Date;
+  isUpvote?: boolean;
 }

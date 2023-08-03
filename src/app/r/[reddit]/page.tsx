@@ -67,7 +67,7 @@ const Reddit: FC<RedditProps> = async ({ params }) => {
     <div className="flex h-screen flex-col items-center">
       <RedditNavbar reddit={redditData.reddit} />
 
-      <div className="mt-3 grid max-w-4xl grid-cols-3 justify-center gap-5 sm:px-5">
+      <div className="mt-3 grid w-full max-w-4xl grid-cols-3 justify-center gap-5 sm:px-5">
         <div className="col-span-3 lg:col-span-2">
           <Posts posts={redditData.posts} reddit={redditData.reddit} />
         </div>
@@ -124,8 +124,8 @@ const AboutReddit = ({ reddit }: { reddit: Reddit }) => {
       <h1 className="w-full rounded-tl-sm rounded-tr-sm bg-blue-500 px-2 py-2 text-left text-sm font-bold text-white ">
         About community
       </h1>
-      <div className="flex flex-col p-2">
-        <p className="text-text/60">{reddit.description}</p>
+      <div className="flex flex-col gap-2 p-2">
+        <p className="text-xs text-text/70">{reddit.description}</p>
         <p>Redditors: {reddit.member_count}</p>
         <Link
           href={`/post`}
@@ -143,7 +143,7 @@ const Reddit404 = () => {
     <div className="flex h-2/3 flex-col items-center justify-center gap-5 text-center">
       <div>
         <h1 className="font-bold">
-          Sorry, there aren't any communities on Reddit with that name.
+          Sorry, there aren&apos;t any communities on Reddit with that name.
         </h1>
         <h2 className="opacity-60">
           {" "}
