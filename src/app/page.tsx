@@ -20,7 +20,6 @@ const fetchPosts = async (userId: number): Promise<Post[] | null> => {
   );
 
   const [posts] = res;
-  console.log(posts);
   return posts as Post[];
 };
 

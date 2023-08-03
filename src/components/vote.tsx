@@ -14,6 +14,7 @@ const Vote: FC<VoteProps> = ({ upvotes, downvotes, isUpvote, postId }) => {
     upvotes,
     downvotes,
     isUpvote,
+    postId,
   );
 
   return (
@@ -21,15 +22,23 @@ const Vote: FC<VoteProps> = ({ upvotes, downvotes, isUpvote, postId }) => {
       <ArrowButton
         onClick={() => upVote()}
         className={twMerge(
-          "fill-none stroke-gray-400 stroke-[5] hover:stroke-orange-500",
+          "fill-none stroke-gray-400 stroke-[5] group-hover:stroke-orange-500",
           isVoted && isUpvoted ? "fill-orange-500 stroke-orange-500" : "",
         )}
       />
-      <h1 className="text-xs">{votes}</h1>
+      <h1
+        className={twMerge(
+          "font-bold",
+          isVoted && isUpvoted ? "text-orange-500" : "",
+          isVoted && !isUpvoted ? "text-blue-500" : "",
+        )}
+      >
+        {votes}
+      </h1>
       <ArrowButton
         onClick={() => downVote()}
         className={twMerge(
-          "rotate-180 fill-none stroke-gray-400 stroke-[5] hover:stroke-blue-500",
+          "rotate-180 fill-none stroke-gray-400 stroke-[5] group-hover:stroke-blue-500",
           isVoted && !isUpvoted ? "fill-blue-500 stroke-blue-500" : "",
         )}
       />
@@ -43,6 +52,7 @@ const useVote = (
   upvotes: number,
   downvotes: number,
   isUpvote: boolean | undefined,
+  postId: number,
 ): useVoteReturn => {
   const [isVoted, setVoted] = useState(isUpvote != undefined);
   const [isUpvoted, setUpvoted] = useState(!!isUpvote);
@@ -50,34 +60,41 @@ const useVote = (
 
   const upVote = () => {
     if (isVoted && isUpvoted) {
-      setVoted(false);
-      setUpvoted(false);
-      setVotes(votes - 1);
-      return;
+      return sendVote(0, postId).then(() => {
+        setVotes(votes - 1);
+        setVoted(false);
+        setUpvoted(false);
+      });
     }
-    if (isVoted && !isUpvoted) {
-      setVotes(votes + 2);
-    } else {
-      setVotes(votes + 1);
-    }
-    setVoted(true);
-    setUpvoted(true);
+    sendVote(1, postId).then(() => {
+      if (isVoted && !isUpvoted) {
+        setVotes(votes + 2);
+      } else {
+        setVotes(votes + 1);
+      }
+      setVoted(true);
+      setUpvoted(true);
+    });
   };
 
   const downVote = () => {
     if (isVoted && !isUpvoted) {
-      setVotes(votes + 1);
-      setVoted(false);
+      return sendVote(0, postId).then(() => {
+        setVotes(votes + 1);
+        setVoted(false);
+        setUpvoted(false);
+      });
+    }
+
+    sendVote(-1, postId).then(() => {
+      if (isVoted && isUpvoted) {
+        setVotes(votes - 2);
+      } else {
+        setVotes(votes - 1);
+      }
+      setVoted(true);
       setUpvoted(false);
-      return;
-    }
-    if (isVoted && isUpvoted) {
-      setVotes(votes - 2);
-    } else {
-      setVotes(votes - 1);
-    }
-    setVoted(true);
-    setUpvoted(false);
+    });
   };
 
   return [votes, upVote, downVote, isVoted, isUpvoted];
@@ -92,7 +109,7 @@ const ArrowButton: FC<ArrowButtonProps> = ({ className, onClick }) => {
   return (
     <button
       onClick={onClick}
-      className="rounded-sm px-1 py-1  hover:bg-gray-200 focus:bg-gray-200 focus:outline-none hover:focus:bg-gray-300"
+      className="group rounded-sm px-1 py-1  hover:bg-gray-200 focus:bg-gray-200 focus:outline-none hover:focus:bg-gray-300"
     >
       <svg
         className={className}
@@ -110,4 +127,14 @@ const ArrowButton: FC<ArrowButtonProps> = ({ className, onClick }) => {
       </svg>
     </button>
   );
+};
+
+const sendVote = (vote: number, postId: number) => {
+  return fetch("/api/vote", {
+    method: "POST",
+    body: JSON.stringify({
+      postId,
+      vote,
+    }),
+  });
 };
