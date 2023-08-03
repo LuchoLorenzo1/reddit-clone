@@ -41,12 +41,12 @@ const PostComponent: FC<PropsPost> = ({ post, reddit }) => {
           />
         </div>
 
-        <div className="w-full rounded-sm px-2 pb-1 hover:text-opacity-100">
-          <div className="flex flex-col">
-            <PostNavbar post={post} reddit={reddit} />
-            <h1 className="mb-1 text-xl">{post.title}</h1>
-          </div>
-          <p className="text-sm">{post.content}</p>
+        <div className="relative w-full rounded-sm px-2 pb-1 hover:text-opacity-100">
+          <PostNavbar post={post} reddit={reddit} />
+          <Link href={`post/${post.id}`}>
+            <h1 className="text-md mb-2 mt-1">{post.title}</h1>
+            <p className="max-h-40 overflow-hidden text-xs">{post.content}</p>
+          </Link>
         </div>
       </div>
     </div>
@@ -84,7 +84,7 @@ const PostNavbar: FC<PostNavbarProps> = ({ post, reddit }) => {
         u/{post.username}
       </Link>
 
-      <h1 className="group relative text-xs">
+      <h1 className="group relative text-xs hover:text-opacity-90">
         <TimeSpan date={post.created_at} />
         {timeAgo(post.created_at)}
       </h1>

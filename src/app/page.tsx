@@ -30,10 +30,8 @@ export default async function Home() {
   }
 
   return (
-    <div className="mt-3 flex justify-center">
-      <div className="w-full max-w-4xl px-0 sm:px-5">
-        <Posts posts={posts} />
-      </div>
-    </div>
+    <main className="mt-3 w-full max-w-4xl px-0 sm:px-5">
+      <Posts posts={posts} />
+    </main>
   );
 }

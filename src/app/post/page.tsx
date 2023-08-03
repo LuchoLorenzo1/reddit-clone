@@ -35,34 +35,35 @@ const Page: FC<{}> = () => {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="m-5 flex flex-col items-center justify-center gap-5 bg-zinc-500 p-5 "
-    >
-      <input
-        type="text"
-        name="title"
-        placeholder="title"
-        required
-        className="w-full p-3 dark:bg-zinc-800 dark:text-white"
-      />
-      <input
-        type="text"
-        name="content"
-        placeholder="content"
-        required
-        className="w-full p-3 dark:bg-zinc-800 dark:text-white"
-      />
-      {loading ? (
-        <Spinner />
-      ) : (
+    <div className="mx-2 mt-3 flex w-full flex-col items-center md:mx-0">
+      <form
+        onSubmit={handleSubmit}
+        className="mx-1 flex w-full max-w-2xl flex-col items-center justify-center gap-5 rounded-sm bg-white p-5 shadow-xl shadow-gray-300 md:w-3/4"
+      >
         <input
-          type="submit"
-          value="CREATE"
-          className="w-2/4 bg-teal-300 p-1 font-bold text-white transition-all hover:bg-teal-400 hover:text-zinc-500"
+          type="text"
+          name="title"
+          placeholder="Title"
+          required
+          className="w-full rounded border border-gray-200 p-3"
         />
-      )}
-    </form>
+        <input
+          type="text"
+          name="content"
+          placeholder="Text (optional)"
+          className="w-full rounded border border-gray-200 p-3"
+        />
+        {loading ? (
+          <Spinner />
+        ) : (
+          <input
+            type="submit"
+            value="Post"
+            className="w-auto rounded-full bg-orange-500 p-1 px-5 text-base font-bold text-white transition-all duration-100 hover:bg-orange-600"
+          />
+        )}
+      </form>
+    </div>
   );
 };
 

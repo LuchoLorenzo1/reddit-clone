@@ -21,7 +21,7 @@ export const POST = async (req: NextRequest) => {
       );
     } else if (vote == 1) {
       res = await pool.query(
-        "INSERT INTO votes (user_id, post_id, is_upvote) VALUES (?, ?, -1) ON DUPLICATE KEY UPDATE is_upvote = true",
+        "INSERT INTO votes (user_id, post_id, is_upvote) VALUES (?, ?, true) ON DUPLICATE KEY UPDATE is_upvote = true",
         [userId, postId],
       );
     } else {

@@ -33,13 +33,15 @@ const fetchRedditData = async (
   const [posts]: [RowDataPacket[], FieldPacket[]] = await pool.query<
     RowDataPacket[]
   >(
-    `SELECT title, content, u.name as username, upvotes, downvotes, posts.created_at
+    `SELECT posts.id, title, content, u.name as username, upvotes, downvotes, posts.created_at, v.is_upvote as isUpvote
 		FROM posts
 		JOIN users u
 			ON posts.author_id = u.id
+		LEFT JOIN votes v
+			ON posts.id = v.post_id AND v.user_id = ?
 		WHERE reddit_id = ?
 		ORDER BY created_at DESC`,
-    [reddit.id],
+    [1, reddit.id],
   );
 
   const [member]: [RowDataPacket[], FieldPacket[]] = await pool.query<
@@ -64,16 +66,15 @@ const Reddit: FC<RedditProps> = async ({ params }) => {
   if (!redditData) return <Reddit404 />;
 
   return (
-    <div className="flex h-screen flex-col items-center">
+    <main className="flex w-full flex-col items-center">
       <RedditNavbar reddit={redditData.reddit} />
-
       <div className="mt-3 grid w-full max-w-4xl grid-cols-3 justify-center gap-5 sm:px-5">
         <div className="col-span-3 lg:col-span-2">
           <Posts posts={redditData.posts} reddit={redditData.reddit} />
         </div>
         <AboutReddit reddit={redditData.reddit} />
       </div>
-    </div>
+    </main>
   );
 };
 

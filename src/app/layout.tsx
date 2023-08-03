@@ -4,8 +4,9 @@ import { Ubuntu } from "next/font/google";
 import Link from "next/link";
 import Image from "next/image";
 import ToggleDarkMode from "@/components/toggleDarkMode";
-import { HomeIcon, PlusIcon, MagnifyingGlassIcon } from "@radix-ui/react-icons";
+import { PlusIcon, MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { ReactNode } from "react";
+import { twMerge } from "tailwind-merge";
 
 const roboto = Ubuntu({
   weight: "300",
@@ -22,10 +23,13 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <body
-        className={`${roboto.className} box-border bg-background text-text`}
+        className={twMerge(
+          "box-border bg-background text-text",
+          roboto.className,
+        )}
       >
         <Navbar />
-        {children}
+        <div className="flex justify-center">{children}</div>
       </body>
     </html>
   );
@@ -33,7 +37,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 
 const Navbar = () => {
   return (
-    <nav className="flex items-center justify-center gap-2 bg-white py-2 dark:bg-black dark:text-white sm:gap-3 md:gap-5">
+    <nav className="flex items-center justify-center gap-2 bg-white px-2 py-2 dark:bg-black dark:text-white sm:gap-3 md:gap-5">
       <Logo />
       <SearchBar />
       <NavLink href="/post">
@@ -46,12 +50,12 @@ const Navbar = () => {
 
 const SearchBar = () => {
   return (
-    <div className="flex flex-row rounded-full border border-gray-500 bg-gray-100 py-1">
+    <div className="flex w-full max-w-md flex-row rounded-full border border-gray-500 bg-gray-100 py-1">
       <MagnifyingGlassIcon width={30} height={30} className="pl-1 opacity-50" />
       <input
         type="text"
         className="left-5 w-full rounded-full bg-gray-100 px-2 text-xs outline-none"
-        placeholder="Search"
+        placeholder="Search Reddit"
       />
     </div>
   );

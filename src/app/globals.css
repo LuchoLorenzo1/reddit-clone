@@ -2,15 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-.hide-scroll::-webkit-scrollbar {
-  display: none;
-}
-
-.hide-scroll {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-}
-
 :root {
   --color-primary-50: 248 248 247;
   --color-primary-100: 241 242 238;
@@ -22,4 +13,17 @@
   --color-primary-700: 68 72 53;
   --color-primary-800: 51 54 40;
   --color-primary-900: 34 36 27;
+}
+
+@layer utilities {
+  @variants responsive {
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  }
 }
