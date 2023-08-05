@@ -8,11 +8,19 @@ import Vote from "./vote";
 import { TimeSpan } from "./TimeSpan";
 
 interface PropsPosts {
-  posts: Post[];
+  posts?: Post[];
   reddit?: Reddit;
 }
 
 const Posts: FC<PropsPosts> = ({ posts, reddit }) => {
+  if (!posts || posts.length == 0) {
+    return (
+      <div className="flex justify-center">
+        <h1>No posts</h1>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col gap-2">
       {posts &&

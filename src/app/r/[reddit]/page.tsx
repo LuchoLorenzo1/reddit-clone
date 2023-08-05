@@ -1,11 +1,13 @@
 import { FC } from "react";
-import pool from "@/database/db";
-import { FieldPacket, RowDataPacket } from "mysql2/promise";
 import Link from "next/link";
 import Image from "next/image";
 import Reddit from "@/types/reddit";
 import Posts from "@/components/posts";
-import Post from "@/types/post";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { getServerSession } from "next-auth/next";
+import { fetchRedditData } from "./fetchRedditData";
+import { redirect } from "next/navigation";
+import JoinReddit from "./joinReddit";
 
 interface RedditProps {
   params: {
@@ -13,75 +15,37 @@ interface RedditProps {
   };
 }
 
-interface RedditData {
-  reddit: Reddit;
-  posts: Post[];
-  isMember: boolean;
-}
-
-const fetchRedditData = async (
-  redditName: string,
-  userId: number,
-): Promise<RedditData | null> => {
-  const [rows]: [RowDataPacket[], FieldPacket[]] = await pool.query(
-    "SELECT * FROM reddits WHERE name LIKE ?",
-    [redditName],
-  );
-  if (rows.length != 1) return null;
-
-  const reddit: Reddit = rows[0] as Reddit;
-  const [posts]: [RowDataPacket[], FieldPacket[]] = await pool.query<
-    RowDataPacket[]
-  >(
-    `SELECT posts.id, title, content, u.name as username, upvotes, downvotes, posts.created_at, v.is_upvote as isUpvote
-		FROM posts
-		JOIN users u
-			ON posts.author_id = u.id
-		LEFT JOIN votes v
-			ON posts.id = v.post_id AND v.user_id = ?
-		WHERE reddit_id = ?
-		ORDER BY created_at DESC`,
-    [1, reddit.id],
-  );
-
-  const [member]: [RowDataPacket[], FieldPacket[]] = await pool.query<
-    RowDataPacket[]
-  >(`SELECT * FROM members WHERE user_id = ? AND reddit_id = ?`, [
-    userId,
-    reddit.id,
-  ]);
-
-  const isMember = member.length > 0;
-
-  return {
-    reddit,
-    posts: posts as Post[],
-    isMember,
-  };
-};
-
 const Reddit: FC<RedditProps> = async ({ params }) => {
-  const redditData = await fetchRedditData(params.reddit, 1);
+  const session = await getServerSession(authOptions);
+  if (!session) redirect("/sigin");
+
+  const redditData = await fetchRedditData(params.reddit, session.user.id);
 
   if (!redditData) return <Reddit404 />;
 
   return (
-    <main className="flex w-full flex-col items-center">
-      <RedditNavbar reddit={redditData.reddit} />
-      <div className="mt-3 grid w-full max-w-4xl grid-cols-3 justify-center gap-5 sm:px-5">
-        <div className="col-span-3 lg:col-span-2">
+    <div className="flex w-full flex-col items-center">
+      <RedditNavbar reddit={redditData.reddit} isMember={redditData.isMember} />
+      <section className="mt-3 grid w-full max-w-4xl grid-cols-3 justify-center gap-5 sm:px-5">
+        <main className="col-span-3 lg:col-span-2">
           <Posts posts={redditData.posts} reddit={redditData.reddit} />
-        </div>
+        </main>
         <AboutReddit reddit={redditData.reddit} />
-      </div>
-    </main>
+      </section>
+    </div>
   );
 };
 
-const RedditNavbar = ({ reddit }: { reddit: Reddit }) => {
+const RedditNavbar = ({
+  reddit,
+  isMember,
+}: {
+  reddit: Reddit;
+  isMember: boolean;
+}) => {
   return (
     <div className="relative flex h-20 min-h-[14rem] w-full flex-col items-center bg-white">
-      <div className="relative mb-5 min-h-[10rem] min-w-full overflow-hidden bg-blue-500">
+      <picture className="relative mb-5 min-h-[10rem] min-w-full overflow-hidden bg-blue-500">
         <Image
           loading="lazy"
           layout="fill"
@@ -90,9 +54,9 @@ const RedditNavbar = ({ reddit }: { reddit: Reddit }) => {
           src="/banner.jpeg"
           alt="Reddit Banner"
         />
-      </div>
+      </picture>
       <div className="absolute top-[9.5rem] flex w-full max-w-4xl items-end justify-start gap-2 px-5 sm:px-5">
-        <div className="rounded-full bg-white">
+        <picture className="rounded-full bg-white">
           <Image
             className="rounded-full border-4 border-white"
             loading="lazy"
@@ -101,16 +65,11 @@ const RedditNavbar = ({ reddit }: { reddit: Reddit }) => {
             height={80}
             alt="profile picture"
           />
-        </div>
+        </picture>
         <div>
           <div className="flex items-center justify-center gap-3">
             <h1 className="text-3xl font-bold">{reddit.name}</h1>
-            <Link
-              href={`/join`}
-              className="rounded-3xl border-2 border-white bg-blue-500 px-5 py-[0.15rem] text-sm font-bold text-white transition-all duration-100 hover:border-blue-500 hover:bg-white hover:text-blue-500 hover:shadow-md"
-            >
-              Join
-            </Link>
+            <JoinReddit redditId={reddit.id} isMember={isMember} />
           </div>
           <h1 className="text-xs font-bold text-text/60">r/{reddit.name}</h1>
         </div>
@@ -121,7 +80,7 @@ const RedditNavbar = ({ reddit }: { reddit: Reddit }) => {
 
 const AboutReddit = ({ reddit }: { reddit: Reddit }) => {
   return (
-    <div className="hidden h-max flex-col rounded-sm border border-slate-500 bg-white lg:col-span-1 lg:flex">
+    <aside className="hidden h-max flex-col rounded-sm border border-slate-500 bg-white lg:col-span-1 lg:flex">
       <h1 className="w-full rounded-tl-sm rounded-tr-sm bg-blue-500 px-2 py-2 text-left text-sm font-bold text-white ">
         About community
       </h1>
@@ -135,7 +94,7 @@ const AboutReddit = ({ reddit }: { reddit: Reddit }) => {
           Create Post
         </Link>
       </div>
-    </div>
+    </aside>
   );
 };
 

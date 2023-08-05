@@ -4,7 +4,7 @@ use reddit;
 
 CREATE TABLE reddits (
 	id INT AUTO_INCREMENT PRIMARY KEY,
-	name VARCHAR(50) NOT NULL,
+	name VARCHAR(50) NOT NULL UNIQUE,
 	description VARCHAR(1000) NOT NULL,
 	member_count INT NOT NULL DEFAULT 0,
 	image_link VARCHAR(100),
@@ -13,9 +13,12 @@ CREATE TABLE reddits (
 
 CREATE TABLE users (
 	id INT AUTO_INCREMENT PRIMARY KEY,
-	name VARCHAR(50) NOT NULL,
+	name VARCHAR(50) NOT NULL UNIQUE,
 	email VARCHAR(50) NOT NULL,
-	created_at TIMESTAMP NOT NULL DEFAULT NOW()
+	provider VARCHAR(50) NOT NULL,
+	provider_id VARCHAR(200) NOT NULL,
+	created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+	UNIQUE KEY (provider, provider_id)
 );
 
 CREATE TABLE members (
@@ -101,10 +104,10 @@ INSERT INTO reddits (name, description) VALUES
 	("compus", "Nos encantan las compus."),
 	("viajes", "Conoceremos el mundo.");
 
-INSERT INTO users (name, email) VALUES
-	("juanceto01", "juanceto01@gmail.com"),
-	("momo", "momorelojero@yahoo.com"),
-	("goku", "songoku@gmail.com");
+INSERT INTO users (name, email, provider, provider_id) VALUES
+	("juanceto01", "juanceto01@gmail.com", "google", "1"),
+	("momo", "momorelojero@yahoo.com", "google", "2"),
+	("goku", "songoku@gmail.com", "google", "3");
 
 INSERT INTO members (user_id, reddit_id) VALUES
 	(1, 1),

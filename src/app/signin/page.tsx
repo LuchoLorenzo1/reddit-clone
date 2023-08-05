@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import Spinner from "@/components/spinner";
 
 const Page = () => {
   const [isLoading, setLoading] = useState(false);
@@ -9,7 +10,7 @@ const Page = () => {
   const { status } = useSession();
 
   if (status == "loading") {
-    return <div>loading</div>;
+    return <Spinner className="mt-5" />;
   } else if (status == "authenticated") {
     return router.push("/");
   }
@@ -31,10 +32,10 @@ const Page = () => {
 
   return (
     <button
-      className="hover:bg-organge-600 mt-1 flex flex-row items-center justify-center gap-3 rounded bg-white px-5 py-2 text-xl"
+      className="mt-1 flex flex-row items-center justify-center gap-3 rounded border border-gray-400 bg-white px-5 py-2 text-xl text-gray-600 hover:bg-gray-100"
       onClick={() => HandleGoogleAuth()}
     >
-      sign in with google <GoogleSVG />
+      <GoogleSVG /> sign in with google
     </button>
   );
 };

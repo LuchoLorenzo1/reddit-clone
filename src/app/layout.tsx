@@ -22,7 +22,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="en">
       <body
         className={twMerge(
-          "box-border bg-background text-text",
+          "box-border h-screen bg-background text-text",
           roboto.className,
         )}
       >

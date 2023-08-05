@@ -6,6 +6,7 @@ import { PlusIcon, MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { Session } from "next-auth/core/types";
+import { ReactNode } from "react";
 
 const Navbar = async () => {
   const session = await getServerSession(authOptions);

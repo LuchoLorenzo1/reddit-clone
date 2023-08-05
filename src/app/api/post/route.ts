@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 export async function POST(req: Request) {
   const { title, content } = await req.json();
 
-  if (!title || !content)
+  if (!title)
     return NextResponse.json({ message: "Invalid post" }, { status: 400 });
 
   try {
@@ -24,7 +24,7 @@ export async function POST(req: Request) {
   } catch (e) {
     console.error(e);
     return NextResponse.json(
-      { error: "A server error ocurred" },
+      { message: "A server error ocurred, try again later" },
       { status: 500 },
     );
   }

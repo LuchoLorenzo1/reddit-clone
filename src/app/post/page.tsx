@@ -1,9 +1,11 @@
 "use client";
+import Spinner from "@/components/spinner";
 import { useRouter } from "next/navigation";
 import { FC, FormEvent, useState } from "react";
 
 const Page: FC<{}> = () => {
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const router = useRouter();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -11,6 +13,7 @@ const Page: FC<{}> = () => {
     const formData = new FormData(e.currentTarget);
     (e.target as HTMLFormElement).reset();
 
+    setError("");
     setLoading(true);
 
     const res = await fetch("/api/post", {
@@ -26,16 +29,20 @@ const Page: FC<{}> = () => {
 
     if (!res.ok) {
       const data = await res.json();
-      console.log(data.message);
+      console.log();
+      setError(data.message);
+      setLoading(false);
       return;
     }
 
-    setLoading(false);
     router.push("/");
   };
 
   return (
-    <div className="mx-2 mt-3 flex w-full flex-col items-center md:mx-0">
+    <div
+      onClick={() => setError("")}
+      className="mx-2 mt-3 flex w-full flex-col items-center md:mx-0"
+    >
       <form
         onSubmit={handleSubmit}
         className="mx-1 flex w-full max-w-2xl flex-col items-center justify-center gap-5 rounded-sm bg-white p-5 shadow-xl shadow-gray-300 md:w-3/4"
@@ -62,14 +69,15 @@ const Page: FC<{}> = () => {
             className="w-auto rounded-full bg-orange-500 p-1 px-5 text-base font-bold text-white transition-all duration-100 hover:bg-orange-600"
           />
         )}
+        {error ? (
+          <h1 className="rounded-md bg-red-500 p-2 text-center font-bold text-white">
+            {error}
+          </h1>
+        ) : (
+          ""
+        )}
       </form>
     </div>
-  );
-};
-
-const Spinner = () => {
-  return (
-    <div className="inline-block h-6 w-6 animate-spin rounded-full border-4 border-solid border-zinc-900 border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite] dark:border-zinc-200 dark:border-r-transparent" />
   );
 };
 
