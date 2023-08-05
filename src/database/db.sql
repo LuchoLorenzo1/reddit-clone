@@ -4,7 +4,7 @@ use reddit;
 
 CREATE TABLE reddits (
 	id INT AUTO_INCREMENT PRIMARY KEY,
-	name VARCHAR(50) NOT NULL UNIQUE,
+	name VARCHAR(21) NOT NULL UNIQUE,
 	description VARCHAR(1000) NOT NULL,
 	member_count INT NOT NULL DEFAULT 0,
 	image_link VARCHAR(100),

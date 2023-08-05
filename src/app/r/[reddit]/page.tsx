@@ -26,7 +26,7 @@ const Reddit: FC<RedditProps> = async ({ params }) => {
   return (
     <div className="flex w-full flex-col items-center">
       <RedditNavbar reddit={redditData.reddit} isMember={redditData.isMember} />
-      <section className="mt-3 grid w-full max-w-4xl grid-cols-3 justify-center gap-5 sm:px-5">
+      <section className="mt-3 grid w-full max-w-3xl grid-cols-3 justify-center gap-5 sm:px-5">
         <main className="col-span-3 lg:col-span-2">
           <Posts posts={redditData.posts} reddit={redditData.reddit} />
         </main>

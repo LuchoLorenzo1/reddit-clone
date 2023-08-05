@@ -1,11 +1,16 @@
 import pool from "@/database/db";
 import { FieldPacket, ResultSetHeader, RowDataPacket } from "mysql2";
+import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
+import { authOptions } from "../auth/[...nextauth]/route";
 
 export async function POST(req: Request) {
-  const { title, content } = await req.json();
+  const session = await getServerSession(authOptions);
+  if (!session) return NextResponse.json("", { status: 403 });
 
-  if (!title)
+  const { title, content, redditId } = await req.json();
+
+  if (!title || redditId === undefined)
     return NextResponse.json({ message: "Invalid post" }, { status: 400 });
 
   try {
@@ -13,13 +18,15 @@ export async function POST(req: Request) {
       await pool.query<ResultSetHeader>("INSERT INTO posts SET ?", {
         title,
         content,
-        reddit_id: 1,
-        author_id: 1,
+        reddit_id: redditId,
+        author_id: session.user.id,
       });
 
-    if (res[0].affectedRows == 0) {
-      return NextResponse.json({ message: "Post not found" }, { status: 404 });
-    }
+    if (res[0].affectedRows == 0)
+      return NextResponse.json(
+        { message: "Couldn't create post" },
+        { status: 400 },
+      );
     return NextResponse.json({ message: "Posted succesfuly" }, { status: 200 });
   } catch (e) {
     console.error(e);

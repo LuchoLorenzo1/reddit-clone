@@ -35,7 +35,7 @@ export default async function Home() {
   const posts = await fetchPosts(session?.user?.id);
 
   return (
-    <section className="mt-3 grid w-full max-w-4xl grid-cols-3 justify-center gap-5 sm:px-5">
+    <section className="mt-3 grid w-full max-w-3xl grid-cols-3 justify-center gap-5 sm:px-5">
       <main className="col-span-3 md:col-span-2">
         <Posts posts={posts} />
       </main>
@@ -60,16 +60,17 @@ export default async function Home() {
           Your personal Reddit frontpage. Come here to check in with your
           favorite communities.
         </p>
+        <hr className="w-5/6 self-center" />
         <div className="flex flex-col gap-2 p-2">
           <Link
             href="/post"
-            className="rounded-full border border-background bg-blue-500 py-[0.15rem] text-center text-xs font-bold text-white"
+            className="rounded-full border border-background bg-blue-500 py-[0.15rem] text-center text-xs font-bold text-white hover:bg-blue-400"
           >
             Create Post
           </Link>
           <Link
             href="/r/create"
-            className="rounded-full border border-blue-500 bg-white py-[0.15rem] text-center text-xs font-bold text-blue-500"
+            className="rounded-full border border-blue-500 bg-white py-[0.15rem] text-center text-xs font-bold text-blue-500 hover:bg-gray-100"
           >
             Create Community
           </Link>
