@@ -27,18 +27,18 @@ const joinReddit = ({
       onClick={() => toggleJoin()}
       className={twMerge(
         "group min-w-[5rem] rounded-3xl border-2 border-blue-500 py-[0.15rem] text-xs font-bold",
-        !member
+        member
           ? "bg-white text-blue-500 hover:bg-gray-100/50"
-          : "bg-blue-500 text-white hover:bg-blue-400",
+          : "bg-blue-500 text-white hover:border-blue-400 hover:bg-blue-400",
       )}
     >
       <span className="inline group-hover:hidden">
         {" "}
-        {member ? "Join" : "Joined"}{" "}
+        {member ? "Joined" : "Join"}{" "}
       </span>
       <span className="hidden group-hover:inline">
         {" "}
-        {member ? "Join" : "Leave"}{" "}
+        {member ? "Leave" : "Join"}{" "}
       </span>
     </button>
   );
