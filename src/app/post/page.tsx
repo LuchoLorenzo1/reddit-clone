@@ -1,18 +1,37 @@
 "use client";
 import Spinner from "@/components/spinner";
 import { useRouter } from "next/navigation";
-import { FC, FormEvent, useState, useEffect } from "react";
+import Image from "next/image";
+import {
+  FC,
+  FormEvent,
+  useState,
+  useEffect,
+  forwardRef,
+  ReactNode,
+  Ref,
+} from "react";
+
+import * as Select from "@radix-ui/react-select";
+import {
+  CheckIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
+} from "@radix-ui/react-icons";
+
+type RedditInfo = { reddit_id: number; reddit: string; image?: string };
 
 const Page: FC<{}> = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [reddits, setReddits] = useState<RedditInfo[]>([]);
   const router = useRouter();
 
   useEffect(() => {
-    fetch("/api/r/create")
+    fetch("/api/r")
       .then((res) => res.json())
-      .then((res) => console.log(res))
-      .catch((e) => console.log(e));
+      .then(({ reddits }) => setReddits(reddits))
+      .catch((_) => setError("An error ocurred in the server"));
   }, []);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -31,7 +50,7 @@ const Page: FC<{}> = () => {
       body: JSON.stringify({
         title: formData.get("title"),
         content: formData.get("content"),
-        redditId: 1,
+        redditId: formData.get("redditId"),
       }),
     });
 
@@ -47,27 +66,27 @@ const Page: FC<{}> = () => {
   };
 
   return (
-    <div
-      onClick={() => setError("")}
-      className="mx-2 mt-3 flex w-full flex-col items-center md:mx-0"
-    >
+    <div className="mx-2 mt-3 flex w-full flex-col items-center md:mx-0">
       <form
         onSubmit={handleSubmit}
         className="mx-1 flex w-full max-w-2xl flex-col items-center justify-center gap-5 rounded-sm bg-white p-5 shadow-xl shadow-gray-300 md:w-3/4"
       >
-        <input
-          type="text"
-          name="title"
-          placeholder="Title"
-          required
-          className="w-full rounded border border-gray-200 p-3"
-        />
-        <input
-          type="text"
-          name="content"
-          placeholder="Text (optional)"
-          className="w-full rounded border border-gray-200 p-3"
-        />
+        <div className="flex w-full flex-col items-start gap-5">
+          <input
+            type="text"
+            name="title"
+            placeholder="Title"
+            required
+            className="w-full rounded border border-gray-200 p-3"
+          />
+          <input
+            type="text"
+            name="content"
+            placeholder="Text (optional)"
+            className="w-full rounded border border-gray-200 p-3"
+          />
+          <RedditSelector reddits={reddits} />
+        </div>
         {loading ? (
           <Spinner />
         ) : (
@@ -85,6 +104,82 @@ const Page: FC<{}> = () => {
           ""
         )}
       </form>
+    </div>
+  );
+};
+
+const RedditSelector = ({ reddits }: { reddits: RedditInfo[] }) => {
+  return (
+    <Select.Root required name="redditId">
+      <Select.Trigger
+        className="flex min-w-[15rem] items-center justify-between gap-2 rounded-t border border-gray-200 px-3 py-2"
+        aria-label="Community"
+      >
+        <Select.Value placeholder={<SelectPlaceholder />} />
+        <Select.Icon>
+          <ChevronDownIcon />
+        </Select.Icon>
+      </Select.Trigger>
+      <Select.Portal>
+        <Select.Content
+          className="max-h-32 w-60 overflow-hidden rounded-b border border-x-2 border-gray-200 bg-white"
+          sideOffset={0}
+          position="popper"
+        >
+          <Select.ScrollUpButton className="flex items-center justify-center">
+            <ChevronUpIcon />
+          </Select.ScrollUpButton>
+          <Select.Viewport className="">
+            <Select.Group>
+              <Select.Label className="py-1 text-center text-xs font-bold">
+                YOUR COMMUNITIES
+              </Select.Label>
+              {reddits.map((r) => (
+                <SelectItem key={r.reddit_id} value={r.reddit_id}>
+                  <div className="flex w-full items-center gap-2">
+                    <Image
+                      width={30}
+                      height={30}
+                      src="r.svg"
+                      alt="subreddit option image"
+                    />
+                    {r.reddit}
+                  </div>
+                </SelectItem>
+              ))}
+            </Select.Group>
+          </Select.Viewport>
+          <Select.ScrollDownButton className="flex items-center justify-center">
+            <ChevronDownIcon />
+          </Select.ScrollDownButton>
+        </Select.Content>
+      </Select.Portal>
+    </Select.Root>
+  );
+};
+
+const SelectItem = forwardRef(
+  (
+    { children, value }: { children: ReactNode; value: number },
+    forwardedRef: Ref<HTMLDivElement>,
+  ) => {
+    return (
+      <Select.Item
+        className="flex items-center justify-start px-3 py-1 hover:bg-gray-100"
+        value={value.toString()}
+        ref={forwardedRef}
+      >
+        <Select.ItemText>{children}</Select.ItemText>
+      </Select.Item>
+    );
+  },
+);
+
+const SelectPlaceholder = () => {
+  return (
+    <div className="flex items-center gap-3">
+      <div className="max-h-[30px] min-h-[30px] min-w-[30px] max-w-[30px] rounded-full border-2 border-dashed border-black" />
+      <h1>Choose a community</h1>
     </div>
   );
 };

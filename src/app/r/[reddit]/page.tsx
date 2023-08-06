@@ -55,7 +55,7 @@ const RedditNavbar = ({
           alt="Reddit Banner"
         />
       </picture>
-      <div className="absolute top-[9.5rem] flex w-full max-w-4xl items-end justify-start gap-2 px-5 sm:px-5">
+      <div className="absolute top-[9.5rem] flex w-full max-w-3xl items-end justify-start gap-2 px-5 sm:px-5">
         <picture className="rounded-full bg-white">
           <Image
             className="rounded-full border-4 border-white"

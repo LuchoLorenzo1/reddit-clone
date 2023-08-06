@@ -8,13 +8,15 @@ export const GET = async (req: NextRequest) => {
   if (!session) return NextResponse.json("", { status: 404 });
 
   try {
-    const [rows] = await pool.query("SELECT * FROM members WHERE user_id ?", [
-      session.user.id,
-    ]);
+    const [rows] = await pool.query(
+      `SELECT reddit_id, r.name AS reddit, r.image_link AS image
+	  FROM members
+	  JOIN reddits r
+	  	ON reddit_id = r.id
+	  WHERE user_id = ?`,
+      [session.user.id],
+    );
 
-    if (rows.length == 0) {
-      return NextResponse.json({}, { status: 200 });
-    }
     return NextResponse.json({ reddits: rows }, { status: 200 });
   } catch (e) {
     console.error(e);
