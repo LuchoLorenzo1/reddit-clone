@@ -13,11 +13,7 @@ import {
 } from "react";
 
 import * as Select from "@radix-ui/react-select";
-import {
-  CheckIcon,
-  ChevronDownIcon,
-  ChevronUpIcon,
-} from "@radix-ui/react-icons";
+import { ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
 
 type RedditInfo = { reddit_id: number; reddit: string; image?: string };
 
@@ -30,7 +26,7 @@ const Page: FC<{}> = () => {
   useEffect(() => {
     fetch("/api/r")
       .then((res) => res.json())
-      .then(({ reddits }) => setReddits(reddits))
+      .then(({ reddits }) => setReddits(reddits ?? []))
       .catch((_) => setError("An error ocurred in the server"));
   }, []);
 
@@ -140,7 +136,7 @@ const RedditSelector = ({ reddits }: { reddits: RedditInfo[] }) => {
                     <Image
                       width={30}
                       height={30}
-                      src="r.svg"
+                      src="/r.svg"
                       alt="subreddit option image"
                     />
                     {r.reddit}

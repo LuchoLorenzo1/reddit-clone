@@ -27,10 +27,12 @@ export const authOptions: NextAuthOptions = {
 
         const [rows] = res;
         if (rows.length == 0) {
+          const name = props.user.name?.split(" ")[0];
+
           const res2: [ResultSetHeader, FieldPacket[]] = await pool.query(
             "INSERT INTO users (name, email, provider, provider_id) VALUES (?, ?, ?, ?)",
             [
-              props.user.name,
+              name,
               props.user.email,
               props.account?.provider,
               props.account?.providerAccountId,

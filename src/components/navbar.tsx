@@ -7,12 +7,14 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { Session } from "next-auth/core/types";
 import { ReactNode } from "react";
+import RedditSelector from "./redditSelector";
 
 const Navbar = async () => {
   const session = await getServerSession(authOptions);
   return (
     <nav className="flex items-center justify-center gap-2 bg-white px-2 py-2 dark:bg-black dark:text-white sm:gap-3 md:gap-5">
       <Logo />
+      <RedditSelector />
       <SearchBar />
       <NavLink href="/post">
         <PlusIcon width={30} height={30} />

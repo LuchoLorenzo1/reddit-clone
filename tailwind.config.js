@@ -38,6 +38,9 @@ module.exports = {
         text: "#050505",
         background: "#dae0e6",
       },
+      fontSize: {
+        xxs: ["0.6rem", "1rem"],
+      },
     },
   },
   plugins: [],
