@@ -5,3 +5,9 @@ export default interface Reddit {
   member_count: number;
   image_link?: string;
 }
+
+export type RedditInfo = {
+  redditId: number;
+  reddit: string;
+  image: string;
+};

@@ -6,8 +6,7 @@ import { ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-
-type RedditInfo = { reddit_id: number; reddit: string; image?: string };
+import { RedditInfo } from "@/types/reddit";
 
 const RedditSelector = () => {
   const [reddits, setReddits] = useState<RedditInfo[]>([]);
@@ -52,7 +51,7 @@ const RedditSelector = () => {
                 YOUR COMMUNITIES
               </Select.Label>
               {reddits.map((r) => (
-                <SelectItem redditInfo={r} key={r.reddit_id} />
+                <SelectItem redditInfo={r} key={r.redditId} />
               ))}
             </Select.Group>
           </Select.Viewport>

@@ -14,8 +14,7 @@ import {
 
 import * as Select from "@radix-ui/react-select";
 import { ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
-
-type RedditInfo = { reddit_id: number; reddit: string; image?: string };
+import { RedditInfo } from "@/types/reddit";
 
 const Page: FC<{}> = () => {
   const [loading, setLoading] = useState(false);
@@ -131,7 +130,7 @@ const RedditSelector = ({ reddits }: { reddits: RedditInfo[] }) => {
                 YOUR COMMUNITIES
               </Select.Label>
               {reddits.map((r) => (
-                <SelectItem key={r.reddit_id} value={r.reddit_id}>
+                <SelectItem key={r.redditId} value={r.redditId}>
                   <div className="flex w-full items-center gap-2">
                     <Image
                       width={30}

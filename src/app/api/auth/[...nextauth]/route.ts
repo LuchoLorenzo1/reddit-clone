@@ -1,6 +1,5 @@
-import pool from "@/database/db";
-import { FieldPacket, ResultSetHeader, RowDataPacket } from "mysql2";
-import NextAuth, { NextAuthOptions, User } from "next-auth";
+import { createUser, getUserByProvider } from "@/controllers/users";
+import NextAuth, { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 
 export const authOptions: NextAuthOptions = {
@@ -20,28 +19,28 @@ export const authOptions: NextAuthOptions = {
     async jwt(props) {
       // Persist the OAuth access_token to the token right after signin
       if (props.account) {
-        const res: [RowDataPacket[], FieldPacket[]] = await pool.query(
-          "SELECT * FROM users WHERE provider LIKE ? AND provider_id LIKE ?",
-          [props.account?.provider, props.account?.providerAccountId],
+        const user = await getUserByProvider(
+          props.account.provider,
+          props.account.providerAccountId,
         );
 
-        const [rows] = res;
-        if (rows.length == 0) {
+        if (user.length == 0) {
           const name = props.user.name?.split(" ")[0];
+          if (!name || !props.user.email) throw new Error();
 
-          const res2: [ResultSetHeader, FieldPacket[]] = await pool.query(
-            "INSERT INTO users (name, email, provider, provider_id) VALUES (?, ?, ?, ?)",
-            [
-              name,
-              props.user.email,
-              props.account?.provider,
-              props.account?.providerAccountId,
-            ],
+          const newUserId = await createUser(
+            name,
+            props.user.email,
+            props.account.provider,
+            props.account.providerAccountId,
           );
-          const [resHeader] = res2;
-          props.token.id = resHeader.insertId;
+          if (newUserId) {
+            props.token.id = newUserId;
+          } else {
+            throw new Error();
+          }
         } else {
-          props.token.id = rows[0].id;
+          props.token.id = user.id;
         }
       }
 
