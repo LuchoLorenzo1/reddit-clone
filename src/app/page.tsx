@@ -43,7 +43,7 @@ export default async function Home() {
         <picture className="relative h-7">
           <Image
             fill={true}
-            layout="cover"
+            style={{ objectFit: "cover" }}
             src="/home_banner.png"
             alt="Reddit Banner"
           />

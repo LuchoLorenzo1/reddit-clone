@@ -5,9 +5,10 @@ import { twMerge } from "tailwind-merge";
 import { PlusIcon, MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { Session } from "next-auth/core/types";
 import { ReactNode } from "react";
 import RedditSelector from "./redditSelector";
+
+import ProfilePic from "./profilePic";
 
 const Navbar = async () => {
   const session = await getServerSession(authOptions);
@@ -28,20 +29,6 @@ const Navbar = async () => {
         </NavLink>
       )}
     </nav>
-  );
-};
-
-const ProfilePic = ({ session }: { session: Session }) => {
-  return (
-    <Link href="/api/auth/signout" className="flex gap-2">
-      <Image
-        src={`${session.user?.image}`}
-        width={40}
-        height={40}
-        alt="profile picture"
-        className="min-w-[1.75rem] rounded-full"
-      />
-    </Link>
   );
 };
 
