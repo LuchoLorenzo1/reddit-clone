@@ -26,7 +26,7 @@ module.exports = {
         background: "#dae0e6",
       },
       fontSize: {
-        xxs: ["0.6rem", "1rem"],
+        xxs: ["0.7rem", "1rem"],
       },
     },
   },

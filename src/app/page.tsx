@@ -5,6 +5,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { getFeed } from "@/controllers/posts";
 
+import { ImageIcon, Link2Icon } from "@radix-ui/react-icons";
+
 export default async function Home() {
   const session = await getServerSession(authOptions);
   if (!session) return;
@@ -14,6 +16,33 @@ export default async function Home() {
   return (
     <section className="mt-3 grid w-full max-w-3xl grid-cols-3 justify-center gap-5 sm:px-5">
       <main className="col-span-3 md:col-span-2">
+        <div className="mb-3 flex w-full items-center gap-2 rounded-sm border border-gray-400 bg-white p-2 py-2">
+          <Image
+            width={40}
+            height={40}
+            src={session.user.image ?? ""}
+            className="rounded-full shadow shadow-gray-500"
+            alt="profile picture"
+          />
+          <Link
+            className="w-full rounded-sm border border-gray-200 bg-gray-100 p-1 px-2 hover:border-blue-500 hover:bg-white"
+            href="/r/create"
+          >
+            <div className="w-full text-sm font-bold text-black/40">
+              Create Post
+            </div>
+          </Link>
+          <ImageIcon
+            width={40}
+            height={40}
+            className="rounded-md p-1 hover:bg-gray-100"
+          />
+          <Link2Icon
+            width={40}
+            height={40}
+            className="rounded-md p-1 hover:bg-gray-100"
+          />
+        </div>
         <Posts posts={posts} />
       </main>
       <HomeAside />

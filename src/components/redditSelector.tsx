@@ -25,7 +25,7 @@ const RedditSelector = () => {
   return (
     <Select.Root onValueChange={onValueChange}>
       <Select.Trigger
-        className="focus:border-gray active:border-gray flex min-w-[3rem] items-center justify-between gap-2 border border-white px-1 py-1 hover:border-gray-200 md:min-w-[10rem] md:max-w-[10rem]"
+        className="focus:border-gray active:border-gray flex min-w-[3rem] items-center justify-between gap-0 border border-white px-1 py-2 hover:border-gray-200 focus:outline-none md:min-w-[12rem] md:max-w-[12rem] md:gap-2"
         aria-label="Community"
       >
         <Select.Value
@@ -79,8 +79,8 @@ const SelectItem = forwardRef(
           <Select.ItemText className="">
             <div className="flex items-center gap-2">
               <Image
-                width={20}
-                height={20}
+                width={25}
+                height={25}
                 src="/r.svg"
                 alt="subreddit option image"
               />
@@ -113,8 +113,8 @@ const Home = () => {
   return (
     <svg
       fill="#000000"
-      height="20px"
-      width="20px"
+      height="25px"
+      width="25px"
       version="1.1"
       id="Capa_1"
       xmlns="http://www.w3.org/2000/svg"
