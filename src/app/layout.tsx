@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { Ubuntu } from "next/font/google";
 import { ReactNode } from "react";
 import { twMerge } from "tailwind-merge";
-import Providers from "@/context/Provider";
+import Providers from "@/context/provider";
 import Navbar from "@/components/navbar";
 
 const roboto = Ubuntu({

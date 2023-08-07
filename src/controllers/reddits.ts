@@ -1,6 +1,6 @@
-import { FieldPacket, ResultSetHeader } from "mysql2";
+import { FieldPacket, ResultSetHeader, RowDataPacket } from "mysql2";
 import pool from "@/database/db";
-import { RedditInfo } from "@/types/reddit";
+import Reddit, { RedditInfo } from "@/types/reddit";
 
 export const toggleJoin = async (
   isJoining: boolean,
@@ -53,4 +53,15 @@ export const createReddit = async (
   );
 
   return res2[0].affectedRows > 0;
+};
+
+export const getRedditByName = async (
+  redditName: string,
+): Promise<Reddit | undefined> => {
+  const res: [RowDataPacket[], FieldPacket[]] = await pool.query(
+    "SELECT id, name, description, member_count, image_link FROM reddits WHERE name LIKE ?",
+    [redditName],
+  );
+
+  return res[0][0] as Reddit;
 };

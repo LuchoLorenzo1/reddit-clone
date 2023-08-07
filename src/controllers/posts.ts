@@ -45,3 +45,37 @@ export const getPosts = async () => {
   );
   return res[0] as Post[];
 };
+
+export const getFeed = async (userId: number) => {
+  const res: [RowDataPacket[], FieldPacket[]] = await pool.query(
+    `SELECT posts.id as id, title, content, u.name as username, upvotes, downvotes, posts.created_at, r.name as reddit, is_upvote as isUpvote
+			  FROM posts
+			  JOIN users u
+				  ON posts.author_id = u.id
+			  JOIN reddits r
+				  ON posts.reddit_id = r.id
+			  LEFT JOIN votes v
+				  ON posts.id = v.post_id AND v.user_id = ?
+			  WHERE posts.reddit_id IN (SELECT reddit_id FROM members WHERE user_id = ?)
+			  ORDER BY created_at DESC`,
+    [userId, userId],
+  );
+
+  return res[0] as Post[];
+};
+
+export const getPostsByReddit = async (redditId: number, userId: number) => {
+  const res: [RowDataPacket[], FieldPacket[]] = await pool.query(
+    `SELECT posts.id, title, content, u.name as username, upvotes, downvotes, posts.created_at, v.is_upvote as isUpvote
+		FROM posts
+		JOIN users u
+			ON posts.author_id = u.id
+		LEFT JOIN votes v
+			ON posts.id = v.post_id AND v.user_id = ?
+		WHERE reddit_id = ?
+		ORDER BY created_at DESC`,
+    [userId, redditId],
+  );
+
+  return res[0] as Post[];
+};

@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { FC } from "react";
 import Vote from "./vote";
-import { TimeSpan } from "./TimeSpan";
+import { TimeSpan } from "./timeSpan";
 
 interface PropsPosts {
   posts?: Post[];
