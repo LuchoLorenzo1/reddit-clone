@@ -24,7 +24,7 @@ export const toggleJoin = async (
 
 export const getRedditsFromUser = async (userId: number) => {
   const res = await pool.query(
-    `SELECT reddit_id as redditId, r.name AS reddit, r.image_link AS image
+    `SELECT reddit_id as redditId, r.name AS reddit, r.image_id AS imageId, r.banner_id as bannerId
 	  FROM members
 	  JOIN reddits r
 	  	ON reddit_id = r.id
@@ -59,7 +59,7 @@ export const getRedditByName = async (
   redditName: string,
 ): Promise<Reddit | undefined> => {
   const res: [RowDataPacket[], FieldPacket[]] = await pool.query(
-    "SELECT id, name, description, member_count, image_link FROM reddits WHERE name LIKE ?",
+    "SELECT id, name, description, member_count, image_id as imageId, banner_id as bannerId FROM reddits WHERE name LIKE ?",
     [redditName],
   );
 

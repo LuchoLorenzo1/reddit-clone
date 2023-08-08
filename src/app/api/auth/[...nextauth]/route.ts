@@ -24,7 +24,7 @@ export const authOptions: NextAuthOptions = {
           props.account.providerAccountId,
         );
 
-        if (user.length == 0) {
+        if (!user) {
           const name = props.user.name?.split(" ")[0];
           if (!name || !props.user.email) throw new Error();
 

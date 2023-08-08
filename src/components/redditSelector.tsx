@@ -1,6 +1,6 @@
 "use client";
 
-import { Ref, forwardRef, useEffect, useRef, useState } from "react";
+import { Ref, forwardRef, useEffect, useState } from "react";
 import * as Select from "@radix-ui/react-select";
 import { ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
 
@@ -38,7 +38,7 @@ const RedditSelector = () => {
       </Select.Trigger>
       <Select.Portal>
         <Select.Content
-          className="max-h-52 overflow-hidden border bg-white text-xs hover:border-gray-200"
+          className="max-h-52 min-w-[12rem] max-w-[12rem] overflow-hidden border bg-white text-xs hover:border-gray-200"
           sideOffset={0}
           position="popper"
         >

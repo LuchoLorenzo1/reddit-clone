@@ -3,11 +3,12 @@ export default interface Reddit {
   name: string;
   description: string;
   member_count: number;
-  image_link?: string;
+  imageId?: string;
+  bannerId?: string;
 }
 
 export type RedditInfo = {
   redditId: number;
   reddit: string;
-  image: string;
+  imageId: string;
 };

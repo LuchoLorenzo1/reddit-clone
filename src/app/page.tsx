@@ -26,7 +26,7 @@ export default async function Home() {
           />
           <Link
             className="w-full rounded-sm border border-gray-200 bg-gray-100 p-1 px-2 hover:border-blue-500 hover:bg-white"
-            href="/r/create"
+            href="/post"
           >
             <div className="w-full text-sm font-bold text-black/40">
               Create Post

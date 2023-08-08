@@ -7,7 +7,8 @@ CREATE TABLE reddits (
 	name VARCHAR(21) NOT NULL UNIQUE,
 	description VARCHAR(1000) NOT NULL,
 	member_count INT NOT NULL DEFAULT 0,
-	image_link VARCHAR(100),
+	image_id VARCHAR(200),
+	banner_id VARCHAR(200),
 	created_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
@@ -17,6 +18,7 @@ CREATE TABLE users (
 	email VARCHAR(50) NOT NULL,
 	provider VARCHAR(50) NOT NULL,
 	provider_id VARCHAR(200) NOT NULL,
+	image_id VARCHAR(200),
 	created_at TIMESTAMP NOT NULL DEFAULT NOW(),
 	UNIQUE KEY (provider, provider_id)
 );

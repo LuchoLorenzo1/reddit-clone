@@ -52,6 +52,7 @@ const Page: FC<{}> = () => {
             type="text"
             name="name"
             required
+            placeholder="name"
             maxLength={21}
             className="w-full rounded border border-gray-200 py-2 pl-6"
           />
