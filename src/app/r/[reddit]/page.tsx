@@ -43,17 +43,19 @@ const RedditNavbar = ({
   reddit: Reddit;
   isMember: boolean;
 }) => {
-  console.log(reddit.imageId);
   return (
-    <div className="relative flex h-20 min-h-[14rem] w-full flex-col items-center bg-white">
-      <picture className="relative mb-5 min-h-[10rem] min-w-full overflow-hidden bg-blue-500">
+    <section className="relative flex h-20 min-h-[14rem] w-full flex-col items-center bg-white">
+      <picture className="relative mb-5 min-h-[10rem] w-screen overflow-hidden bg-blue-500">
         {reddit.bannerId ? (
           <Image
             loading="lazy"
-            layout="fill"
             quality={100}
-            objectFit="cover"
             src={`https://f005.backblazeb2.com/b2api/v1/b2_download_file_by_id?fileId=${reddit.bannerId}`}
+            sizes="(min-width: 800px) 2500px, 1500px"
+            fill
+            className="object-cover"
+            objectFit="cover"
+            objectPosition="center"
             alt="Reddit Banner"
           />
         ) : (
@@ -65,6 +67,7 @@ const RedditNavbar = ({
           <Image
             className="rounded-full border-4 border-white"
             loading="lazy"
+            quality={100}
             src={
               !!reddit.imageId
                 ? `https://f005.backblazeb2.com/b2api/v1/b2_download_file_by_id?fileId=${reddit.imageId}`
@@ -83,7 +86,7 @@ const RedditNavbar = ({
           <h1 className="text-xs font-bold text-text/60">r/{reddit.name}</h1>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

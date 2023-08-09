@@ -77,7 +77,11 @@ const PostNavbar: FC<PostNavbarProps> = ({ post, reddit }) => {
         <>
           <Image
             className="rounded-full"
-            src="/devsarg.png"
+            src={
+              post.redditImageId
+                ? `https://f005.backblazeb2.com/b2api/v1/b2_download_file_by_id?fileId=${post.redditImageId}`
+                : "/r.svg"
+            }
             width={20}
             height={20}
             alt="profile picture"

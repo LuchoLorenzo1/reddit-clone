@@ -8,4 +8,5 @@ export default interface Post {
   downvotes: number;
   created_at: Date;
   isUpvote?: boolean;
+  redditImageId: string;
 }

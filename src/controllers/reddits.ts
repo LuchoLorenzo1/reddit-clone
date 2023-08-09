@@ -35,13 +35,22 @@ export const getRedditsFromUser = async (userId: number) => {
 };
 
 export const createReddit = async (
-  name: string,
-  description: string,
+  {
+    name,
+    description,
+    bannerId,
+    imageId,
+  }: {
+    name: string;
+    description: string;
+    bannerId?: string;
+    imageId?: string;
+  },
   userId: number,
 ) => {
   const res: [ResultSetHeader, FieldPacket[]] = await pool.query(
-    "INSERT INTO reddits (name, description) VALUES (?, ?)",
-    [name, description],
+    "INSERT INTO reddits (name, description, image_id, banner_id) VALUES (?, ?, ?, ?)",
+    [name, description, imageId, bannerId],
   );
 
   if (res[0].affectedRows <= 0) return false;

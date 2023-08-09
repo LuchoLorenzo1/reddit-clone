@@ -18,13 +18,7 @@ const Page: FC<{}> = () => {
 
     const res = await fetch("/api/r/create", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name: formData.get("name"),
-        description: formData.get("description"),
-      }),
+      body: formData,
     });
 
     if (!res.ok) {
@@ -44,6 +38,7 @@ const Page: FC<{}> = () => {
         onSubmit={handleSubmit}
         className="mx-1 flex w-full max-w-2xl flex-col items-center justify-center gap-5 rounded-sm bg-white p-5 shadow-xl shadow-gray-300 md:w-3/4"
       >
+        <h1 className="text-start text-xl">Create a community</h1>
         <div className="relative flex w-full">
           <span className="absolute left-2 top-1/2 -translate-y-2/4 transform text-xl">
             r/
@@ -61,8 +56,24 @@ const Page: FC<{}> = () => {
           type="text"
           name="description"
           placeholder="description"
-          className="w-full rounded border border-gray-200 p-3"
+          className="w-full rounded border border-gray-200 px-3 py-2"
         />
+        <label className="flex w-full flex-col gap-2">
+          Subreddit Icon
+          <input
+            type="file"
+            name="image"
+            className="w-full rounded border border-gray-200 px-3 py-2"
+          />
+        </label>
+        <label className="flex w-full flex-col gap-2">
+          Subreddit Banner
+          <input
+            type="file"
+            name="banner"
+            className="w-full rounded border border-gray-200 px-3 py-2"
+          />
+        </label>
         {loading ? (
           <Spinner />
         ) : (

@@ -79,9 +79,14 @@ const SelectItem = forwardRef(
           <Select.ItemText className="">
             <div className="flex items-center gap-2">
               <Image
+                className="rounded-full"
                 width={25}
                 height={25}
-                src="/r.svg"
+                src={
+                  redditInfo.imageId
+                    ? `https://f005.backblazeb2.com/b2api/v1/b2_download_file_by_id?fileId=${redditInfo.imageId}`
+                    : "/r.svg"
+                }
                 alt="subreddit option image"
               />
               <h1 className="hidden text-xxs font-bold md:block">

@@ -48,7 +48,7 @@ export const getPosts = async () => {
 
 export const getFeed = async (userId: number) => {
   const res: [RowDataPacket[], FieldPacket[]] = await pool.query(
-    `SELECT posts.id as id, title, content, u.name as username, upvotes, downvotes, posts.created_at, r.name as reddit, is_upvote as isUpvote
+    `SELECT posts.id as id, title, content, u.name as username, upvotes, downvotes, posts.created_at, r.name as reddit, r.image_id as redditImageId, is_upvote as isUpvote
 			  FROM posts
 			  JOIN users u
 				  ON posts.author_id = u.id

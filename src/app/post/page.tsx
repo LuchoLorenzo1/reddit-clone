@@ -133,9 +133,14 @@ const RedditSelector = ({ reddits }: { reddits: RedditInfo[] }) => {
                 <SelectItem key={r.redditId} value={r.redditId}>
                   <div className="flex w-full items-center gap-2">
                     <Image
+                      className="rounded-full"
                       width={30}
                       height={30}
-                      src="/r.svg"
+                      src={
+                        r.imageId
+                          ? `https://f005.backblazeb2.com/b2api/v1/b2_download_file_by_id?fileId=${r.imageId}`
+                          : "/r.svg"
+                      }
                       alt="subreddit option image"
                     />
                     {r.reddit}
