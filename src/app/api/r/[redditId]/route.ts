@@ -1,28 +1,22 @@
 import { NextRequest, NextResponse } from "next/server";
-import { authOptions } from "../auth/[...nextauth]/route";
+import { authOptions } from "../../auth/[...nextauth]/route";
 import { getServerSession } from "next-auth/next";
-import { getRedditsFromUser, createReddit } from "@/controllers/reddits";
+import { updateReddit, getRedditById } from "@/controllers/reddits";
 import { authorizeBucket, uploadImage } from "@/database/b2";
 
-export const GET = async () => {
-  const session = await getServerSession(authOptions);
-  if (!session) return NextResponse.json("", { status: 404 });
-
-  try {
-    const reddits = await getRedditsFromUser(session.user.id);
-    return NextResponse.json({ reddits }, { status: 200 });
-  } catch (e) {
-    console.error(e);
-    return NextResponse.json(
-      { error: "A server error ocurred" },
-      { status: 500 },
-    );
-  }
-};
-
-export const POST = async (req: NextRequest) => {
+export const PUT = async (
+  req: NextRequest,
+  { params }: { params: { redditId: number } },
+) => {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json("", { status: 403 });
+
+  if (isNaN(params.redditId))
+    return NextResponse.json({ error: "ID is invalid" }, { status: 400 });
+
+  const reddit = await getRedditById(params.redditId);
+  if (!reddit)
+    return NextResponse.json({ error: "Reddit not found" }, { status: 404 });
 
   const data = await req.formData();
 
@@ -30,9 +24,6 @@ export const POST = async (req: NextRequest) => {
   const description = data.get("description")?.toString();
   const banner = data.get("banner");
   const image = data.get("image");
-
-  if (name === undefined || description === undefined)
-    return NextResponse.json({}, { status: 400 });
 
   let bannerId;
   let imageId;
@@ -50,7 +41,7 @@ export const POST = async (req: NextRequest) => {
       bannerId = await uploadImage(
         banner,
         "banner",
-        name,
+        reddit.name,
         uploadUrl,
         authorizationToken,
       );
@@ -65,7 +56,7 @@ export const POST = async (req: NextRequest) => {
       imageId = await uploadImage(
         image,
         "icon",
-        name,
+        reddit.name,
         uploadUrl,
         authorizationToken,
       );
@@ -78,9 +69,9 @@ export const POST = async (req: NextRequest) => {
   }
 
   try {
-    await createReddit(
+    await updateReddit(
       { name, description, bannerId, imageId },
-      session.user.id,
+      params.redditId,
     );
     return NextResponse.json({}, { status: 200 });
   } catch (e) {

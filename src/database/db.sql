@@ -27,8 +27,8 @@ CREATE TABLE members (
 	user_id INT NOT NULL,
 	reddit_id INT NOT NULL,
 	join_date TIMESTAMP NOT NULL DEFAULT NOW(),
-	FOREIGN KEY(user_id) REFERENCES users(id),
-	FOREIGN KEY(reddit_id) REFERENCES reddits(id),
+	FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
+	FOREIGN KEY(reddit_id) REFERENCES reddits(id) ON DELETE CASCADE,
 	PRIMARY KEY(user_id, reddit_id)
 );
 
@@ -42,16 +42,16 @@ CREATE TABLE posts (
 	downvotes INT NOT NULL DEFAULT 0,
 	num_comments INT DEFAULT 0,
 	created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-	FOREIGN KEY(author_id) REFERENCES users(id),
-	FOREIGN KEY(reddit_id) REFERENCES reddits(id)
+	FOREIGN KEY(author_id) REFERENCES users(id) ON DELETE CASCADE,
+	FOREIGN KEY(reddit_id) REFERENCES reddits(id) ON DELETE CASCADE
 );
 
 CREATE TABLE votes (
 	user_id INT NOT NULL,
 	post_id INT NOT NULL,
 	is_upvote BOOLEAN NOT NULL,
-	FOREIGN KEY(user_id) REFERENCES users(id),
-	FOREIGN KEY(post_id) REFERENCES posts(id),
+	FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
+	FOREIGN KEY(post_id) REFERENCES posts(id) ON DELETE CASCADE,
 	PRIMARY KEY(user_id, post_id)
 );
 

@@ -16,7 +16,7 @@ const Page: FC<{}> = () => {
     setError("");
     setLoading(true);
 
-    const res = await fetch("/api/r/create", {
+    const res = await fetch("/api/r", {
       method: "POST",
       body: formData,
     });

@@ -34,6 +34,28 @@ export const getRedditsFromUser = async (userId: number) => {
   return res[0] as RedditInfo[];
 };
 
+export const getRedditByName = async (
+  redditName: string,
+): Promise<Reddit | undefined> => {
+  const res: [RowDataPacket[], FieldPacket[]] = await pool.query(
+    "SELECT id, name, description, member_count, image_id as imageId, banner_id as bannerId FROM reddits WHERE name LIKE ?",
+    [redditName],
+  );
+
+  return res[0][0] as Reddit;
+};
+
+export const getRedditById = async (
+  redditId: number,
+): Promise<Reddit | undefined> => {
+  const res: [RowDataPacket[], FieldPacket[]] = await pool.query(
+    "SELECT id, name, description, member_count, image_id as imageId, banner_id as bannerId FROM reddits WHERE id = ?",
+    [redditId],
+  );
+
+  return res[0][0] as Reddit;
+};
+
 export const createReddit = async (
   {
     name,
@@ -64,13 +86,39 @@ export const createReddit = async (
   return res2[0].affectedRows > 0;
 };
 
-export const getRedditByName = async (
-  redditName: string,
-): Promise<Reddit | undefined> => {
-  const res: [RowDataPacket[], FieldPacket[]] = await pool.query(
-    "SELECT id, name, description, member_count, image_id as imageId, banner_id as bannerId FROM reddits WHERE name LIKE ?",
-    [redditName],
-  );
+export const updateReddit = async (
+  data: {
+    name?: string;
+    description?: string;
+    bannerId?: string;
+    imageId?: string;
+  },
+  redditId: number,
+) => {
+  const update: {
+    name?: string;
+    description?: string;
+    banner_id?: string;
+    image_id?: string;
+  } = {};
 
-  return res[0][0] as Reddit;
+  if (data.name) {
+    update.name = data.name;
+  }
+  if (data.description) {
+    update.description = data.description;
+  }
+  if (data.bannerId) {
+    update.banner_id = data.bannerId;
+  }
+  if (data.imageId) {
+    update.image_id = data.imageId;
+  }
+  console.log(update);
+
+  const res: [ResultSetHeader, FieldPacket[]] = await pool.query(
+    "UPDATE reddits SET ? WHERE id = ?",
+    [update, redditId],
+  );
+  return true;
 };

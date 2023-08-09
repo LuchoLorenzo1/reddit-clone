@@ -8,6 +8,7 @@ import { getServerSession } from "next-auth/next";
 import { fetchRedditData } from "./fetchRedditData";
 import { redirect } from "next/navigation";
 import JoinReddit from "./joinReddit";
+import RedditIcon from "./redditIcon";
 
 interface RedditProps {
   params: {
@@ -64,19 +65,7 @@ const RedditNavbar = ({
       </picture>
       <div className="absolute top-[9.5rem] flex w-full max-w-3xl items-end justify-start gap-2 px-5 sm:px-5">
         <picture className="rounded-full bg-white">
-          <Image
-            className="rounded-full border-4 border-white"
-            loading="lazy"
-            quality={100}
-            src={
-              !!reddit.imageId
-                ? `https://f005.backblazeb2.com/b2api/v1/b2_download_file_by_id?fileId=${reddit.imageId}`
-                : "/r.svg"
-            }
-            width={80}
-            height={80}
-            alt="profile picture"
-          />
+          <RedditIcon imageId={reddit.imageId} redditId={reddit.id} />
         </picture>
         <div>
           <div className="flex items-center justify-center gap-3">
