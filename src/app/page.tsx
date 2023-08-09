@@ -6,10 +6,12 @@ import Link from "next/link";
 import { getFeed } from "@/controllers/posts";
 
 import { ImageIcon, Link2Icon } from "@radix-ui/react-icons";
+import { getUserById } from "@/controllers/users";
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
   if (!session) return;
+  const user = await getUserById(session.user.id);
 
   const posts = await getFeed(session.user.id);
 
@@ -20,7 +22,11 @@ export default async function Home() {
           <Image
             width={40}
             height={40}
-            src={session.user.image ?? ""}
+            src={
+              user?.imageId
+                ? `https://f005.backblazeb2.com/b2api/v1/b2_download_file_by_id?fileId=${user.imageId}`
+                : session.user?.image ?? "/r.svg"
+            }
             className="rounded-full shadow shadow-gray-500"
             alt="profile picture"
           />

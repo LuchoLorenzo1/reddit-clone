@@ -102,23 +102,15 @@ export const updateReddit = async (
     image_id?: string;
   } = {};
 
-  if (data.name) {
-    update.name = data.name;
-  }
-  if (data.description) {
-    update.description = data.description;
-  }
-  if (data.bannerId) {
-    update.banner_id = data.bannerId;
-  }
-  if (data.imageId) {
-    update.image_id = data.imageId;
-  }
-  console.log(update);
+  if (data.name) update.name = data.name;
+  if (data.description) update.description = data.description;
+  if (data.bannerId) update.banner_id = data.bannerId;
+  if (data.imageId) update.image_id = data.imageId;
 
   const res: [ResultSetHeader, FieldPacket[]] = await pool.query(
     "UPDATE reddits SET ? WHERE id = ?",
     [update, redditId],
   );
-  return true;
+
+  return res[0].affectedRows == 1;
 };

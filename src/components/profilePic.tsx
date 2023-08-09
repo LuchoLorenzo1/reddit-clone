@@ -3,15 +3,24 @@ import { Session } from "next-auth/core/types";
 import * as Dialog from "@radix-ui/react-dialog";
 import Image from "next/image";
 import { Cross2Icon } from "@radix-ui/react-icons";
-import { useSession, signOut } from "next-auth/react";
-import { FormEvent } from "react";
+import { signOut } from "next-auth/react";
+import { Dispatch, FormEvent, SetStateAction, useState } from "react";
+import { useRouter } from "next/navigation";
+import Spinner from "./spinner";
+import User from "@/types/user";
 
-const ProfilePic = ({ session }: { session: Session }) => {
+const ProfilePic = ({ session, user }: { session: Session; user?: User }) => {
+  const [open, setOpen] = useState(false);
+
   return (
-    <Dialog.Root>
+    <Dialog.Root open={open} onOpenChange={() => setOpen(!open)}>
       <Dialog.Trigger className="focus:outline-none">
         <Image
-          src={`${session.user?.image}`}
+          src={
+            user?.imageId
+              ? `https://f005.backblazeb2.com/b2api/v1/b2_download_file_by_id?fileId=${user.imageId}`
+              : session.user?.image ?? "/r.svg"
+          }
           width={40}
           height={40}
           alt="profile picture"
@@ -42,46 +51,86 @@ const ProfilePic = ({ session }: { session: Session }) => {
           </button>
           <hr />
           <h2 className="text-xl">Edit Profile</h2>
-          <EditProfile />
+          <EditProfile user={user} setOpen={setOpen} />
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>
   );
 };
 
-const EditProfile = () => {
-  const session = useSession();
-  if (!session) return;
+const EditProfile = ({
+  setOpen,
+  user,
+}: {
+  setOpen: Dispatch<SetStateAction<boolean>>;
+  user: User;
+}) => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const router = useRouter();
 
-  const onSubmit = (e: FormEvent) => {
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    return;
+    const formData = new FormData(e.currentTarget);
+
+    setError("");
+    setLoading(true);
+
+    const res = await fetch(`/api/u`, {
+      method: "PUT",
+      body: formData,
+    });
+
+    if (!res.ok) {
+      const data = await res.json();
+      console.log("error");
+      setError(data.message);
+      setLoading(false);
+      return;
+    }
+    setLoading(false);
+    setOpen(false);
+    router.refresh();
   };
 
   return (
-    <form className="flex flex-col gap-4">
-      <label className="flex flex-col gap-1">
-        <h2 className="text-xs font-bold ">Username</h2>
+    <form
+      onSubmit={onSubmit}
+      className="flex w-full flex-col items-center gap-4"
+    >
+      <label className="flex w-full flex-col gap-1">
+        <h2 className="text-xs font-bold">Username</h2>
         <input
           type="text"
-          className="border border-gray-200 p-1"
-          defaultValue={session.data?.user.name ?? ""}
-          name="username"
+          className="w-full border border-gray-200 p-1"
+          defaultValue={user.name}
+          name="name"
         />
       </label>
-      <label className="flex flex-col gap-1">
+      <label className="flex w-full flex-col gap-1">
         <h2 className="text-xs font-bold ">Profile picture</h2>
         <input
           type="file"
-          className="border border-gray-200 p-1"
+          className="w-full border border-gray-200 p-1"
           name="image"
         />
       </label>
-      <input
-        type="submit"
-        className="rounded-full border border-gray-200 bg-blue-500 py-[0.15rem] text-xs font-bold text-white hover:bg-blue-400"
-        value="Save changes"
-      />
+      {loading ? (
+        <Spinner />
+      ) : (
+        <input
+          type="submit"
+          className="rounded-full border border-gray-200 bg-blue-500 py-[0.15rem] text-xs font-bold text-white hover:bg-blue-400"
+          value="Save changes"
+        />
+      )}
+      {error ? (
+        <h1 className="rounded-md bg-red-500 p-2 text-center font-bold text-white">
+          {error}
+        </h1>
+      ) : (
+        ""
+      )}
     </form>
   );
 };

@@ -85,9 +85,16 @@ const RedditIcon = ({
             ) : (
               <input
                 type="submit"
+                className="rounded-full border border-gray-200 bg-blue-500 py-[0.15rem] text-xs font-bold text-white hover:bg-blue-400"
                 value="Save changes"
-                className="rounded-full border border-blue-500 bg-white py-[0.15rem] text-center text-xs font-bold text-blue-500 hover:bg-blue-500 hover:text-white"
               />
+            )}
+            {error ? (
+              <h1 className="rounded-md bg-red-500 p-2 text-center font-bold text-white">
+                {error}
+              </h1>
+            ) : (
+              ""
             )}
           </form>
         </Dialog.Content>

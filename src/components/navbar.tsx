@@ -9,9 +9,14 @@ import { ReactNode } from "react";
 import RedditSelector from "./redditSelector";
 
 import ProfilePic from "./profilePic";
+import { getUserById } from "@/controllers/users";
+import User from "@/types/user";
 
 const Navbar = async () => {
   const session = await getServerSession(authOptions);
+  let user: User | undefined;
+  if (session) user = await getUserById(session.user.id);
+
   return (
     <nav className="flex items-center justify-center gap-2 bg-white px-2 py-2 dark:bg-black dark:text-white sm:gap-3 md:gap-5">
       <Logo />
@@ -22,7 +27,7 @@ const Navbar = async () => {
       </NavLink>
       <ToggleDarkMode />
       {session ? (
-        <ProfilePic session={session} />
+        <ProfilePic user={user} session={session} />
       ) : (
         <NavLink className="min-w-fit px-2" href="/signin">
           Sign In

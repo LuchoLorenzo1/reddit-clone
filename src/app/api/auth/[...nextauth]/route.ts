@@ -41,6 +41,7 @@ export const authOptions: NextAuthOptions = {
           }
         } else {
           props.token.id = user.id;
+          props.token.name = user.name;
         }
       }
 
@@ -49,6 +50,7 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token, user }) {
       // Send properties to the client, like an access_token from a provider.
       session.user.id = token.id;
+      session.user.name = token.name ?? user.name;
       return session;
     },
   },
