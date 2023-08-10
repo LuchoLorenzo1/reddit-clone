@@ -9,6 +9,7 @@ import { fetchRedditData } from "./fetchRedditData";
 import { redirect } from "next/navigation";
 import JoinReddit from "./joinReddit";
 import RedditIcon from "./redditIcon";
+import { twMerge } from "tailwind-merge";
 
 interface RedditProps {
   params: {
@@ -46,7 +47,12 @@ const RedditNavbar = ({
 }) => {
   return (
     <section className="relative flex h-20 min-h-[14rem] w-full flex-col items-center bg-white">
-      <picture className="relative mb-5 min-h-[10rem] w-screen overflow-hidden bg-blue-500">
+      <picture
+        className={twMerge(
+          "relative mb-5 min-h-[10rem] w-screen overflow-hidden",
+          reddit.bannerId ? "" : "bg-blue-500",
+        )}
+      >
         {reddit.bannerId ? (
           <Image
             loading="lazy"
@@ -64,7 +70,7 @@ const RedditNavbar = ({
         )}
       </picture>
       <div className="absolute top-[9.5rem] flex w-full max-w-3xl items-end justify-start gap-2 px-5 sm:px-5">
-        <picture className="rounded-full bg-white">
+        <picture className="relative h-16 w-16 rounded-full bg-white">
           <RedditIcon imageId={reddit.imageId} redditId={reddit.id} />
         </picture>
         <div>

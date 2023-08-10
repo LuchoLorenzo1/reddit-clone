@@ -34,8 +34,8 @@ export const POST = async (req: NextRequest) => {
   if (name === undefined || description === undefined)
     return NextResponse.json({}, { status: 400 });
 
-  let bannerId;
-  let imageId;
+  let bannerId: string | undefined;
+  let imageId: string | undefined;
 
   if (banner || image) {
     const res = await authorizeBucket();
@@ -47,33 +47,39 @@ export const POST = async (req: NextRequest) => {
     const { authorizationToken, uploadUrl } = res;
 
     if (banner && banner instanceof File) {
-      bannerId = await uploadImage(
+      const result = await uploadImage(
         banner,
         "banner",
         name,
         uploadUrl,
         authorizationToken,
       );
-      if (!bannerId)
+      if (!result.ok) {
         return NextResponse.json(
-          { message: "A server error ocurred" },
-          { status: 500 },
+          { message: result.msg },
+          { status: result.status ?? 500 },
         );
+      } else {
+        bannerId = result.res;
+      }
     }
 
     if (image && image instanceof File) {
-      imageId = await uploadImage(
+      const result = await uploadImage(
         image,
         "icon",
         name,
         uploadUrl,
         authorizationToken,
       );
-      if (!imageId)
+      if (!result.ok) {
         return NextResponse.json(
-          { message: "A server error ocurred" },
-          { status: 500 },
+          { message: result.msg },
+          { status: result.status ?? 500 },
         );
+      } else {
+        imageId = result.res;
+      }
     }
   }
 

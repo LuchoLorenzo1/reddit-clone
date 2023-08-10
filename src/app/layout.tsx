@@ -13,7 +13,7 @@ const roboto = Ubuntu({
 });
 
 export const metadata: Metadata = {
-  title: "Reddit",
+  title: "Reddit - Dive into anything",
   description: "Share with your community",
 };
 

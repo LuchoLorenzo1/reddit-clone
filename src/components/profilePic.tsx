@@ -8,6 +8,7 @@ import { Dispatch, FormEvent, SetStateAction, useState } from "react";
 import { useRouter } from "next/navigation";
 import Spinner from "./spinner";
 import User from "@/types/user";
+import InputImage from "./inputImage";
 
 const ProfilePic = ({ session, user }: { session: Session; user?: User }) => {
   const [open, setOpen] = useState(false);
@@ -63,7 +64,7 @@ const EditProfile = ({
   user,
 }: {
   setOpen: Dispatch<SetStateAction<boolean>>;
-  user: User;
+  user?: User;
 }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -103,16 +104,15 @@ const EditProfile = ({
         <input
           type="text"
           className="w-full border border-gray-200 p-1"
-          defaultValue={user.name}
+          defaultValue={user?.name ?? ""}
           name="name"
         />
       </label>
       <label className="flex w-full flex-col gap-1">
         <h2 className="text-xs font-bold ">Profile picture</h2>
-        <input
-          type="file"
-          className="w-full border border-gray-200 p-1"
+        <InputImage
           name="image"
+          className="w-full border border-gray-200 p-1"
         />
       </label>
       {loading ? (
@@ -120,7 +120,7 @@ const EditProfile = ({
       ) : (
         <input
           type="submit"
-          className="rounded-full border border-gray-200 bg-blue-500 py-[0.15rem] text-xs font-bold text-white hover:bg-blue-400"
+          className="w-full rounded-full border border-gray-200 bg-blue-500 py-[0.15rem] text-xs font-bold text-white hover:bg-blue-400"
           value="Save changes"
         />
       )}

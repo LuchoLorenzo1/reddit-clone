@@ -1,4 +1,5 @@
 "use client";
+import InputImage from "@/components/inputImage";
 import Spinner from "@/components/spinner";
 import { useRouter } from "next/navigation";
 import { FC, FormEvent, useState } from "react";
@@ -60,16 +61,14 @@ const Page: FC<{}> = () => {
         />
         <label className="flex w-full flex-col gap-2">
           Subreddit Icon
-          <input
-            type="file"
+          <InputImage
             name="image"
             className="w-full rounded border border-gray-200 px-3 py-2"
           />
         </label>
         <label className="flex w-full flex-col gap-2">
           Subreddit Banner
-          <input
-            type="file"
+          <InputImage
             name="banner"
             className="w-full rounded border border-gray-200 px-3 py-2"
           />

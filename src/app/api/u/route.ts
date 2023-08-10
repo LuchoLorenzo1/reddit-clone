@@ -16,26 +16,27 @@ export const PUT = async (req: NextRequest) => {
 
   if (image instanceof File && image.size > 0) {
     const res = await authorizeBucket();
-    if (!res)
+    if (!res) {
       return NextResponse.json(
         { message: "A server error ocurred" },
         { status: 500 },
       );
-    const { authorizationToken, uploadUrl } = res;
+    }
 
-    if (image && image instanceof File) {
-      imageId = await uploadImage(
-        image,
-        "users",
-        name ?? session.user.name!,
-        uploadUrl,
-        authorizationToken,
+    const result = await uploadImage(
+      image,
+      "banner",
+      name ?? session.user.name!,
+      res.uploadUrl,
+      res.authorizationToken,
+    );
+    if (!result.ok) {
+      return NextResponse.json(
+        { message: result.msg },
+        { status: result.status ?? 500 },
       );
-      if (!imageId)
-        return NextResponse.json(
-          { message: "A server error ocurred" },
-          { status: 500 },
-        );
+    } else {
+      imageId = result.res;
     }
   }
 

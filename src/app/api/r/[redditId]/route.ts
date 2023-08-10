@@ -25,8 +25,8 @@ export const PUT = async (
   const banner = data.get("banner");
   const image = data.get("image");
 
-  let bannerId;
-  let imageId;
+  let bannerId: string | undefined;
+  let imageId: string | undefined;
 
   if (banner || image) {
     const res = await authorizeBucket();
@@ -37,34 +37,40 @@ export const PUT = async (
       );
     const { authorizationToken, uploadUrl } = res;
 
-    if (banner && banner instanceof File) {
-      bannerId = await uploadImage(
+    if (banner instanceof File && banner.size > 0) {
+      const result = await uploadImage(
         banner,
         "banner",
         reddit.name,
         uploadUrl,
         authorizationToken,
       );
-      if (!bannerId)
+      if (!result.ok) {
         return NextResponse.json(
           { message: "A server error ocurred" },
           { status: 500 },
         );
+      } else {
+        bannerId = result.res;
+      }
     }
 
-    if (image && image instanceof File) {
-      imageId = await uploadImage(
+    if (image instanceof File && image.size > 0) {
+      const result = await uploadImage(
         image,
         "icon",
         reddit.name,
         uploadUrl,
         authorizationToken,
       );
-      if (!imageId)
+      if (!result.ok) {
         return NextResponse.json(
           { message: "A server error ocurred" },
-          { status: 500 },
+          { status: result.status ?? 500 },
         );
+      } else {
+        imageId = result.res;
+      }
     }
   }
 

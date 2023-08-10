@@ -5,6 +5,7 @@ import { Cross2Icon } from "@radix-ui/react-icons";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { FormEvent, useState } from "react";
+import InputImage from "@/components/inputImage";
 
 const RedditIcon = ({
   imageId,
@@ -48,14 +49,14 @@ const RedditIcon = ({
         <Image
           className="rounded-full border-4 border-white"
           loading="lazy"
-          quality={100}
           src={
             !!imageId
               ? `https://f005.backblazeb2.com/b2api/v1/b2_download_file_by_id?fileId=${imageId}`
               : "/r.svg"
           }
-          width={80}
-          height={80}
+          width={100}
+          height={100}
+          objectFit="cover"
           alt="profile picture"
         />
       </Dialog.Trigger>
@@ -74,11 +75,17 @@ const RedditIcon = ({
           <form onSubmit={onSubmit} className="flex w-full flex-col gap-4">
             <label className="flex flex-col">
               Update icon
-              <input type="file" name="image" />
+              <InputImage
+                name="image"
+                className="w-full rounded border border-gray-200 px-3 py-2"
+              />
             </label>
             <label>
               Update banner
-              <input type="file" name="banner" />
+              <InputImage
+                name="banner"
+                className="w-full rounded border border-gray-200 px-3 py-2"
+              />
             </label>
             {loading ? (
               <Spinner />

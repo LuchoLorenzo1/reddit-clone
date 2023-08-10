@@ -19,6 +19,7 @@
     "dotenv": "16.3.1",
     "eslint": "8.44.0",
     "eslint-config-next": "13.4.9",
+    "file-type": "^18.5.0",
     "mysql2": "3.5.1",
     "next": "13.4.9",
     "next-auth": "4.22.3",
