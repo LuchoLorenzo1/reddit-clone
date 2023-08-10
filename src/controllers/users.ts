@@ -52,3 +52,18 @@ export const updateUser = async (
 
   return res[0].affectedRows == 1;
 };
+
+export const deleteUser = async (userId: number) => {
+  let res: [ResultSetHeader, FieldPacket[]] = await pool.query(
+    "DELETE FROM votes WHERE user_id = ?",
+    [userId],
+  );
+
+  res = await pool.query("DELETE FROM posts WHERE author_id = ?", [userId]);
+
+  res = await pool.query("DELETE FROM members WHERE user_id = ?", [userId]);
+
+  res = await pool.query("DELETE FROM users WHERE id = ?", [userId]);
+
+  return res[0].affectedRows == 1;
+};

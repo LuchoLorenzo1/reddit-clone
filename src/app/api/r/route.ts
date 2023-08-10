@@ -46,7 +46,7 @@ export const POST = async (req: NextRequest) => {
       );
     const { authorizationToken, uploadUrl } = res;
 
-    if (banner && banner instanceof File) {
+    if (banner instanceof File && banner.size > 0) {
       const result = await uploadImage(
         banner,
         "banner",
@@ -64,7 +64,7 @@ export const POST = async (req: NextRequest) => {
       }
     }
 
-    if (image && image instanceof File) {
+    if (image instanceof File && image.size > 0) {
       const result = await uploadImage(
         image,
         "icon",

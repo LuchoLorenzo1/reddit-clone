@@ -38,7 +38,7 @@ export const getRedditByName = async (
   redditName: string,
 ): Promise<Reddit | undefined> => {
   const res: [RowDataPacket[], FieldPacket[]] = await pool.query(
-    "SELECT id, name, description, member_count, image_id as imageId, banner_id as bannerId FROM reddits WHERE name LIKE ?",
+    "SELECT id, name, description, member_count, image_id as imageId, banner_id as bannerId, created_at as createdAt FROM reddits WHERE name LIKE ?",
     [redditName],
   );
 
@@ -110,6 +110,15 @@ export const updateReddit = async (
   const res: [ResultSetHeader, FieldPacket[]] = await pool.query(
     "UPDATE reddits SET ? WHERE id = ?",
     [update, redditId],
+  );
+
+  return res[0].affectedRows == 1;
+};
+
+export const deleteReddit = async (redditId: number) => {
+  const res: [ResultSetHeader, FieldPacket[]] = await pool.query(
+    "DELETE FROM reddits WHERE id = ?",
+    [redditId],
   );
 
   return res[0].affectedRows == 1;

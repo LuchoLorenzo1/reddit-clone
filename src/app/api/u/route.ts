@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { authOptions } from "../auth/[...nextauth]/route";
 import { getServerSession } from "next-auth/next";
-import { updateUser } from "@/controllers/users";
+import { deleteUser, updateUser } from "@/controllers/users";
 import { authorizeBucket, uploadImage } from "@/database/b2";
 
 export const PUT = async (req: NextRequest) => {
@@ -42,6 +42,22 @@ export const PUT = async (req: NextRequest) => {
 
   try {
     await updateUser({ name, imageId }, session.user.id);
+    return NextResponse.json({}, { status: 200 });
+  } catch (e) {
+    console.error(e);
+    return NextResponse.json(
+      { message: "A server error ocurred" },
+      { status: 500 },
+    );
+  }
+};
+
+export const DELETE = async () => {
+  const session = await getServerSession(authOptions);
+  if (!session || !session.user) return NextResponse.json("", { status: 403 });
+
+  try {
+    await deleteUser(session.user.id);
     return NextResponse.json({}, { status: 200 });
   } catch (e) {
     console.error(e);

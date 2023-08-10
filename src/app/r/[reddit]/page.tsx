@@ -10,6 +10,7 @@ import { redirect } from "next/navigation";
 import JoinReddit from "./joinReddit";
 import RedditIcon from "./redditIcon";
 import { twMerge } from "tailwind-merge";
+import RemoveReddit from "./removeReddit";
 
 interface RedditProps {
   params: {
@@ -19,7 +20,7 @@ interface RedditProps {
 
 const Reddit: FC<RedditProps> = async ({ params }) => {
   const session = await getServerSession(authOptions);
-  if (!session) redirect("/sigin");
+  if (!session) redirect("/signin");
 
   const redditData = await fetchRedditData(params.reddit, session.user.id);
 
@@ -92,14 +93,18 @@ const AboutReddit = ({ reddit }: { reddit: Reddit }) => {
         About community
       </h1>
       <div className="flex flex-col gap-2 p-2">
-        <p className="text-xs text-text/70">{reddit.description}</p>
-        <p>Redditors: {reddit.member_count}</p>
+        <p className="text-xs">{reddit.description}</p>
+        <p className="text-sm text-text/70">
+          Created: {reddit.createdAt.toDateString().slice(4)}
+        </p>
+        <p className="text-sm text-text/70">Members: {reddit.member_count}</p>
         <Link
           href={`/post`}
           className="mt-2 rounded-xl bg-blue-500 px-2 py-1 text-center text-sm font-bold text-white hover:shadow-md"
         >
           Create Post
         </Link>
+        <RemoveReddit redditId={reddit.id} />
       </div>
     </aside>
   );

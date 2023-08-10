@@ -13,6 +13,10 @@ import InputImage from "./inputImage";
 const ProfilePic = ({ session, user }: { session: Session; user?: User }) => {
   const [open, setOpen] = useState(false);
 
+  const deleteAccount = () => {
+    fetch("/api/u", { method: "DELETE" }).then(() => signOut());
+  };
+
   return (
     <Dialog.Root open={open} onOpenChange={() => setOpen(!open)}>
       <Dialog.Trigger className="focus:outline-none">
@@ -47,7 +51,10 @@ const ProfilePic = ({ session, user }: { session: Session; user?: User }) => {
           >
             Sign Out
           </button>
-          <button className="rounded-full border border-red-500 bg-white py-[0.15rem] text-center text-xs font-bold text-red-500 transition hover:bg-red-500 hover:text-white">
+          <button
+            onClick={() => deleteAccount()}
+            className="rounded-full border border-red-500 bg-white py-[0.15rem] text-center text-xs font-bold text-red-500 transition hover:bg-red-500 hover:text-white"
+          >
             Delete Account
           </button>
           <hr />

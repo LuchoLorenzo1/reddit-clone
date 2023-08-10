@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { authOptions } from "../../auth/[...nextauth]/route";
 import { getServerSession } from "next-auth/next";
-import { updateReddit, getRedditById } from "@/controllers/reddits";
+import {
+  updateReddit,
+  getRedditById,
+  deleteReddit,
+} from "@/controllers/reddits";
 import { authorizeBucket, uploadImage } from "@/database/b2";
 
 export const PUT = async (
@@ -79,6 +83,28 @@ export const PUT = async (
       { name, description, bannerId, imageId },
       params.redditId,
     );
+    return NextResponse.json({}, { status: 200 });
+  } catch (e) {
+    console.error(e);
+    return NextResponse.json(
+      { message: "A server error ocurred" },
+      { status: 500 },
+    );
+  }
+};
+
+export const DELETE = async (
+  req: NextRequest,
+  { params }: { params: { redditId: number } },
+) => {
+  const session = await getServerSession(authOptions);
+  if (!session) return NextResponse.json("", { status: 403 });
+
+  if (isNaN(params.redditId))
+    return NextResponse.json({ error: "ID is invalid" }, { status: 400 });
+
+  try {
+    await deleteReddit(params.redditId);
     return NextResponse.json({}, { status: 200 });
   } catch (e) {
     console.error(e);

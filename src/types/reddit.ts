@@ -5,6 +5,7 @@ export default interface Reddit {
   member_count: number;
   imageId?: string;
   bannerId?: string;
+  createdAt: Date;
 }
 
 export type RedditInfo = {
