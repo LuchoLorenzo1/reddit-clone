@@ -5,6 +5,7 @@ import { ReactNode } from "react";
 import { twMerge } from "tailwind-merge";
 import Providers from "@/context/provider";
 import Navbar from "@/components/navbar";
+import { RedditsProvider } from "@/context/redditsContext";
 
 const roboto = Ubuntu({
   weight: "300",
@@ -27,8 +28,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         )}
       >
         <Providers>
-          <Navbar />
-          <div className="flex justify-center">{children}</div>
+          <RedditsProvider>
+            <Navbar />
+            <div className="flex justify-center">{children}</div>
+          </RedditsProvider>
         </Providers>
       </body>
     </html>

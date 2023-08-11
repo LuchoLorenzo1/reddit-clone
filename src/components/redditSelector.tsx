@@ -1,22 +1,17 @@
 "use client";
 
-import { Ref, forwardRef, useEffect, useState } from "react";
+import { Ref, forwardRef } from "react";
 import * as Select from "@radix-ui/react-select";
 import { ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { RedditInfo } from "@/types/reddit";
+import { useReddits } from "@/context/redditsContext";
 
 const RedditSelector = () => {
-  const [reddits, setReddits] = useState<RedditInfo[]>([]);
+  const { reddits } = useReddits();
   const router = useRouter();
-
-  useEffect(() => {
-    fetch("/api/r")
-      .then((res) => res.json())
-      .then(({ reddits }) => setReddits(reddits ?? []));
-  }, []);
 
   const onValueChange = (value: string) => {
     router.push(`/r/${value}`);

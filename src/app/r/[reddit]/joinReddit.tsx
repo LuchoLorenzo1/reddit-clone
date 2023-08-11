@@ -1,5 +1,7 @@
 "use client";
 
+import { useReddits } from "@/context/redditsContext";
+import Reddit from "@/types/reddit";
 import { useState } from "react";
 import { twMerge } from "tailwind-merge";
 
@@ -13,6 +15,7 @@ const joinReddit = ({
   className?: string;
 }) => {
   const [member, setMember] = useState(isMember);
+  const { reddits, setReddits } = useReddits();
 
   const toggleJoin = () => {
     fetch("/api/r/join", {
@@ -21,7 +24,26 @@ const joinReddit = ({
         redditId,
         isJoining: !member,
       }),
-    }).then((res) => (res.ok ? setMember(!member) : ""));
+    })
+      .then((res) => {
+        if (res.ok) {
+          setMember(!member);
+          return res.json();
+        }
+        throw new Error();
+      })
+      .then((r: Reddit) => {
+        if (member) {
+          setReddits((reddits) =>
+            reddits.filter((r) => r.redditId != redditId),
+          );
+        } else {
+          setReddits([
+            ...reddits,
+            { redditId, reddit: r.name, imageId: r.imageId },
+          ]);
+        }
+      });
   };
 
   return (

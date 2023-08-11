@@ -11,5 +11,5 @@ export default interface Reddit {
 export type RedditInfo = {
   redditId: number;
   reddit: string;
-  imageId: string;
+  imageId?: string;
 };

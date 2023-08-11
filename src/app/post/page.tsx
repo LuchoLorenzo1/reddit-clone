@@ -2,32 +2,18 @@
 import Spinner from "@/components/spinner";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import {
-  FC,
-  FormEvent,
-  useState,
-  useEffect,
-  forwardRef,
-  ReactNode,
-  Ref,
-} from "react";
+import { FC, FormEvent, useState, forwardRef, ReactNode, Ref } from "react";
 
 import * as Select from "@radix-ui/react-select";
 import { ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
 import { RedditInfo } from "@/types/reddit";
+import { useReddits } from "@/context/redditsContext";
 
 const Page: FC<{}> = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [reddits, setReddits] = useState<RedditInfo[]>([]);
+  const { reddits } = useReddits();
   const router = useRouter();
-
-  useEffect(() => {
-    fetch("/api/r")
-      .then((res) => res.json())
-      .then(({ reddits }) => setReddits(reddits ?? []))
-      .catch((_) => setError("An error ocurred in the server"));
-  }, []);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -51,7 +37,6 @@ const Page: FC<{}> = () => {
 
     if (!res.ok) {
       const data = await res.json();
-      console.log();
       setError(data.message);
       setLoading(false);
       return;
