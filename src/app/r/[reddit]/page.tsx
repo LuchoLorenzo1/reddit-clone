@@ -8,9 +8,10 @@ import { getServerSession } from "next-auth/next";
 import { fetchRedditData } from "./fetchRedditData";
 import { redirect } from "next/navigation";
 import JoinReddit from "./joinReddit";
-import RedditIcon from "./redditIcon";
 import { twMerge } from "tailwind-merge";
 import RemoveReddit from "./removeReddit";
+import EditReddit from "./redditIcon";
+import Dialog from "@/components/dialog";
 
 interface RedditProps {
   params: {
@@ -72,7 +73,24 @@ const RedditNavbar = ({
       </picture>
       <div className="absolute top-[9.5rem] flex w-full max-w-3xl items-end justify-start gap-2 px-5 sm:px-5">
         <picture className="relative h-16 w-16 rounded-full bg-white">
-          <RedditIcon imageId={reddit.imageId} redditId={reddit.id} />
+          <Dialog<{ redditId: number }>
+            Modal={EditReddit}
+            modalProps={{ redditId: reddit.id }}
+          >
+            <Image
+              className="rounded-full border-4 border-white"
+              loading="lazy"
+              src={
+                !!reddit.imageId
+                  ? `https://f005.backblazeb2.com/b2api/v1/b2_download_file_by_id?fileId=${reddit.imageId}`
+                  : "/r.svg"
+              }
+              width={100}
+              height={100}
+              objectFit="cover"
+              alt="profile picture"
+            />
+          </Dialog>
         </picture>
         <div>
           <div className="flex items-center justify-center gap-3">

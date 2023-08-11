@@ -8,9 +8,10 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { ReactNode } from "react";
 import RedditSelector from "./redditSelector";
 
-import ProfilePic from "./profilePic";
 import { getUserById } from "@/controllers/users";
 import User from "@/types/user";
+import EditUserModal from "./profilePic";
+import Dialog from "./dialog";
 
 const Navbar = async () => {
   const session = await getServerSession(authOptions);
@@ -27,7 +28,19 @@ const Navbar = async () => {
       </NavLink>
       <ToggleDarkMode />
       {session ? (
-        <ProfilePic user={user} session={session} />
+        <Dialog Modal={EditUserModal}>
+          <Image
+            src={
+              user?.imageId
+                ? `https://f005.backblazeb2.com/b2api/v1/b2_download_file_by_id?fileId=${user.imageId}`
+                : session.user?.image ?? "/r.svg"
+            }
+            width={40}
+            height={40}
+            alt="profile picture"
+            className="min-w-[1.75rem] rounded-full"
+          />
+        </Dialog>
       ) : (
         <NavLink className="min-w-fit px-2" href="/signin">
           Sign In

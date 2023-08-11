@@ -1,22 +1,16 @@
 "use client";
 import Spinner from "@/components/spinner";
-import * as Dialog from "@radix-ui/react-dialog";
-import { Cross2Icon } from "@radix-ui/react-icons";
+import { modalProps } from "@/components/dialog";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
-import { FormEvent, useState } from "react";
+import { FC, FormEvent, useState } from "react";
 import InputImage from "@/components/inputImage";
 
-const RedditIcon = ({
-  imageId,
-  redditId,
-}: {
-  imageId?: string;
-  redditId: number;
+const EditReddit: FC<modalProps<{ redditId: number }>> = ({
+  setOpen,
+  props,
 }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [open, setOpen] = useState(false);
   const router = useRouter();
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -26,7 +20,7 @@ const RedditIcon = ({
     setError("");
     setLoading(true);
 
-    const res = await fetch(`/api/r/${redditId}`, {
+    const res = await fetch(`/api/r/${props?.redditId}`, {
       method: "PUT",
       body: formData,
     });
@@ -39,75 +33,47 @@ const RedditIcon = ({
       return;
     }
     setLoading(false);
-    setOpen(false);
+    if (setOpen) setOpen(false);
     router.refresh();
   };
 
   return (
-    <Dialog.Root open={open} onOpenChange={() => setOpen(!open)}>
-      <Dialog.Trigger className="focus:outline-none">
-        <Image
-          className="rounded-full border-4 border-white"
-          loading="lazy"
-          src={
-            !!imageId
-              ? `https://f005.backblazeb2.com/b2api/v1/b2_download_file_by_id?fileId=${imageId}`
-              : "/r.svg"
-          }
-          width={100}
-          height={100}
-          objectFit="cover"
-          alt="profile picture"
-        />
-      </Dialog.Trigger>
-      <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 bg-black/70 data-[state=open]:animate-overlayShow" />
-        <Dialog.Content className="fixed left-1/2 top-1/2 flex w-full max-w-md -translate-x-2/4 -translate-y-2/4 transform flex-col gap-4 rounded bg-white px-5 py-3 focus:outline-none data-[state=open]:animate-contentShow">
-          <Dialog.Close asChild>
-            <button
-              className="absolute right-[10px] top-[10px] inline-flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-full focus:shadow-[0_0_0_2px] focus:outline-none"
-              aria-label="Close"
-            >
-              <Cross2Icon />
-            </button>
-          </Dialog.Close>
-          <Dialog.Title className="text-2xl">Update reddit</Dialog.Title>
-          <form onSubmit={onSubmit} className="flex w-full flex-col gap-4">
-            <label className="flex flex-col">
-              Update icon
-              <InputImage
-                name="image"
-                className="w-full rounded border border-gray-200 px-3 py-2"
-              />
-            </label>
-            <label>
-              Update banner
-              <InputImage
-                name="banner"
-                className="w-full rounded border border-gray-200 px-3 py-2"
-              />
-            </label>
-            {loading ? (
-              <Spinner />
-            ) : (
-              <input
-                type="submit"
-                className="rounded-full border border-gray-200 bg-blue-500 py-[0.15rem] text-xs font-bold text-white hover:bg-blue-400"
-                value="Save changes"
-              />
-            )}
-            {error ? (
-              <h1 className="rounded-md bg-red-500 p-2 text-center font-bold text-white">
-                {error}
-              </h1>
-            ) : (
-              ""
-            )}
-          </form>
-        </Dialog.Content>
-      </Dialog.Portal>
-    </Dialog.Root>
+    <>
+      <h1>Update reddit</h1>
+      <form onSubmit={onSubmit} className="flex w-full flex-col gap-4">
+        <label className="flex flex-col">
+          Update icon
+          <InputImage
+            name="image"
+            className="w-full rounded border border-gray-200 px-3 py-2"
+          />
+        </label>
+        <label>
+          Update banner
+          <InputImage
+            name="banner"
+            className="w-full rounded border border-gray-200 px-3 py-2"
+          />
+        </label>
+        {loading ? (
+          <Spinner />
+        ) : (
+          <input
+            type="submit"
+            className="rounded-full border border-gray-200 bg-blue-500 py-[0.15rem] text-xs font-bold text-white hover:bg-blue-400"
+            value="Save changes"
+          />
+        )}
+        {error ? (
+          <h1 className="rounded-md bg-red-500 p-2 text-center font-bold text-white">
+            {error}
+          </h1>
+        ) : (
+          ""
+        )}
+      </form>
+    </>
   );
 };
 
-export default RedditIcon;
+export default EditReddit;
