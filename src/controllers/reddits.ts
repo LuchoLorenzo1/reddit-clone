@@ -34,6 +34,21 @@ export const getRedditsFromUser = async (userId: number) => {
   return res[0] as RedditInfo[];
 };
 
+export const getRedditRecommendations = async (
+  userId: number,
+): Promise<RedditInfo[]> => {
+  const res = await pool.query(
+    `SELECT id as redditId, name AS reddit, image_id AS imageId
+	FROM reddits
+		WHERE id NOT IN (SELECT reddit_id FROM members WHERE user_id = ?)
+	ORDER BY member_count
+	LIMIT 5
+	`,
+    [userId],
+  );
+  return res[0] as RedditInfo[];
+};
+
 export const getRedditByName = async (
   redditName: string,
 ): Promise<Reddit | undefined> => {

@@ -7,6 +7,10 @@ import { getFeed } from "@/controllers/posts";
 
 import { ImageIcon, Link2Icon } from "@radix-ui/react-icons";
 import { getUserById } from "@/controllers/users";
+import { getRedditRecommendations } from "@/controllers/reddits";
+import JoinReddit from "./r/[reddit]/joinReddit";
+import { Suspense } from "react";
+import Spinner from "@/components/spinner";
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
@@ -51,14 +55,19 @@ export default async function Home() {
         </div>
         <Posts posts={posts} />
       </main>
-      <HomeAside />
+      <aside className="w-max-[10rem] hidden h-max flex-col items-center justify-center gap-3 md:col-span-1 md:flex">
+        <HomeAside />
+        <Suspense>
+          <RedditRecommendations userId={session.user.id} />
+        </Suspense>
+      </aside>
     </section>
   );
 }
 
 const HomeAside = () => {
   return (
-    <aside className="w-max-[10rem] hidden h-max flex-col rounded-sm border border-slate-500 bg-white md:col-span-1 md:flex">
+    <div className="w-full flex-col rounded-sm border border-slate-500 bg-white md:flex">
       <picture className="relative h-7">
         <Image
           fill={true}
@@ -94,6 +103,52 @@ const HomeAside = () => {
           Create Community
         </Link>
       </div>
-    </aside>
+    </div>
+  );
+};
+
+const RedditRecommendations = async ({ userId }: { userId: number }) => {
+  const reddits = await getRedditRecommendations(userId);
+  if (reddits.length == 0) return;
+
+  return (
+    <div className="w-full flex-col items-center justify-center rounded-sm border border-slate-500 bg-white md:flex">
+      <h2 className="base w-full bg-blue-500 px-3 py-1 text-left text-sm font-bold text-white">
+        Popular Communities
+      </h2>
+      <ul className="w-full px-2">
+        {reddits.map((r) => (
+          <li
+            key={r.redditId}
+            className="my-2 flex w-full items-center justify-between gap-2"
+          >
+            <div className="flex items-center justify-start gap-1">
+              <picture>
+                <Image
+                  loading="lazy"
+                  className="rounded-full"
+                  width={35}
+                  height={35}
+                  src={
+                    r.imageId
+                      ? `https://f005.backblazeb2.com/b2api/v1/b2_download_file_by_id?fileId=${r.imageId}`
+                      : "/r.svg"
+                  }
+                  alt="reddit icon"
+                />
+              </picture>
+              <Link href={`/r/${r.reddit}`} className="text-sm hover:underline">
+                r/{r.reddit}
+              </Link>
+            </div>
+            <JoinReddit
+              isMember={false}
+              redditId={r.redditId}
+              className="min-w-[3rem]"
+            />
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 };

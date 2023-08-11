@@ -6,9 +6,11 @@ import { twMerge } from "tailwind-merge";
 const joinReddit = ({
   isMember,
   redditId,
+  className,
 }: {
   isMember: boolean;
   redditId: number;
+  className?: string;
 }) => {
   const [member, setMember] = useState(isMember);
 
@@ -27,6 +29,7 @@ const joinReddit = ({
       onClick={() => toggleJoin()}
       className={twMerge(
         "group min-w-[5rem] rounded-3xl border-2 border-blue-500 py-[0.15rem] text-xs font-bold",
+        className,
         member
           ? "bg-white text-blue-500 hover:bg-gray-100/50"
           : "bg-blue-500 text-white hover:border-blue-400 hover:bg-blue-400",
