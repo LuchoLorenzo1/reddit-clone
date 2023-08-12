@@ -45,7 +45,8 @@ const joinReddit = ({
             { redditId, reddit: r.name, imageId: r.imageId },
           ]);
         }
-      });
+      })
+      .catch((e) => console.error(e));
   };
 
   return (

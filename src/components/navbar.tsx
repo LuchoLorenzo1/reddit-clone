@@ -6,7 +6,7 @@ import { PlusIcon, MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { ReactNode } from "react";
-import Navigator from "./redditSelector";
+import Navigator from "./navigator";
 
 import { getUserById } from "@/controllers/users";
 import User from "@/types/user";

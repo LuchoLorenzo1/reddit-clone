@@ -98,7 +98,7 @@ export const createReddit = async (
     [userId, redditId],
   );
 
-  return res2[0].affectedRows > 0;
+  return redditId;
 };
 
 export const updateReddit = async (

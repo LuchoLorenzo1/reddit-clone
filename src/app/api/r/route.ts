@@ -84,11 +84,14 @@ export const POST = async (req: NextRequest) => {
   }
 
   try {
-    await createReddit(
+    const redditId = await createReddit(
       { name, description, bannerId, imageId },
       session.user.id,
     );
-    return NextResponse.json({}, { status: 200 });
+    return NextResponse.json(
+      { redditId, reddit: name, imageId },
+      { status: 200 },
+    );
   } catch (e) {
     console.error(e);
     return NextResponse.json(

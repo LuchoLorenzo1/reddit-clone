@@ -1,18 +1,24 @@
 "use client";
 import Spinner from "@/components/spinner";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
-import { FC, FormEvent, useState, forwardRef, ReactNode, Ref } from "react";
+import {
+  FC,
+  FormEvent,
+  useState,
+  forwardRef,
+  ReactNode,
+  Ref,
+  useEffect,
+} from "react";
 
 import * as Select from "@radix-ui/react-select";
 import { ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
-import { RedditInfo } from "@/types/reddit";
 import { useReddits } from "@/context/redditsContext";
 
 const Page: FC<{}> = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const { reddits } = useReddits();
   const router = useRouter();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -65,7 +71,7 @@ const Page: FC<{}> = () => {
             placeholder="Text (optional)"
             className="w-full rounded border border-gray-200 p-3"
           />
-          <RedditSelector reddits={reddits} />
+          <RedditSelector />
         </div>
         {loading ? (
           <Spinner />
@@ -88,11 +94,26 @@ const Page: FC<{}> = () => {
   );
 };
 
-const RedditSelector = ({ reddits }: { reddits: RedditInfo[] }) => {
+const RedditSelector = () => {
+  const { reddits } = useReddits();
+  const [value, setValue] = useState<string | undefined>();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const id = searchParams.get("r");
+    if (
+      id &&
+      !isNaN(parseFloat(id)) &&
+      !!reddits.find((r) => r.redditId == +id)
+    ) {
+      setValue(id);
+    }
+  }, [reddits, searchParams]);
+
   return (
-    <Select.Root required name="redditId">
+    <Select.Root value={value} required name="redditId">
       <Select.Trigger
-        className="flex min-w-[15rem] items-center justify-between gap-2 rounded-t border border-gray-200 px-3 py-2"
+        className="flex min-w-[15rem] items-center justify-between gap-2 rounded border border-gray-200 px-3 py-2"
         aria-label="Community"
       >
         <Select.Value placeholder={<SelectPlaceholder />} />
@@ -102,25 +123,22 @@ const RedditSelector = ({ reddits }: { reddits: RedditInfo[] }) => {
       </Select.Trigger>
       <Select.Portal>
         <Select.Content
-          className="max-h-32 w-60 overflow-hidden rounded-b border border-x-2 border-gray-200 bg-white"
+          className="max-h-32 w-60 overflow-hidden rounded border border-x-2 border-gray-200 bg-white"
           sideOffset={0}
           position="popper"
         >
           <Select.ScrollUpButton className="flex items-center justify-center">
             <ChevronUpIcon />
           </Select.ScrollUpButton>
-          <Select.Viewport className="">
+          <Select.Viewport>
             <Select.Group>
-              <Select.Label className="py-1 text-center text-xs font-bold">
-                YOUR COMMUNITIES
-              </Select.Label>
               {reddits.map((r) => (
                 <SelectItem key={r.redditId} value={r.redditId}>
-                  <div className="flex w-full items-center gap-2">
+                  <div className="flex w-full items-center gap-3">
                     <Image
                       className="rounded-full"
-                      width={30}
-                      height={30}
+                      width={25}
+                      height={25}
                       src={
                         r.imageId
                           ? `https://f005.backblazeb2.com/b2api/v1/b2_download_file_by_id?fileId=${r.imageId}`
@@ -128,7 +146,7 @@ const RedditSelector = ({ reddits }: { reddits: RedditInfo[] }) => {
                       }
                       alt="subreddit option image"
                     />
-                    {r.reddit}
+                    <h1 className="text-sm">r/{r.reddit}</h1>
                   </div>
                 </SelectItem>
               ))}
@@ -150,7 +168,7 @@ const SelectItem = forwardRef(
   ) => {
     return (
       <Select.Item
-        className="flex items-center justify-start px-3 py-1 hover:bg-gray-100"
+        className="flex items-center justify-start px-3 py-1 hover:bg-gray-100 focus:bg-gray-200 focus:outline-none"
         value={value.toString()}
         ref={forwardedRef}
       >
@@ -163,8 +181,8 @@ const SelectItem = forwardRef(
 const SelectPlaceholder = () => {
   return (
     <div className="flex items-center gap-3">
-      <div className="max-h-[30px] min-h-[30px] min-w-[30px] max-w-[30px] rounded-full border-2 border-dashed border-black" />
-      <h1>Choose a community</h1>
+      <div className="max-h-[25px] min-h-[25px] min-w-[25px] max-w-[25px] rounded-full border-2 border-dashed border-black" />
+      <h1 className="text-sm">Choose a community</h1>
     </div>
   );
 };

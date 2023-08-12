@@ -111,10 +111,10 @@ const AboutReddit = ({ reddit }: { reddit: Reddit }) => {
         </p>
         <p className="text-sm text-text/70">Members: {reddit.member_count}</p>
         <Link
-          href={`/post`}
+          href={`/post?r=${reddit.id}`}
           className="mt-2 rounded-xl bg-blue-500 px-2 py-1 text-center text-sm font-bold text-white hover:shadow-md"
         >
-          Create Post
+          Post on r/{reddit.name}
         </Link>
         <RemoveReddit redditId={reddit.id} />
       </div>

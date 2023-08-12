@@ -51,10 +51,7 @@ const Navigator = () => {
           sideOffset={0}
           position="popper"
         >
-          <Select.ScrollUpButton className="flex items-center justify-center">
-            <ChevronUpIcon />
-          </Select.ScrollUpButton>
-          <Select.Viewport className="">
+          <Select.Viewport>
             <Select.Group>
               <Select.Label className="pl-2 text-[.5rem] font-bold">
                 NAVIGATE
@@ -81,19 +78,17 @@ const Navigator = () => {
               ) : (
                 ""
               )}
+
               {reddits.map((r) => (
                 <SelectItem
                   value={`/r/${r.reddit}`}
-                  name={r.reddit}
+                  name={`r/${r.reddit}`}
                   key={r.redditId}
                   imageId={r.imageId}
                 />
               ))}
             </Select.Group>
           </Select.Viewport>
-          <Select.ScrollDownButton className="flex items-center justify-center">
-            <ChevronDownIcon />
-          </Select.ScrollDownButton>
         </Select.Content>
       </Select.Portal>
     </Select.Root>

@@ -1,11 +1,14 @@
 "use client";
 import InputImage from "@/components/inputImage";
 import Spinner from "@/components/spinner";
+import { useReddits } from "@/context/redditsContext";
+import { RedditInfo } from "@/types/reddit";
 import { useRouter } from "next/navigation";
 import { FC, FormEvent, useState } from "react";
 
 const Page: FC<{}> = () => {
   const [loading, setLoading] = useState(false);
+  const { reddits, setReddits } = useReddits();
   const [error, setError] = useState("");
   const router = useRouter();
 
@@ -28,6 +31,14 @@ const Page: FC<{}> = () => {
       setError(data.message);
       setLoading(false);
       return;
+    }
+
+    const data = (await res.json()) as RedditInfo;
+    if (data) {
+      setReddits([
+        ...reddits,
+        { redditId: data.redditId, reddit: data.reddit, imageId: data.imageId },
+      ]);
     }
 
     router.push(`/r/${formData.get("name")}`);
