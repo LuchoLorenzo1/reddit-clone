@@ -22,7 +22,7 @@ const removeReddit: FC<removeRedditProps> = ({ redditId }) => {
   return (
     <button
       onClick={onClick}
-      className="mt-2 rounded-xl border border-red-500 px-2 py-1 text-center text-sm font-bold text-red-500"
+      className="rounded-xl border border-red-500 px-2 py-1 text-center text-sm font-bold text-red-500"
     >
       {loading ? <Spinner /> : <h3>Remove reddit</h3>}
     </button>

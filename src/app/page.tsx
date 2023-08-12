@@ -10,7 +10,6 @@ import { getUserById } from "@/controllers/users";
 import { getRedditRecommendations } from "@/controllers/reddits";
 import JoinReddit from "./r/[reddit]/joinReddit";
 import { Suspense } from "react";
-import Spinner from "@/components/spinner";
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
@@ -141,11 +140,7 @@ const RedditRecommendations = async ({ userId }: { userId: number }) => {
                 r/{r.reddit}
               </Link>
             </div>
-            <JoinReddit
-              isMember={false}
-              redditId={r.redditId}
-              className="min-w-[3rem]"
-            />
+            <JoinReddit redditId={r.redditId} className="min-w-[3rem]" />
           </li>
         ))}
       </ul>

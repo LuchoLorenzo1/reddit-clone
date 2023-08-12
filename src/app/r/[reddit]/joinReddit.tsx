@@ -2,38 +2,40 @@
 
 import { useReddits } from "@/context/redditsContext";
 import Reddit from "@/types/reddit";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
 const joinReddit = ({
-  isMember,
   redditId,
   className,
 }: {
-  isMember: boolean;
   redditId: number;
   className?: string;
 }) => {
-  const [member, setMember] = useState(isMember);
+  const [isMember, setIsMember] = useState(false);
   const { reddits, setReddits } = useReddits();
+
+  useEffect(() => {
+    setIsMember(!!reddits.find((r) => r.redditId == redditId));
+  }, [reddits]);
 
   const toggleJoin = () => {
     fetch("/api/r/join", {
       method: "POST",
       body: JSON.stringify({
         redditId,
-        isJoining: !member,
+        isJoining: !isMember,
       }),
     })
       .then((res) => {
         if (res.ok) {
-          setMember(!member);
+          setIsMember(!isMember);
           return res.json();
         }
         throw new Error();
       })
       .then((r: Reddit) => {
-        if (member) {
+        if (isMember) {
           setReddits((reddits) =>
             reddits.filter((r) => r.redditId != redditId),
           );
@@ -52,18 +54,18 @@ const joinReddit = ({
       className={twMerge(
         "group min-w-[5rem] rounded-3xl border-2 border-blue-500 py-[0.15rem] text-xs font-bold",
         className,
-        member
+        isMember
           ? "bg-white text-blue-500 hover:bg-gray-100/50"
           : "bg-blue-500 text-white hover:border-blue-400 hover:bg-blue-400",
       )}
     >
       <span className="inline group-hover:hidden">
         {" "}
-        {member ? "Joined" : "Join"}{" "}
+        {isMember ? "Joined" : "Join"}{" "}
       </span>
       <span className="hidden group-hover:inline">
         {" "}
-        {member ? "Leave" : "Join"}{" "}
+        {isMember ? "Leave" : "Join"}{" "}
       </span>
     </button>
   );

@@ -29,7 +29,7 @@ const Reddit: FC<RedditProps> = async ({ params }) => {
 
   return (
     <div className="flex w-full flex-col items-center">
-      <RedditNavbar reddit={redditData.reddit} isMember={redditData.isMember} />
+      <RedditNavbar reddit={redditData.reddit} />
       <section className="mt-3 grid w-full max-w-3xl grid-cols-3 justify-center gap-5 sm:px-5">
         <main className="col-span-3 lg:col-span-2">
           <Posts posts={redditData.posts} reddit={redditData.reddit} />
@@ -40,13 +40,7 @@ const Reddit: FC<RedditProps> = async ({ params }) => {
   );
 };
 
-const RedditNavbar = ({
-  reddit,
-  isMember,
-}: {
-  reddit: Reddit;
-  isMember: boolean;
-}) => {
+const RedditNavbar = ({ reddit }: { reddit: Reddit }) => {
   return (
     <section className="relative flex h-20 min-h-[14rem] w-full flex-col items-center bg-white">
       <picture
@@ -95,7 +89,7 @@ const RedditNavbar = ({
         <div>
           <div className="flex items-center justify-center gap-3">
             <h1 className="text-3xl font-bold">{reddit.name}</h1>
-            <JoinReddit redditId={reddit.id} isMember={isMember} />
+            <JoinReddit redditId={reddit.id} />
           </div>
           <h1 className="text-xs font-bold text-text/60">r/{reddit.name}</h1>
         </div>
