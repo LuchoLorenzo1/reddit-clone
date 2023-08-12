@@ -35,10 +35,6 @@ export const RedditsProvider = ({ children }: { children: ReactNode }) => {
       .then(({ reddits }) => setReddits(reddits ?? []));
   }, []);
 
-  useEffect(() => {
-    console.log("CAMBIO EN REDDITS", reddits);
-  }, [reddits]);
-
   return (
     <RedditsContext.Provider value={{ reddits, setReddits }}>
       {children}

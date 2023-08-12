@@ -1,32 +1,46 @@
 "use client";
 
-import { Ref, forwardRef } from "react";
+import { ReactNode, Ref, forwardRef, useEffect, useState } from "react";
 import * as Select from "@radix-ui/react-select";
-import { ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
+import {
+  ChevronDownIcon,
+  ChevronUpIcon,
+  PlusIcon,
+} from "@radix-ui/react-icons";
 
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { RedditInfo } from "@/types/reddit";
+import { usePathname, useRouter } from "next/navigation";
 import { useReddits } from "@/context/redditsContext";
 
-const RedditSelector = () => {
+const Navigator = () => {
   const { reddits } = useReddits();
   const router = useRouter();
+  const pathname = usePathname();
+  const [value, setValue] = useState("Home");
 
-  const onValueChange = (value: string) => {
-    router.push(`/r/${value}`);
-  };
+  const onValueChange = (value: string) => router.push(value);
+
+  useEffect(() => {
+    const x = pathname.split("/").slice(1);
+    if (x[0] == "r" && reddits.find((r) => r.reddit == x[1])) {
+      setValue(pathname);
+      return;
+    }
+    if (x[0] == "post") {
+      setValue("/post");
+      return;
+    }
+    setValue("/");
+  }, [pathname, reddits]);
 
   return (
-    <Select.Root onValueChange={onValueChange}>
+    <Select.Root value={value} defaultValue="/" onValueChange={onValueChange}>
+      {" "}
       <Select.Trigger
         className="focus:border-gray active:border-gray flex min-w-[3rem] items-center justify-between gap-0 border border-white px-1 py-2 hover:border-gray-200 focus:outline-none md:min-w-[12rem] md:max-w-[12rem] md:gap-2"
         aria-label="Community"
       >
-        <Select.Value
-          className="focus:boder-white bg-red-500"
-          placeholder={<SelectPlaceholder />}
-        />
+        <Select.Value className="focus:boder-white bg-red-500" />
         <Select.Icon>
           <ChevronDownIcon />
         </Select.Icon>
@@ -42,11 +56,38 @@ const RedditSelector = () => {
           </Select.ScrollUpButton>
           <Select.Viewport className="">
             <Select.Group>
-              <Select.Label className="border-b border-gray-200 bg-gray-100 p-1 text-center text-xxs font-bold">
-                YOUR COMMUNITIES
+              <Select.Label className="pl-2 text-[.5rem] font-bold">
+                NAVIGATE
               </Select.Label>
+              <hr />
+
+              <SelectItem value="/" name="Home" icon={<Home />} />
+              <SelectItem
+                value="/post"
+                name="Post"
+                icon={<PlusIcon width={25} height={25} />}
+              />
+
+              {reddits.length > 0 ? (
+                <>
+                  {" "}
+                  <hr />{" "}
+                  <Select.Label className="pl-2 text-[.5rem] font-bold">
+                    {" "}
+                    YOUR COMMUNITIES{" "}
+                  </Select.Label>{" "}
+                  <hr />{" "}
+                </>
+              ) : (
+                ""
+              )}
               {reddits.map((r) => (
-                <SelectItem redditInfo={r} key={r.redditId} />
+                <SelectItem
+                  value={`/r/${r.reddit}`}
+                  name={r.reddit}
+                  key={r.redditId}
+                  imageId={r.imageId}
+                />
               ))}
             </Select.Group>
           </Select.Viewport>
@@ -61,53 +102,45 @@ const RedditSelector = () => {
 
 const SelectItem = forwardRef(
   (
-    { redditInfo }: { redditInfo: RedditInfo },
+    {
+      value,
+      icon,
+      imageId,
+      name,
+    }: { value: string; icon?: ReactNode; imageId?: string; name: string },
     forwardedRef: Ref<HTMLDivElement>,
   ) => {
     return (
       <Select.Item
-        className="flex items-center justify-start p-1 hover:bg-gray-100"
-        value={redditInfo.reddit}
+        className="flex items-center justify-start p-1 pl-2 hover:bg-gray-100 focus:bg-gray-200 focus:outline-none"
+        value={value}
         ref={forwardedRef}
       >
         <div className="flex items-center gap-2">
-          <Select.ItemText className="">
+          <Select.ItemText>
             <div className="flex items-center gap-2">
-              <Image
-                className="rounded-full"
-                width={25}
-                height={25}
-                src={
-                  redditInfo.imageId
-                    ? `https://f005.backblazeb2.com/b2api/v1/b2_download_file_by_id?fileId=${redditInfo.imageId}`
-                    : "/r.svg"
-                }
-                alt="subreddit option image"
-              />
-              <h1 className="hidden text-xxs font-bold md:block">
-                r/{redditInfo.reddit}
-              </h1>
+              {icon ?? (
+                <Image
+                  className="rounded-full"
+                  width={25}
+                  height={25}
+                  src={
+                    imageId
+                      ? `https://f005.backblazeb2.com/b2api/v1/b2_download_file_by_id?fileId=${imageId}`
+                      : "/r.svg"
+                  }
+                  alt="subreddit option image"
+                />
+              )}
+              <h1 className="hidden text-xxs font-bold md:block">{name}</h1>
             </div>
           </Select.ItemText>
-          <h1 className="block text-xxs font-bold md:hidden">
-            r/{redditInfo.reddit}
-          </h1>
+          <h1 className="block text-xxs font-bold md:hidden">{name}</h1>
         </div>
       </Select.Item>
     );
   },
 );
-
-const SelectPlaceholder = () => {
-  return (
-    <div className="flex items-center gap-3">
-      <Home />
-      <h1 className="hidden text-xxs font-bold md:block">Home</h1>
-    </div>
-  );
-};
-
-export default RedditSelector;
 
 const Home = () => {
   return (
@@ -135,3 +168,5 @@ const Home = () => {
     </svg>
   );
 };
+
+export default Navigator;

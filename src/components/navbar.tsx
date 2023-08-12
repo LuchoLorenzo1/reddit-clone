@@ -6,7 +6,7 @@ import { PlusIcon, MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { ReactNode } from "react";
-import RedditSelector from "./redditSelector";
+import Navigator from "./redditSelector";
 
 import { getUserById } from "@/controllers/users";
 import User from "@/types/user";
@@ -21,7 +21,7 @@ const Navbar = async () => {
   return (
     <nav className="flex items-center justify-center gap-2 bg-white px-2 py-2 dark:bg-black dark:text-white sm:gap-3 md:gap-5">
       <Logo />
-      <RedditSelector />
+      <Navigator />
       <SearchBar />
       <NavLink href="/post">
         <PlusIcon width={30} height={30} />
