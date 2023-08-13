@@ -11,8 +11,8 @@ export const POST = async (req: NextRequest) => {
   const { vote, postId } = await req.json();
 
   if (
-    typeof postId == undefined ||
-    typeof vote == undefined ||
+    typeof postId == "undefined" ||
+    typeof vote == "undefined" ||
     ![-1, 0, 1].includes(vote)
   )
     return NextResponse.json({ message: "Invalid vote" }, { status: 400 });

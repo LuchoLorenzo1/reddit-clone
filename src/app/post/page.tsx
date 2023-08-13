@@ -13,12 +13,21 @@ import {
 } from "react";
 
 import * as Select from "@radix-ui/react-select";
-import { ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
+import {
+  ChevronDownIcon,
+  ChevronUpIcon,
+  ImageIcon,
+  FileTextIcon,
+} from "@radix-ui/react-icons";
 import { useReddits } from "@/context/redditsContext";
+
+import * as Tabs from "@radix-ui/react-tabs";
+import InputImage from "@/components/inputImage";
 
 const Page: FC<{}> = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [selected, setSelected] = useState("post");
   const router = useRouter();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -29,16 +38,18 @@ const Page: FC<{}> = () => {
     setError("");
     setLoading(true);
 
+    console.log(selected);
+    if (selected == "image") {
+      formData.delete("content");
+    } else if (selected == "post") {
+      formData.delete("image");
+    } else {
+      return;
+    }
+
     const res = await fetch("/api/post", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        title: formData.get("title"),
-        content: formData.get("content"),
-        redditId: formData.get("redditId"),
-      }),
+      body: formData,
     });
 
     if (!res.ok) {
@@ -52,34 +63,63 @@ const Page: FC<{}> = () => {
   };
 
   return (
-    <div className="mx-2 mt-3 flex w-full flex-col items-center md:mx-0">
+    <Tabs.Root
+      value={selected}
+      onValueChange={(v) => setSelected(v)}
+      className="mx-2 mt-3 flex max-w-2xl flex-col items-center rounded-sm bg-white shadow shadow-gray-300 md:mx-0 md:w-3/4"
+      defaultValue="post"
+    >
+      <Tabs.List className="grid w-full grid-cols-3 border-b border-gray-200">
+        <Tabs.Trigger
+          value="post"
+          className="align-center flex justify-center gap-2 p-3 font-bold hover:bg-gray-100 focus:outline-none data-[state=active]:border-b-2 data-[state=active]:border-blue-500 data-[state=active]:bg-blue-100/40 data-[state=active]:text-blue-500"
+        >
+          <FileTextIcon width={30} height={30} />
+          Post
+        </Tabs.Trigger>
+        <Tabs.Trigger
+          value="image"
+          className="align-center flex justify-center gap-2 p-3 font-bold hover:bg-gray-100 focus:outline-none data-[state=active]:border-b-2 data-[state=active]:border-blue-500 data-[state=active]:bg-blue-100/40 data-[state=active]:text-blue-500"
+        >
+          <ImageIcon width={30} height={30} />
+          Image
+        </Tabs.Trigger>
+      </Tabs.List>
       <form
         onSubmit={handleSubmit}
-        className="mx-1 flex w-full max-w-2xl flex-col items-center justify-center gap-5 rounded-sm bg-white p-5 shadow-xl shadow-gray-300 md:w-3/4"
+        className="flex w-full flex-col items-center justify-center gap-5 px-5 py-3"
       >
-        <div className="flex w-full flex-col items-start gap-5">
+        <section className="flex w-full flex-col items-start gap-3">
           <input
             type="text"
             name="title"
             placeholder="Title"
             required
-            className="w-full rounded border border-gray-200 p-3"
+            className="h-8 w-full rounded border border-gray-200 px-2"
           />
-          <input
-            type="text"
-            name="content"
-            placeholder="Text (optional)"
-            className="w-full rounded border border-gray-200 p-3"
-          />
-          <RedditSelector />
-        </div>
+          <Tabs.Content value="post" className="w-full">
+            <textarea
+              name="content"
+              placeholder="Text (optional)"
+              className="block max-h-52 min-h-[4rem] w-full rounded border border-gray-200 p-2 text-xs"
+            />
+          </Tabs.Content>
+          <Tabs.Content value="image" className="w-full">
+            <InputImage
+              name="image"
+              className="w-full rounded border border-gray-200 p-3"
+            />
+          </Tabs.Content>
+          <PostRedditSelector />
+        </section>
+
         {loading ? (
           <Spinner />
         ) : (
           <input
             type="submit"
             value="Post"
-            className="w-auto rounded-full bg-orange-500 p-1 px-5 text-base font-bold text-white transition-all duration-100 hover:bg-orange-600"
+            className="w-auto rounded-full bg-blue-500 px-4 py-1 font-bold text-white transition-all duration-100 hover:bg-blue-600"
           />
         )}
         {error ? (
@@ -90,11 +130,11 @@ const Page: FC<{}> = () => {
           ""
         )}
       </form>
-    </div>
+    </Tabs.Root>
   );
 };
 
-const RedditSelector = () => {
+const PostRedditSelector = () => {
   const { reddits } = useReddits();
   const [value, setValue] = useState<string | undefined>();
   const searchParams = useSearchParams();
@@ -123,7 +163,7 @@ const RedditSelector = () => {
       </Select.Trigger>
       <Select.Portal>
         <Select.Content
-          className="max-h-32 w-60 overflow-hidden rounded border border-x-2 border-gray-200 bg-white"
+          className="max-h-32 w-60 overflow-hidden border border-x-2 border-gray-200 bg-white"
           sideOffset={0}
           position="popper"
         >

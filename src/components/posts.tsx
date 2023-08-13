@@ -40,7 +40,7 @@ const PostComponent: FC<PropsPost> = ({ post, reddit }) => {
   return (
     <div className="min-w-fit rounded-sm border border-gray-400 bg-white hover:border-black">
       <div className="flex h-full w-full">
-        <div className="rounded-l-sm bg-gray-50 px-1 py-2">
+        <div className="rounded-l-sm bg-gray-100 px-1 py-2">
           <Vote
             downvotes={post.downvotes}
             upvotes={post.upvotes}
@@ -53,7 +53,20 @@ const PostComponent: FC<PropsPost> = ({ post, reddit }) => {
           <PostNavbar post={post} reddit={reddit} />
           <Link href={`post/${post.id}`}>
             <h1 className="text-md mb-2 mt-1">{post.title}</h1>
-            <p className="max-h-40 overflow-hidden text-xs">{post.content}</p>
+            {post.imageId ? (
+              <div className="relative flex w-full items-center justify-center">
+                <Image
+                  src={`https://f005.backblazeb2.com/b2api/v1/b2_download_file_by_id?fileId=${post.imageId}`}
+                  loading="lazy"
+                  width={1500}
+                  height={1500}
+                  alt="post picture"
+                  className="h-auto max-h-80 max-w-full object-contain"
+                />
+              </div>
+            ) : (
+              <p className="max-h-40 overflow-hidden text-xs">{post.content}</p>
+            )}
           </Link>
         </div>
       </div>
