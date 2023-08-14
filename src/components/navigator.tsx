@@ -37,17 +37,17 @@ const Navigator = () => {
     <Select.Root value={value} defaultValue="/" onValueChange={onValueChange}>
       {" "}
       <Select.Trigger
-        className="focus:border-gray active:border-gray flex min-w-[3rem] items-center justify-between gap-0 border border-white px-1 py-2 hover:border-gray-200 focus:outline-none md:min-w-[12rem] md:max-w-[12rem] md:gap-2"
+        className="focus:border-gray active:border-gray flex min-w-[3rem] items-center justify-between border border-white px-1 py-2 hover:border-gray-200 focus:outline-none md:min-w-[12rem] md:max-w-[12rem]"
         aria-label="Community"
       >
-        <Select.Value className="focus:boder-white bg-red-500" />
+        <Select.Value />
         <Select.Icon>
           <ChevronDownIcon />
         </Select.Icon>
       </Select.Trigger>
       <Select.Portal>
         <Select.Content
-          className="max-h-52 min-w-[12rem] max-w-[12rem] overflow-hidden border bg-white text-xs hover:border-gray-200"
+          className="max-h-56 min-w-[12rem] max-w-[12rem] overflow-hidden border bg-white text-xs hover:border-gray-200"
           sideOffset={0}
           position="popper"
         >
@@ -127,7 +127,9 @@ const SelectItem = forwardRef(
                   alt="subreddit option image"
                 />
               )}
-              <h1 className="hidden text-xxs font-bold md:block">{name}</h1>
+              <h1 className="hidden overflow-hidden overflow-ellipsis text-xxs font-bold md:block">
+                {name}
+              </h1>
             </div>
           </Select.ItemText>
           <h1 className="block text-xxs font-bold md:hidden">{name}</h1>

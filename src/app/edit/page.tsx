@@ -114,6 +114,7 @@ const EditProfile = () => {
         <input
           type="text"
           className="w-full border border-gray-200 p-1"
+          maxLength={21}
           name="name"
         />
       </label>

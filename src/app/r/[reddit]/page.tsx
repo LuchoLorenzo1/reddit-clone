@@ -44,7 +44,7 @@ const RedditNavbar = ({ reddit }: { reddit: Reddit }) => {
   return (
     <section
       className={twMerge(
-        "relative flex w-full flex-col items-center bg-white",
+        "relative flex w-full max-w-full flex-col items-center bg-white",
         reddit.bannerId ? "h-52" : "h-36",
       )}
     >
@@ -62,8 +62,6 @@ const RedditNavbar = ({ reddit }: { reddit: Reddit }) => {
             sizes="(min-width: 800px) 2500px, 1500px"
             fill
             className="object-cover"
-            objectFit="cover"
-            objectPosition="center"
             alt="Reddit Banner"
           />
         ) : (
@@ -72,11 +70,11 @@ const RedditNavbar = ({ reddit }: { reddit: Reddit }) => {
       </picture>
       <div
         className={twMerge(
-          "absolute flex w-full max-w-3xl items-end justify-start gap-2 px-5 sm:px-5",
+          "absolute flex w-full max-w-3xl items-end justify-start gap-2 px-2 sm:px-5",
           reddit.bannerId ? "top-[65%]" : "top-[50%]",
         )}
       >
-        <picture className="relative h-16 w-16 rounded-full bg-white">
+        <picture className="relative h-16 w-16 max-w-full rounded-full bg-white">
           <Dialog<{ redditId: number }>
             Modal={EditReddit}
             modalProps={{ redditId: reddit.id }}
@@ -91,14 +89,13 @@ const RedditNavbar = ({ reddit }: { reddit: Reddit }) => {
               }
               width={100}
               height={100}
-              objectFit="cover"
               alt="profile picture"
             />
           </Dialog>
         </picture>
-        <div>
-          <div className="flex items-center justify-center gap-3">
-            <h1 className="text-base font-bold sm:text-xl md:text-3xl">
+        <div className="w-3/4 md:w-full">
+          <div className="flex max-w-fit items-center justify-center gap-3">
+            <h1 className="overflow-hidden overflow-ellipsis text-2xl font-bold md:text-3xl">
               {reddit.name}
             </h1>
             <JoinReddit redditId={reddit.id} />
@@ -124,7 +121,7 @@ const AboutReddit = ({ reddit }: { reddit: Reddit }) => {
         <p className="text-sm text-text/70">Members: {reddit.member_count}</p>
         <Link
           href={`/post?r=${reddit.id}`}
-          className="mt-2 rounded-xl bg-blue-500 px-2 py-1 text-center text-sm font-bold text-white hover:shadow-md"
+          className="mt-2 overflow-hidden overflow-ellipsis rounded-xl bg-blue-500 px-2 py-1 text-center text-sm font-bold text-white hover:shadow-md"
         >
           Post on r/{reddit.name}
         </Link>

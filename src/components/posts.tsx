@@ -41,7 +41,7 @@ interface PropsPost {
 
 const PostComponent: FC<PropsPost> = ({ post, reddit }) => {
   return (
-    <div className="flex min-w-fit rounded-sm border border-gray-400 bg-white">
+    <div className="flex max-w-full rounded-sm border border-gray-400 bg-white">
       <section className="rounded-l-sm bg-gray-100 px-1 py-2">
         <Vote
           downvotes={post.downvotes}
@@ -51,12 +51,43 @@ const PostComponent: FC<PropsPost> = ({ post, reddit }) => {
         />
       </section>
 
-      <div className="relative w-full rounded-sm px-2 pb-1 hover:text-opacity-100">
+      <div className="relative max-w-full rounded-sm px-2 pb-1 hover:text-opacity-100">
         <PostNavbar post={post} reddit={reddit} />
         <PostContent post={post} />
         <PostFooter post={post} />
       </div>
     </div>
+  );
+};
+
+interface PostContentProps {
+  post: Post;
+}
+
+const PostContent: FC<PostContentProps> = ({ post }) => {
+  return (
+    <Link href={`post/${post.id}`} className="max-w-full overflow-hidden">
+      {post.imageId ? (
+        <div className="relative flex flex-col items-center justify-center">
+          <h1 className="text-md mb-2 mt-1 max-h-10 w-full overflow-clip break-all">
+            {post.title}
+          </h1>
+          <Image
+            src={`https://f005.backblazeb2.com/b2api/v1/b2_download_file_by_id?fileId=${post.imageId}`}
+            loading="lazy"
+            width={1500}
+            height={1500}
+            alt="post picture"
+            className="h-auto max-h-80 max-w-full object-contain"
+          />
+        </div>
+      ) : (
+        <div className="max-h-40 overflow-clip break-all">
+          <h1 className="text-md mb-2 mt-1 w-full">{post.title}</h1>
+          <p className="text-xs">{post.content}</p>
+        </div>
+      )}
+    </Link>
   );
 };
 
@@ -69,7 +100,7 @@ interface PostNavbarProps {
 
 const PostNavbar: FC<PostNavbarProps> = ({ post, reddit }) => {
   return (
-    <div className="flex gap-2 pt-1">
+    <div className="flex w-full max-w-full items-center gap-1 overflow-hidden pt-1 text-[0.5rem] text-gray-500 sm:gap-2 sm:text-xs">
       {reddit ? (
         ""
       ) : (
@@ -83,22 +114,31 @@ const PostNavbar: FC<PostNavbarProps> = ({ post, reddit }) => {
             }
             width={20}
             height={20}
+            loading="lazy"
             alt="profile picture"
           />
-          <Link className="text-xs hover:underline" href={`r/${post.reddit}`}>
+          <Link
+            className="max-w-[8rem] overflow-hidden overflow-ellipsis hover:underline"
+            href={`r/${post.reddit}`}
+          >
             r/{post.reddit}
           </Link>
         </>
       )}
 
-      <Link className="text-xs hover:underline" href={`u/${post.username}`}>
+      <Link
+        className="max-w-[8rem] overflow-hidden overflow-ellipsis hover:underline"
+        href={`u/${post.username}`}
+      >
         u/{post.username}
       </Link>
 
-      <h1 className="group relative text-xs hover:text-opacity-90">
+      <div className="group relative hover:text-opacity-90">
         <TimeSpan date={post.created_at} />
-        {timeAgo(post.created_at)}
-      </h1>
+        <h1 className="overflow-hidden overflow-ellipsis whitespace-nowrap">
+          {timeAgo(post.created_at)}
+        </h1>
+      </div>
     </div>
   );
 };
@@ -109,26 +149,26 @@ interface PostFooterProps {
 
 const PostFooter: FC<PostFooterProps> = ({ post }) => {
   return (
-    <div className="align-center flex gap-2 pt-1">
+    <div className="align-center flex gap-2 pt-1 text-gray-500">
       <Link
         href={`post/${post.id}`}
-        className="align-center group flex w-auto gap-1 rounded p-1 text-sm text-gray-400 hover:bg-gray-200"
+        className="align-center group flex w-auto gap-1 rounded p-1 text-sm hover:bg-gray-200 hover:text-gray-700"
       >
         <ChatBubbleIcon
           width={20}
           height={20}
-          className="group-hover: text-gray-400"
+          className="group-hover:text-gray-700"
         />
         <h3 className="text-xs">{`${post.comments} Comments`}</h3>
       </Link>
       <Link
         href={`post/${post.id}`}
-        className="align-center group flex w-auto gap-1 rounded p-1 text-sm text-gray-400 hover:bg-gray-200"
+        className="align-center group flex w-auto gap-1 rounded p-1 text-sm hover:bg-gray-200 hover:text-gray-700"
       >
         <Share1Icon
           width={20}
           height={20}
-          className="group-hover: text-gray-400"
+          className="group-hover:text-gray-700"
         />
         <h3 className="text-xs">Share</h3>
       </Link>
@@ -138,42 +178,16 @@ const PostFooter: FC<PostFooterProps> = ({ post }) => {
           modalProps={{ postId: post.id }}
           modalClassName="max-w-xs text-center"
         >
-          <div className="align-center group flex w-auto gap-1 rounded p-1 text-sm text-gray-400 hover:bg-gray-200 hover:text-red-500">
+          <div className="align-center group flex w-auto gap-1 rounded p-1 text-sm hover:bg-gray-200 hover:text-red-500">
             <TrashIcon
               width={20}
               height={20}
-              className="text-gray-400 group-hover:text-red-500"
+              className="gray-400 group-hover:text-red-500"
             />
             <h3 className="text-xs">Remove</h3>
           </div>
         </Dialog>
       </div>
     </div>
-  );
-};
-
-interface PostContentProps {
-  post: Post;
-}
-
-const PostContent: FC<PostContentProps> = ({ post }) => {
-  return (
-    <Link href={`post/${post.id}`}>
-      <h1 className="text-md mb-2 mt-1">{post.title}</h1>
-      {post.imageId ? (
-        <div className="relative flex w-full items-center justify-center">
-          <Image
-            src={`https://f005.backblazeb2.com/b2api/v1/b2_download_file_by_id?fileId=${post.imageId}`}
-            loading="lazy"
-            width={1500}
-            height={1500}
-            alt="post picture"
-            className="h-auto max-h-80 max-w-full object-contain"
-          />
-        </div>
-      ) : (
-        <p className="max-h-40 overflow-hidden text-xs">{post.content}</p>
-      )}
-    </Link>
   );
 };

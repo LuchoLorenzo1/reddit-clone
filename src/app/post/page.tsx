@@ -104,12 +104,14 @@ const Page: FC<{}> = () => {
             type="text"
             name="title"
             placeholder="Title"
+            maxLength={200}
             required
             className="h-8 w-full rounded border border-gray-200 px-2"
           />
           <Tabs.Content value="post" className="w-full">
             <textarea
               name="content"
+              maxLength={20000}
               placeholder="Text (optional)"
               className="block max-h-52 min-h-[4rem] w-full rounded border border-gray-200 p-2 text-xs"
             />

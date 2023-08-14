@@ -10,8 +10,8 @@ export const TimeSpan = ({ date }: { date: Date }) => {
   }, [date]);
 
   return (
-    <div className="absolute bottom-6 hidden bg-black p-1 text-xs text-white opacity-90 group-hover:block">
-      <h1>{time}</h1>
+    <div className="absolute bottom-6 hidden -translate-x-1/2 bg-black p-1 text-xs text-white opacity-90 group-hover:inline-block sm:left-1/2">
+      <h1 className="whitespace-nowrap">{time}</h1>
     </div>
   );
 };
