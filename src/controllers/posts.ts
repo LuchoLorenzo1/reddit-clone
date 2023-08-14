@@ -4,7 +4,7 @@ import Post, { SubmitPostData } from "@/types/post";
 
 export const getPostById = async (postId: number) => {
   const res: [RowDataPacket[], FieldPacket[]] = await pool.query(
-    `SELECT posts.id, title, content, r.name as reddit, u.name as username, upvotes, downvotes, posts.created_at, posts.image_id as imageId
+    `SELECT posts.id, title, content, r.name as reddit, u.name as username, upvotes, downvotes, posts.created_at, posts.image_id as imageId, num_comments as comments
 	  	FROM posts
 		JOIN reddits r
 			ON posts.reddit_id = r.id
@@ -39,7 +39,7 @@ export const createPost = async (
 
 export const getPosts = async () => {
   const res: [RowDataPacket[], FieldPacket[]] = await pool.query(
-    `SELECT posts.id, title, content, r.name as reddit, u.name as username, upvotes, downvotes, posts.created_at, posts.image_id as imageId
+    `SELECT posts.id, title, content, r.name as reddit, u.name as username, upvotes, downvotes, posts.created_at, posts.image_id as imageId, num_comments as comments
 	  	FROM posts
 		JOIN reddits r
 			ON posts.reddit_id = r.id
@@ -51,7 +51,7 @@ export const getPosts = async () => {
 
 export const getFeed = async (userId: number) => {
   const res: [RowDataPacket[], FieldPacket[]] = await pool.query(
-    `SELECT posts.id as id, title, content, u.name as username, upvotes, downvotes, posts.created_at, r.name as reddit, r.image_id as redditImageId, is_upvote as isUpvote, posts.image_id as imageId
+    `SELECT posts.id as id, title, content, u.name as username, upvotes, downvotes, posts.created_at, r.name as reddit, r.image_id as redditImageId, is_upvote as isUpvote, posts.image_id as imageId, posts.num_comments as comments
 			  FROM posts
 			  JOIN users u
 				  ON posts.author_id = u.id
@@ -69,7 +69,7 @@ export const getFeed = async (userId: number) => {
 
 export const getPostsByReddit = async (redditId: number, userId: number) => {
   const res: [RowDataPacket[], FieldPacket[]] = await pool.query(
-    `SELECT posts.id, title, content, u.name as username, upvotes, downvotes, posts.created_at, v.is_upvote as isUpvote, posts.image_id as imageId
+    `SELECT posts.id, title, content, u.name as username, upvotes, downvotes, posts.created_at, v.is_upvote as isUpvote, posts.image_id as imageId, num_comments as comments
 		FROM posts
 		JOIN users u
 			ON posts.author_id = u.id
@@ -81,4 +81,13 @@ export const getPostsByReddit = async (redditId: number, userId: number) => {
   );
 
   return res[0] as Post[];
+};
+
+export const deletePostById = async (postId: number) => {
+  let res: [ResultSetHeader, FieldPacket[]] = await pool.query(
+    "DELETE FROM posts WHERE id = ?",
+    [postId],
+  );
+
+  return res[0].affectedRows == 1;
 };

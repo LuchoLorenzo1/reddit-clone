@@ -4,6 +4,7 @@ export default interface Post {
   username: string;
   reddit?: string;
   id: number;
+  comments: number;
   upvotes: number;
   downvotes: number;
   imageId?: string;

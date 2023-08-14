@@ -123,8 +123,8 @@ const RedditRecommendations = async ({ userId }: { userId: number }) => {
             key={r.redditId}
             className="my-2 flex w-full items-center justify-between gap-2"
           >
-            <div className="flex items-center justify-start gap-1">
-              <picture>
+            <div className="overlflow-hidden flex w-4/6 items-center justify-start gap-2">
+              <picture className="min-h-fit min-w-fit">
                 <Image
                   loading="lazy"
                   className="rounded-full"
@@ -138,12 +138,17 @@ const RedditRecommendations = async ({ userId }: { userId: number }) => {
                   alt="reddit icon"
                 />
               </picture>
-              <Link href={`/r/${r.reddit}`} className="text-xs hover:underline">
-                r/{r.reddit.slice(0, 15)}
-                {r.reddit.slice(15) ? "..." : ""}
+              <Link
+                href={`/r/${r.reddit}`}
+                className="overflow-hidden overflow-ellipsis text-xs hover:underline"
+              >
+                r/{r.reddit}
               </Link>
             </div>
-            <JoinReddit redditId={r.redditId} className="min-w-[3rem]" />
+            <JoinReddit
+              redditId={r.redditId}
+              className="min-w-[3rem] max-w-[20%]"
+            />
           </li>
         ))}
       </ul>
