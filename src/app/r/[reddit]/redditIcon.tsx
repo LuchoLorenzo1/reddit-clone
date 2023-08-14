@@ -42,14 +42,14 @@ const EditReddit: FC<modalProps<{ redditId: number }>> = ({
       <h1>Update reddit</h1>
       <form onSubmit={onSubmit} className="flex w-full flex-col gap-4">
         <label className="flex flex-col">
-          Update icon
+          <h2 className="text-sm">Update icon</h2>
           <InputImage
             name="image"
             className="w-full rounded border border-gray-200 px-3 py-2"
           />
         </label>
         <label>
-          Update banner
+          <h2 className="text-sm">Update banner</h2>
           <InputImage
             name="banner"
             className="w-full rounded border border-gray-200 px-3 py-2"

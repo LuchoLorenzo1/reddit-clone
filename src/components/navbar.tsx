@@ -10,8 +10,6 @@ import Navigator from "./navigator";
 
 import { getUserById } from "@/controllers/users";
 import User from "@/types/user";
-import EditUserModal from "./profilePic";
-import Dialog from "./dialog";
 
 const Navbar = async () => {
   const session = await getServerSession(authOptions);
@@ -28,7 +26,7 @@ const Navbar = async () => {
       </NavLink>
       <ToggleDarkMode />
       {session ? (
-        <Dialog Modal={EditUserModal}>
+        <Link href="/edit">
           <Image
             src={
               user?.imageId
@@ -38,9 +36,9 @@ const Navbar = async () => {
             width={40}
             height={40}
             alt="profile picture"
-            className="min-w-[1.75rem] rounded-full"
+            className="min-w-[1.75rem] rounded-full hover:opacity-50"
           />
-        </Dialog>
+        </Link>
       ) : (
         <NavLink className="min-w-fit px-2" href="/signin">
           Sign In

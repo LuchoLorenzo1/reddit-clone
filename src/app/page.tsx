@@ -34,23 +34,25 @@ export default async function Home() {
             alt="profile picture"
           />
           <Link
-            className="w-full rounded-sm border border-gray-200 bg-gray-100 p-1 px-2 hover:border-blue-500 hover:bg-white"
+            className="group w-full rounded-sm border border-gray-200 bg-gray-100 p-1 px-2 hover:border-blue-500 hover:bg-white"
             href="/post"
           >
-            <div className="w-full text-sm font-bold text-black/40">
+            <div className="w-full text-sm font-bold text-black/40 group-hover:text-blue-500">
               Create Post
             </div>
           </Link>
-          <ImageIcon
-            width={40}
-            height={40}
-            className="rounded-md p-1 hover:bg-gray-100"
-          />
-          <Link2Icon
-            width={40}
-            height={40}
-            className="rounded-md p-1 hover:bg-gray-100"
-          />
+          <Link
+            href="/post?m=image"
+            className="rounded-sm p-1 hover:bg-gray-100 hover:text-blue-500"
+          >
+            <ImageIcon width={25} height={25} />
+          </Link>
+          <Link
+            href="/post?m=image"
+            className="rounded-sm p-1 hover:bg-gray-100 hover:text-blue-500"
+          >
+            <Link2Icon width={25} height={25} />
+          </Link>
         </div>
         <Posts posts={posts} />
       </main>
@@ -136,8 +138,9 @@ const RedditRecommendations = async ({ userId }: { userId: number }) => {
                   alt="reddit icon"
                 />
               </picture>
-              <Link href={`/r/${r.reddit}`} className="text-sm hover:underline">
-                r/{r.reddit}
+              <Link href={`/r/${r.reddit}`} className="text-xs hover:underline">
+                r/{r.reddit.slice(0, 15)}
+                {r.reddit.slice(15) ? "..." : ""}
               </Link>
             </div>
             <JoinReddit redditId={r.redditId} className="min-w-[3rem]" />

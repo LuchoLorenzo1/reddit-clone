@@ -26,4 +26,12 @@
       scrollbar-width: none;
     }
   }
+
+  .text-wrap {
+    text-wrap: wrap;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
 }

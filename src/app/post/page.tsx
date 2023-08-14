@@ -29,6 +29,16 @@ const Page: FC<{}> = () => {
   const [error, setError] = useState("");
   const [selected, setSelected] = useState("post");
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const mode = searchParams.get("m");
+    if (mode == "image") {
+      setSelected("image");
+    } else if (mode == "post") {
+      setSelected("post");
+    }
+  }, []);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -66,7 +76,7 @@ const Page: FC<{}> = () => {
     <Tabs.Root
       value={selected}
       onValueChange={(v) => setSelected(v)}
-      className="mx-2 mt-3 flex max-w-2xl flex-col items-center rounded-sm bg-white shadow shadow-gray-300 md:mx-0 md:w-3/4"
+      className="mt-3 flex w-full flex-col items-center rounded-sm bg-white shadow shadow-gray-300 md:mx-0 md:w-3/4 md:max-w-2xl"
       defaultValue="post"
     >
       <Tabs.List className="grid w-full grid-cols-3 border-b border-gray-200">

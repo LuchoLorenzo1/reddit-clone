@@ -42,11 +42,16 @@ const Reddit: FC<RedditProps> = async ({ params }) => {
 
 const RedditNavbar = ({ reddit }: { reddit: Reddit }) => {
   return (
-    <section className="relative flex h-20 min-h-[14rem] w-full flex-col items-center bg-white">
+    <section
+      className={twMerge(
+        "relative flex w-full flex-col items-center bg-white",
+        reddit.bannerId ? "h-52" : "h-36",
+      )}
+    >
       <picture
         className={twMerge(
-          "relative mb-5 min-h-[10rem] w-screen overflow-hidden",
-          reddit.bannerId ? "" : "bg-blue-500",
+          "relative mb-5 min-h-[60%] w-screen",
+          reddit.bannerId ? "min-h-[70%]" : "min-h-[55%] bg-blue-500",
         )}
       >
         {reddit.bannerId ? (
@@ -65,14 +70,19 @@ const RedditNavbar = ({ reddit }: { reddit: Reddit }) => {
           ""
         )}
       </picture>
-      <div className="absolute top-[9.5rem] flex w-full max-w-3xl items-end justify-start gap-2 px-5 sm:px-5">
+      <div
+        className={twMerge(
+          "absolute flex w-full max-w-3xl items-end justify-start gap-2 px-5 sm:px-5",
+          reddit.bannerId ? "top-[65%]" : "top-[50%]",
+        )}
+      >
         <picture className="relative h-16 w-16 rounded-full bg-white">
           <Dialog<{ redditId: number }>
             Modal={EditReddit}
             modalProps={{ redditId: reddit.id }}
           >
             <Image
-              className="rounded-full border-4 border-white"
+              className="min-h-[80px] min-w-[80px] rounded-full border-4 border-white"
               loading="lazy"
               src={
                 !!reddit.imageId
@@ -88,7 +98,9 @@ const RedditNavbar = ({ reddit }: { reddit: Reddit }) => {
         </picture>
         <div>
           <div className="flex items-center justify-center gap-3">
-            <h1 className="text-3xl font-bold">{reddit.name}</h1>
+            <h1 className="text-base font-bold sm:text-xl md:text-3xl">
+              {reddit.name}
+            </h1>
             <JoinReddit redditId={reddit.id} />
           </div>
           <h1 className="text-xs font-bold text-text/60">r/{reddit.name}</h1>

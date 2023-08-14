@@ -41,7 +41,7 @@ export const getRedditRecommendations = async (
     `SELECT id as redditId, name AS reddit, image_id AS imageId
 	FROM reddits
 		WHERE id NOT IN (SELECT reddit_id FROM members WHERE user_id = ?)
-	ORDER BY member_count
+	ORDER BY member_count DESC
 	LIMIT 5
 	`,
     [userId],
