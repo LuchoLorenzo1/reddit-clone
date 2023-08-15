@@ -11,60 +11,29 @@ import { TrashIcon, ChatBubbleIcon, Share1Icon } from "@radix-ui/react-icons";
 import Dialog, { modalProps } from "./dialog";
 import { useRedditData } from "@/context/redditDataContext";
 import Spinner from "./spinner";
+import toast from "react-hot-toast";
 
 const SCROLL_SIZE = 5;
 
 const Posts: FC = () => {
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [offset, setOffset] = useState(0);
-  const [scrollEnd, setScrollEnd] = useState(false);
-  const reddit = useRedditData();
-  const firstTime = useRef(true);
-
-  const observerTarget = useRef(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && !firstTime.current && !scrollEnd) {
-          setOffset((o) => o + SCROLL_SIZE);
-        } else {
-          firstTime.current = false;
-        }
-      },
-      { threshold: 1 },
-    );
-
-    if (observerTarget.current) {
-      observer.observe(observerTarget.current);
-    }
-
-    return () => {
-      if (observerTarget.current) {
-        observer.unobserve(observerTarget.current);
-      }
-    };
-  }, [observerTarget]);
-
-  useEffect(() => {
-    setLoading(true);
-    fetch(`/api/post?r=${reddit?.id}&offset=${offset}&limit=${SCROLL_SIZE}`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.posts) {
-          if (data.posts.length == 0) return setScrollEnd(true);
-          setPosts([...posts, ...data.posts]);
-        }
-      })
-      .catch((e) => console.error(e))
-      .finally(() => setLoading(false));
-  }, [offset]);
+  const { posts, setPosts, observerTarget, loading, scrollEnd } =
+    useInfiniteScrolling();
 
   const deletePost = async (postId: number) => {
     await fetch(`/api/post/${postId}`, { method: "DELETE" })
-      .then(() => setPosts((_posts) => _posts.filter((p) => p.id != postId)))
-      .catch((e) => console.error("(toast)", e));
+      .then(() => {
+        setPosts((_posts) => _posts.filter((p) => p.id != postId));
+        toast.success("Post removed succesfully", {
+          position: "bottom-right",
+          duration: 2000,
+        });
+      })
+      .catch(() => {
+        toast.error("An error ocurred removing post", {
+          position: "bottom-right",
+          duration: 2000,
+        });
+      });
   };
 
   return (
@@ -274,4 +243,54 @@ const removePost: FC<modalProps<removePostProps>> = ({ setOpen, props }) => {
       </button>
     </div>
   );
+};
+
+const useInfiniteScrolling = () => {
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [offset, setOffset] = useState(0);
+  const [scrollEnd, setScrollEnd] = useState(false);
+  const reddit = useRedditData();
+  const firstTime = useRef(true);
+
+  const observerTarget = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !firstTime.current && !scrollEnd) {
+          setOffset((o) => o + SCROLL_SIZE);
+        } else {
+          firstTime.current = false;
+        }
+      },
+      { threshold: 1 },
+    );
+
+    if (observerTarget.current) {
+      observer.observe(observerTarget.current);
+    }
+
+    return () => {
+      if (observerTarget.current) {
+        observer.unobserve(observerTarget.current);
+      }
+    };
+  }, [observerTarget]);
+
+  useEffect(() => {
+    setLoading(true);
+    fetch(`/api/post?r=${reddit?.id}&offset=${offset}&limit=${SCROLL_SIZE}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.posts) {
+          if (data.posts.length == 0) return setScrollEnd(true);
+          setPosts([...posts, ...data.posts]);
+        }
+      })
+      .catch((e) => console.error(e))
+      .finally(() => setLoading(false));
+  }, [offset]);
+
+  return { posts, setPosts, observerTarget, loading, scrollEnd };
 };
