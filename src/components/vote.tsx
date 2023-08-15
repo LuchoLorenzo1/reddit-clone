@@ -1,5 +1,6 @@
 "use client";
-import { FC, useEffect, useState, useReducer } from "react";
+import { FC, useState, useRef } from "react";
+import toast from "react-hot-toast";
 import { twMerge } from "tailwind-merge";
 
 interface VoteProps {
@@ -10,94 +11,74 @@ interface VoteProps {
 }
 
 const Vote: FC<VoteProps> = ({ upvotes, downvotes, isUpvote, postId }) => {
-  const [votes, upVote, downVote, isVoted, isUpvoted] = useVote(
-    upvotes,
-    downvotes,
-    isUpvote,
-    postId,
-  );
+  const alreadyVoted = isUpvote == undefined ? 0 : isUpvote ? 1 : -1;
+  const [vote, createVote] = useVote(isUpvote, postId);
 
   return (
     <div className="flex flex-col items-center justify-center text-center">
       <ArrowButton
-        onClick={() => upVote()}
+        onClick={() => createVote(1)}
         className={twMerge(
           "fill-none stroke-gray-400 stroke-[5] group-hover:stroke-orange-500",
-          isVoted && isUpvoted ? "fill-orange-500 stroke-orange-500" : "",
+          vote == 1 ? "fill-orange-500 stroke-orange-500" : "",
         )}
       />
       <h1
         className={twMerge(
           "font-bold",
-          isVoted && isUpvoted ? "text-orange-500" : "",
-          isVoted && !isUpvoted ? "text-blue-500" : "",
+          vote == 1 ? "text-orange-500" : "",
+          vote == -1 ? "text-blue-500" : "",
         )}
       >
-        {votes}
+        {upvotes - downvotes + vote - alreadyVoted}
       </h1>
       <ArrowButton
-        onClick={() => downVote()}
+        onClick={() => createVote(-1)}
         className={twMerge(
           "rotate-180 fill-none stroke-gray-400 stroke-[5] group-hover:stroke-blue-500",
-          isVoted && !isUpvoted ? "fill-blue-500 stroke-blue-500" : "",
+          vote == -1 ? "fill-blue-500 stroke-blue-500" : "",
         )}
       />
     </div>
   );
 };
 
-type useVoteReturn = [number, () => void, () => void, boolean, boolean];
+type VoteType = 0 | 1 | -1;
+type useVoteReturn = [VoteType, (newVote: VoteType) => void];
 
 const useVote = (
-  upvotes: number,
-  downvotes: number,
   isUpvote: boolean | undefined,
   postId: number,
 ): useVoteReturn => {
-  const [isVoted, setVoted] = useState(isUpvote != undefined);
-  const [isUpvoted, setUpvoted] = useState(!!isUpvote);
-  const [votes, setVotes] = useState(upvotes - downvotes);
+  const [vote, setVote] = useState<VoteType>(
+    isUpvote == undefined ? 0 : isUpvote ? 1 : -1,
+  );
+  const lastVote = useRef<VoteType>(0);
 
-  const upVote = () => {
-    if (isVoted && isUpvoted) {
-      return sendVote(0, postId).then(() => {
-        setVotes(votes - 1);
-        setVoted(false);
-        setUpvoted(false);
+  const createVote = (newVote: VoteType) => {
+    lastVote.current = vote;
+    if (vote == newVote) newVote = 0;
+
+    setVote(newVote);
+    fetch("/api/vote", {
+      method: "POST",
+      body: JSON.stringify({
+        postId,
+        vote: newVote,
+      }),
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error();
+      })
+      .catch(() => {
+        toast.error("An error ocurred voting the post", {
+          position: "bottom-right",
+        });
+        setVote(lastVote.current);
       });
-    }
-    sendVote(1, postId).then(() => {
-      if (isVoted && !isUpvoted) {
-        setVotes(votes + 2);
-      } else {
-        setVotes(votes + 1);
-      }
-      setVoted(true);
-      setUpvoted(true);
-    });
   };
 
-  const downVote = () => {
-    if (isVoted && !isUpvoted) {
-      return sendVote(0, postId).then(() => {
-        setVotes(votes + 1);
-        setVoted(false);
-        setUpvoted(false);
-      });
-    }
-
-    sendVote(-1, postId).then(() => {
-      if (isVoted && isUpvoted) {
-        setVotes(votes - 2);
-      } else {
-        setVotes(votes - 1);
-      }
-      setVoted(true);
-      setUpvoted(false);
-    });
-  };
-
-  return [votes, upVote, downVote, isVoted, isUpvoted];
+  return [vote, createVote];
 };
 
 export default Vote;
@@ -127,14 +108,4 @@ const ArrowButton: FC<ArrowButtonProps> = ({ className, onClick }) => {
       </svg>
     </button>
   );
-};
-
-const sendVote = (vote: number, postId: number) => {
-  return fetch("/api/vote", {
-    method: "POST",
-    body: JSON.stringify({
-      postId,
-      vote,
-    }),
-  });
 };

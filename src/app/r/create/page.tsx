@@ -5,6 +5,7 @@ import { useReddits } from "@/context/redditsContext";
 import { RedditInfo } from "@/types/reddit";
 import { useRouter } from "next/navigation";
 import { FC, FormEvent, useState } from "react";
+import toast from "react-hot-toast";
 
 const Page: FC<{}> = () => {
   const [loading, setLoading] = useState(false);
@@ -27,7 +28,10 @@ const Page: FC<{}> = () => {
 
     if (!res.ok) {
       const data = await res.json();
-      console.log("error");
+      toast.success("An error ocurred creating community", {
+        position: "bottom-right",
+        duration: 2000,
+      });
       setError(data.message);
       setLoading(false);
       return;
@@ -40,6 +44,11 @@ const Page: FC<{}> = () => {
         { redditId: data.redditId, reddit: data.reddit, imageId: data.imageId },
       ]);
     }
+
+    toast.success("Succesfully created community", {
+      position: "bottom-right",
+      duration: 2000,
+    });
 
     router.push(`/r/${formData.get("name")}`);
   };

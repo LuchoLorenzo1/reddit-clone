@@ -93,8 +93,6 @@ export async function GET(req: NextRequest) {
   const limitParam = searchParams.get("limit");
   const limit = limitParam ? +limitParam : 5;
 
-  console.log(redditId, offset, limit);
-
   try {
     const posts = await getFeed(session.user.id, limit, offset, redditId);
     return NextResponse.json({ posts }, { status: 200 });

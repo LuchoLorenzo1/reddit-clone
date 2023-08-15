@@ -2,7 +2,8 @@
 
 import { useReddits } from "@/context/redditsContext";
 import Reddit from "@/types/reddit";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import toast from "react-hot-toast";
 import { twMerge } from "tailwind-merge";
 
 const joinReddit = ({
@@ -14,12 +15,16 @@ const joinReddit = ({
 }) => {
   const [isMember, setIsMember] = useState(false);
   const { reddits, setReddits } = useReddits();
+  const lastState = useRef(false);
 
   useEffect(() => {
     setIsMember(!!reddits.find((r) => r.redditId == redditId));
   }, [reddits]);
 
   const toggleJoin = () => {
+    lastState.current = isMember;
+    setIsMember(!isMember);
+
     fetch("/api/r/join", {
       method: "POST",
       body: JSON.stringify({
@@ -28,10 +33,7 @@ const joinReddit = ({
       }),
     })
       .then((res) => {
-        if (res.ok) {
-          setIsMember(!isMember);
-          return res.json();
-        }
+        if (res.ok) return res.json();
         throw new Error();
       })
       .then((r: Reddit) => {
@@ -39,14 +41,28 @@ const joinReddit = ({
           setReddits((reddits) =>
             reddits.filter((r) => r.redditId != redditId),
           );
+          toast.success(`Successfully left r/${r.name}!`, {
+            position: "bottom-right",
+          });
         } else {
           setReddits([
             ...reddits,
             { redditId, reddit: r.name, imageId: r.imageId },
           ]);
+          toast.success(`Successfully joined r/${r.name}!`, {
+            position: "bottom-right",
+          });
         }
       })
-      .catch((e) => console.error(e));
+      .catch(() => {
+        toast.error(
+          `An error ocurred ${
+            lastState.current ? "leaving" : "joining"
+          } reddit`,
+          { position: "bottom-right" },
+        );
+        setIsMember(lastState.current);
+      });
   };
 
   return (

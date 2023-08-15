@@ -23,6 +23,7 @@ import { useReddits } from "@/context/redditsContext";
 
 import * as Tabs from "@radix-ui/react-tabs";
 import InputImage from "@/components/inputImage";
+import toast from "react-hot-toast";
 
 const Page: FC<{}> = () => {
   const [loading, setLoading] = useState(false);
@@ -63,11 +64,19 @@ const Page: FC<{}> = () => {
 
     if (!res.ok) {
       const data = await res.json();
+      toast.error("An error ocurred posting", {
+        position: "bottom-right",
+        duration: 2000,
+      });
       setError(data.message);
       setLoading(false);
       return;
     }
 
+    toast.success("Posted succesfully", {
+      position: "bottom-right",
+      duration: 2000,
+    });
     router.push("/");
   };
 
