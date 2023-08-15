@@ -49,20 +49,42 @@ export const getPosts = async () => {
   return res[0] as Post[];
 };
 
-export const getFeed = async (userId: number) => {
-  const res: [RowDataPacket[], FieldPacket[]] = await pool.query(
-    `SELECT posts.id as id, title, content, u.name as username, upvotes, downvotes, posts.created_at, r.name as reddit, r.image_id as redditImageId, is_upvote as isUpvote, posts.image_id as imageId, posts.num_comments as comments
-			  FROM posts
-			  JOIN users u
-				  ON posts.author_id = u.id
-			  JOIN reddits r
-				  ON posts.reddit_id = r.id
-			  LEFT JOIN votes v
-				  ON posts.id = v.post_id AND v.user_id = ?
-			  WHERE posts.reddit_id IN (SELECT reddit_id FROM members WHERE user_id = ?)
-			  ORDER BY created_at DESC`,
-    [userId, userId],
-  );
+export const getFeed = async (
+  userId: number,
+  limit: number,
+  offset: number,
+  redditId?: number,
+) => {
+  let res: [RowDataPacket[], FieldPacket[]];
+  if (redditId) {
+    res = await pool.query(
+      `SELECT posts.id, title, content, u.name as username, upvotes, downvotes, posts.created_at, v.is_upvote as isUpvote, posts.image_id as imageId, num_comments as comments
+		FROM posts
+		JOIN users u
+			ON posts.author_id = u.id
+		LEFT JOIN votes v
+			ON posts.id = v.post_id AND v.user_id = ?
+		WHERE reddit_id = ?
+		ORDER BY created_at DESC
+		LIMIT ? OFFSET ?
+		`,
+      [userId, redditId, limit, offset],
+    );
+  } else {
+    res = await pool.query(
+      `SELECT posts.id as id, title, content, u.name as username, upvotes, downvotes, posts.created_at, r.name as reddit, r.image_id as redditImageId, is_upvote as isUpvote, posts.image_id as imageId, posts.num_comments as comments
+				   FROM posts
+				   JOIN users u
+					   ON posts.author_id = u.id
+				   JOIN reddits r
+					   ON posts.reddit_id = r.id
+				   LEFT JOIN votes v
+					   ON posts.id = v.post_id AND v.user_id = ?
+				   WHERE posts.reddit_id IN (SELECT reddit_id FROM members WHERE user_id = ?)
+				   ORDER BY created_at DESC LIMIT ? OFFSET ?`,
+      [userId, userId, limit, offset],
+    );
+  }
 
   return res[0] as Post[];
 };

@@ -1,5 +1,12 @@
-export function timeAgo(created_at: Date): string {
-  const seconds = (new Date().getTime() - created_at.getTime()) / 1000;
+export function timeAgo(created_at: Date | string): string {
+  let date: Date;
+  if (typeof created_at == "string") {
+    date = new Date(created_at);
+  } else {
+    date = created_at;
+  }
+
+  const seconds = (new Date().getTime() - date.getTime()) / 1000;
 
   let span: number;
   let text: string;
@@ -31,9 +38,3 @@ export function timeAgo(created_at: Date): string {
 
   return `${span} ${text} ago`;
 }
-
-// if (typeof created_at == "string") {
-//   date = new Date(created_at);
-// } else {
-//   date = created_at;
-// }

@@ -1,7 +1,7 @@
 import { getServerSession } from "next-auth";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { authOptions } from "../auth/[...nextauth]/route";
-import { createPost, getPosts } from "@/controllers/posts";
+import { createPost, getFeed } from "@/controllers/posts";
 import { SubmitPostData } from "@/types/post";
 import { authorizeBucket, uploadImage } from "@/database/b2";
 
@@ -78,9 +78,25 @@ export async function POST(req: Request) {
   }
 }
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const session = await getServerSession(authOptions);
+  if (!session) return NextResponse.json("", { status: 403 });
+
+  const { searchParams } = new URL(req.url);
+
+  const redditIdParam = searchParams.get("r");
+  const redditId = redditIdParam && +redditIdParam ? +redditIdParam : undefined;
+
+  const offsetParam = searchParams.get("offset");
+  const offset = offsetParam ? +offsetParam : 0;
+
+  const limitParam = searchParams.get("limit");
+  const limit = limitParam ? +limitParam : 5;
+
+  console.log(redditId, offset, limit);
+
   try {
-    const posts = await getPosts();
+    const posts = await getFeed(session.user.id, limit, offset, redditId);
     return NextResponse.json({ posts }, { status: 200 });
   } catch (e) {
     console.error(e);

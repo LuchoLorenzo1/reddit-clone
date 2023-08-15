@@ -2,11 +2,15 @@
 
 import { useEffect, useState } from "react";
 
-export const TimeSpan = ({ date }: { date: Date }) => {
+export const TimeSpan = ({ date }: { date: Date | string }) => {
   const [time, setTime] = useState("");
 
   useEffect(() => {
-    setTime(date.toLocaleString());
+    if (typeof date == "string") {
+      setTime(new Date(date).toLocaleString());
+    } else {
+      setTime(date.toLocaleString());
+    }
   }, [date]);
 
   return (

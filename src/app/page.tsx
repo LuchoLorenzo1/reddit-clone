@@ -3,8 +3,6 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]/route";
 import Image from "next/image";
 import Link from "next/link";
-import { getFeed } from "@/controllers/posts";
-
 import { ImageIcon, Link2Icon } from "@radix-ui/react-icons";
 import { getUserById } from "@/controllers/users";
 import { getRedditRecommendations } from "@/controllers/reddits";
@@ -15,8 +13,6 @@ export default async function Home() {
   const session = await getServerSession(authOptions);
   if (!session) return;
   const user = await getUserById(session.user.id);
-
-  const posts = await getFeed(session.user.id);
 
   return (
     <section className="mt-3 grid w-full max-w-3xl grid-cols-3 justify-center gap-5 sm:px-5">
@@ -54,7 +50,7 @@ export default async function Home() {
             <Link2Icon width={25} height={25} />
           </Link>
         </div>
-        <Posts posts={posts} />
+        <Posts />
       </main>
       <aside className="w-max-[10rem] hidden h-max flex-col items-center justify-center gap-3 md:col-span-1 md:flex">
         <HomeAside />

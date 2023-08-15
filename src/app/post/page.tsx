@@ -48,7 +48,6 @@ const Page: FC<{}> = () => {
     setError("");
     setLoading(true);
 
-    console.log(selected);
     if (selected == "image") {
       formData.delete("content");
     } else if (selected == "post") {
@@ -108,7 +107,7 @@ const Page: FC<{}> = () => {
             required
             className="h-8 w-full rounded border border-gray-200 px-2"
           />
-          <Tabs.Content value="post" className="w-full">
+          <Tabs.Content tabIndex={-1} value="post" className="w-full">
             <textarea
               name="content"
               maxLength={20000}
@@ -116,7 +115,7 @@ const Page: FC<{}> = () => {
               className="block max-h-52 min-h-[4rem] w-full rounded border border-gray-200 p-2 text-xs"
             />
           </Tabs.Content>
-          <Tabs.Content value="image" className="w-full">
+          <Tabs.Content tabIndex={-1} value="image" className="w-full">
             <InputImage
               name="image"
               className="w-full rounded border border-gray-200 p-3"
