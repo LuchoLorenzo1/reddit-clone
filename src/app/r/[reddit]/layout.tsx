@@ -156,11 +156,15 @@ const AboutReddit = ({ reddit }: { reddit: Reddit }) => {
         <p className="text-sm text-text/70">Members: {reddit.member_count}</p>
         <Link
           href={`/post?r=${reddit.id}`}
-          className="mt-2 overflow-hidden overflow-ellipsis rounded-xl bg-blue-500 px-2 py-1 text-center text-sm font-bold text-white hover:shadow-md"
+          className="overflow-hidden overflow-ellipsis rounded-xl bg-blue-500 px-2 py-1 text-center text-sm font-bold text-white hover:bg-blue-400"
         >
           Post on r/{reddit.name}
         </Link>
-        <RemoveReddit redditId={reddit.id} />
+        <RemoveReddit
+          redditName={reddit.name}
+          className="rounded-xl border border-red-500 px-2 py-1 text-center text-sm font-bold text-red-500 transition-colors duration-75 hover:bg-red-500 hover:text-white"
+          redditId={reddit.id}
+        />
       </div>
     </aside>
   );

@@ -280,7 +280,11 @@ const useInfiniteScrolling = () => {
 
   useEffect(() => {
     setLoading(true);
-    fetch(`/api/post?r=${reddit?.id}&offset=${offset}&limit=${SCROLL_SIZE}`)
+    fetch(
+      `/api/post?offset=${offset}&limit=${SCROLL_SIZE}${
+        reddit ? `&r=${reddit?.id}` : ""
+      }`,
+    )
       .then((res) => res.json())
       .then((data) => {
         if (data.posts) {

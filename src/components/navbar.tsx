@@ -10,6 +10,7 @@ import Navigator from "./navigator";
 
 import { getUserById } from "@/controllers/users";
 import User from "@/types/user";
+import SearchBar from "./searchBar";
 
 const Navbar = async () => {
   const session = await getServerSession(authOptions);
@@ -17,7 +18,7 @@ const Navbar = async () => {
   if (session) user = await getUserById(session.user.id);
 
   return (
-    <nav className="flex items-center justify-center gap-2 bg-white px-2 py-2 dark:bg-black dark:text-white sm:gap-3 md:gap-5">
+    <nav className="flex items-center justify-center gap-2 bg-white px-4 py-1 dark:bg-black dark:text-white sm:gap-3 md:gap-4">
       <Logo />
       <Navigator />
       <SearchBar />
@@ -45,19 +46,6 @@ const Navbar = async () => {
         </NavLink>
       )}
     </nav>
-  );
-};
-
-const SearchBar = () => {
-  return (
-    <div className="flex w-full max-w-md flex-row rounded-full border border-gray-500 bg-gray-100 py-1">
-      <MagnifyingGlassIcon width={30} height={30} className="pl-1 opacity-50" />
-      <input
-        type="text"
-        className="left-5 w-full rounded-full bg-gray-100 px-2 text-xs outline-none"
-        placeholder="Search Reddit"
-      />
-    </div>
   );
 };
 
