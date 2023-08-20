@@ -2,17 +2,40 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --color-primary-50: 248 248 247;
-  --color-primary-100: 241 242 238;
-  --color-primary-200: 220 221 214;
-  --color-primary-300: 198 201 189;
-  --color-primary-400: 156 161 139;
-  --color-primary-500: 113 120 89;
-  --color-primary-600: 102 108 80;
-  --color-primary-700: 68 72 53;
-  --color-primary-800: 51 54 40;
-  --color-primary-900: 34 36 27;
+@layer base {
+  :root {
+    --color-primary: 59 130 256;
+    --color-secondary: 248 119 24;
+    --color-text: 5 5 5;
+    --color-success: 0 200 81;
+    --color-info: 51 181 229;
+    --color-warn: 255 187 51;
+    --color-error: 254 78 78;
+
+    --color-background: 218 224 230;
+    --color-background-100: 255 255 255;
+    --color-background-300: 242 244 246;
+
+    --color-accent-1: "#C2C5CC";
+    --color-accent-2: "#969BA7";
+  }
+
+  /* @media (prefers-color-scheme: dark){} */
+  :root[class~="dark"] {
+    --color-primary: 215 218 228;
+    --color-text: 255 255 255;
+    --color-secondary: 248 119 24;
+    --color-success: 0 200 81;
+    --color-info: 51 181 229;
+    --color-warn: 255 187 51;
+    --color-error: 254 78 78;
+
+    --color-background: 3 3 3;
+    --color-background-100: 39 39 41;
+    --color-background-300: 26 26 25;
+    --color-accent-1: "#C2C5CC";
+    --color-accent-2: "#969BA7";
+  }
 }
 
 @layer utilities {

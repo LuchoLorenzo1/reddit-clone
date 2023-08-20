@@ -17,39 +17,13 @@ export default async function Home() {
   return (
     <section className="mt-3 grid w-full max-w-3xl grid-cols-3 justify-center gap-5 sm:px-5">
       <main className="col-span-3 md:col-span-2">
-        <div className="mb-3 flex w-full items-center gap-2 rounded-sm border border-gray-400 bg-white p-2 py-2">
-          <Image
-            width={40}
-            height={40}
-            src={
-              user?.imageId
-                ? `https://f005.backblazeb2.com/b2api/v1/b2_download_file_by_id?fileId=${user.imageId}`
-                : session.user?.image ?? "/r.svg"
-            }
-            className="rounded-full shadow shadow-gray-500"
-            alt="profile picture"
-          />
-          <Link
-            className="group w-full rounded-sm border border-gray-200 bg-gray-100 p-1 px-2 hover:border-blue-500 hover:bg-white"
-            href="/post"
-          >
-            <div className="w-full text-sm font-bold text-black/40 group-hover:text-blue-500">
-              Create Post
-            </div>
-          </Link>
-          <Link
-            href="/post?m=image"
-            className="rounded-sm p-1 hover:bg-gray-100 hover:text-blue-500"
-          >
-            <ImageIcon width={25} height={25} />
-          </Link>
-          <Link
-            href="/post?m=image"
-            className="rounded-sm p-1 hover:bg-gray-100 hover:text-blue-500"
-          >
-            <Link2Icon width={25} height={25} />
-          </Link>
-        </div>
+        <CreatePost
+          imageSrc={
+            user?.imageId
+              ? `https://f005.backblazeb2.com/b2api/v1/b2_download_file_by_id?fileId=${user.imageId}`
+              : session.user?.image ?? "/r.svg"
+          }
+        />
         <Posts />
       </main>
       <aside className="w-max-[10rem] hidden h-max flex-col items-center justify-center gap-3 md:col-span-1 md:flex">
@@ -62,9 +36,43 @@ export default async function Home() {
   );
 }
 
+const CreatePost = ({ imageSrc }: { imageSrc: string }) => {
+  return (
+    <div className="mb-3 flex w-full items-center gap-2 rounded-sm border border-background-300/40 bg-background-300 p-2 py-2">
+      <Image
+        width={40}
+        height={40}
+        src={imageSrc}
+        className="rounded-full"
+        alt="profile picture"
+      />
+      <Link
+        className="group w-full rounded-sm border border-background bg-background-100 p-1 px-2 hover:border-primary hover:bg-background-300/90"
+        href="/post"
+      >
+        <div className="w-full text-sm font-bold text-text/40 group-hover:text-primary">
+          Create Post
+        </div>
+      </Link>
+      <Link
+        href="/post?m=image"
+        className="rounded-sm p-1 hover:bg-background-100 hover:text-primary"
+      >
+        <ImageIcon width={25} height={25} />
+      </Link>
+      <Link
+        href="/post?m=image"
+        className="rounded-sm p-1 hover:bg-background-100 hover:text-primary"
+      >
+        <Link2Icon width={25} height={25} />
+      </Link>
+    </div>
+  );
+};
+
 const HomeAside = () => {
   return (
-    <div className="w-full flex-col rounded-sm border border-slate-500 bg-white md:flex">
+    <div className="w-full flex-col rounded-sm border border-background bg-background-100 md:flex">
       <picture className="relative h-7">
         <Image
           fill={true}
@@ -89,13 +97,13 @@ const HomeAside = () => {
       <div className="flex flex-col gap-2 p-2">
         <Link
           href="/post"
-          className="rounded-full border border-background bg-blue-500 py-[0.15rem] text-center text-xs font-bold text-white hover:bg-blue-400"
+          className="rounded-full border border-background bg-primary py-[0.15rem] text-center text-xs font-bold text-background hover:bg-primary/80"
         >
           Create Post
         </Link>
         <Link
           href="/r/create"
-          className="rounded-full border border-blue-500 bg-white py-[0.15rem] text-center text-xs font-bold text-blue-500 hover:bg-gray-100"
+          className="rounded-full border border-primary bg-background-300/10 py-[0.15rem] text-center text-xs font-bold text-primary hover:bg-background-300/90"
         >
           Create Community
         </Link>
@@ -109,8 +117,8 @@ const RedditRecommendations = async ({ userId }: { userId: number }) => {
   if (reddits.length == 0) return;
 
   return (
-    <div className="w-full flex-col items-center justify-center rounded-sm border border-slate-500 bg-white md:flex">
-      <h2 className="base w-full bg-blue-500 px-3 py-1 text-left text-sm font-bold text-white">
+    <div className="w-full flex-col items-center justify-center rounded-sm bg-background-100 md:flex">
+      <h2 className="base w-full bg-primary px-3 py-1 text-left text-sm font-bold text-background">
         Popular Communities
       </h2>
       <ul className="w-full px-2">
@@ -120,7 +128,7 @@ const RedditRecommendations = async ({ userId }: { userId: number }) => {
             className="my-2 flex w-full items-center justify-between gap-2"
           >
             <div className="overlflow-hidden flex w-4/6 items-center justify-start gap-2">
-              <picture className="min-h-fit min-w-fit">
+              <picture className="min-h-fit min-w-fit rounded-full bg-white">
                 <Image
                   loading="lazy"
                   className="rounded-full"

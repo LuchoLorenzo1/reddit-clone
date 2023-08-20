@@ -28,7 +28,7 @@ export default function Dialog<T>(props: dialogProps<T>) {
         <DialogUI.Overlay className="fixed inset-0 bg-black/70 data-[state=open]:animate-overlayShow" />
         <DialogUI.Content
           className={twMerge(
-            "fixed left-1/2 top-1/2 flex w-full max-w-md -translate-x-2/4 -translate-y-2/4 transform flex-col gap-4 rounded bg-white px-5 py-3 focus:outline-none data-[state=open]:animate-contentShow",
+            "fixed left-1/2 top-1/2 flex w-full max-w-md -translate-x-2/4 -translate-y-2/4 transform flex-col gap-4 rounded bg-white focus:outline-none data-[state=open]:animate-contentShow",
             props.modalClassName,
           )}
         >
@@ -37,7 +37,7 @@ export default function Dialog<T>(props: dialogProps<T>) {
             className="focus:shadown-none focus:border-none focus:outline-none active:outline-none"
           >
             <button
-              className="absolute right-[10px] top-[10px] inline-flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-full focus:bg-gray-200 focus:shadow-none "
+              className="absolute right-[10px] top-[10px] inline-flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-full focus:bg-background/80 focus:shadow-none "
               aria-label="Close"
             >
               <Cross2Icon />

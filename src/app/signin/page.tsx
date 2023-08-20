@@ -1,4 +1,5 @@
 "use client";
+
 import { useState } from "react";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -32,7 +33,7 @@ const Page = () => {
 
   return (
     <button
-      className="mt-1 flex flex-row items-center justify-center gap-3 rounded border border-gray-400 bg-white px-5 py-2 text-xl text-gray-600 hover:bg-gray-100"
+      className="mt-1 flex flex-row items-center justify-center gap-3 rounded border border-white bg-background-100 px-5 py-2 text-xl hover:bg-background-100/50"
       onClick={() => HandleGoogleAuth()}
     >
       <GoogleSVG /> sign in with google

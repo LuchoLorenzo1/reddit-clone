@@ -42,9 +42,9 @@ const Posts: FC = () => {
         posts.map((post: Post) => (
           <div
             key={post.id}
-            className="flex max-w-full rounded-sm border border-gray-400 bg-white"
+            className="flex max-w-full rounded-sm border border-background hover:border-background-300"
           >
-            <section className="rounded-l-sm bg-gray-100 px-1 py-2">
+            <section className="rounded-l-sm bg-background-300 px-1 py-2">
               <Vote
                 downvotes={post.downvotes}
                 upvotes={post.upvotes}
@@ -53,7 +53,7 @@ const Posts: FC = () => {
               />
             </section>
 
-            <div className="relative w-full max-w-full rounded-sm px-2 pb-1 hover:text-opacity-100">
+            <div className="relative w-full max-w-full rounded-r-sm bg-background-100 px-2 pb-1 hover:text-opacity-100">
               <PostNavbar post={post} />
               <PostContent post={post} />
               <PostFooter post={post} deletePost={deletePost} />
@@ -80,7 +80,7 @@ const PostContent: FC<PostContentProps> = ({ post }) => {
   return (
     <Link
       href={`/post/${post.id}`}
-      className="w-full max-w-full overflow-hidden bg-red-200"
+      className="w-full max-w-full overflow-hidden"
     >
       {post.imageId ? (
         <div className="relative mb-2 flex flex-col items-center justify-center">
@@ -167,24 +167,20 @@ const PostFooter: FC<PostFooterProps> = ({ post, deletePost }) => {
     <div className="align-center flex gap-2 text-gray-500">
       <Link
         href={`post/${post.id}`}
-        className="align-center group flex w-auto gap-1 rounded p-1 text-sm hover:bg-gray-200 hover:text-gray-700"
+        className="align-center group flex w-auto gap-1 rounded p-1 text-sm hover:bg-background-300 hover:text-text"
       >
         <ChatBubbleIcon
           width={20}
           height={20}
-          className="group-hover:text-gray-700"
+          className="group-hover:text-text"
         />
         <h3 className="text-xs">{`${post.comments} Comments`}</h3>
       </Link>
       <Link
         href={`/post/${post.id}`}
-        className="align-center group flex w-auto gap-1 rounded p-1 text-sm hover:bg-gray-200 hover:text-gray-700"
+        className="align-center group flex w-auto gap-1 rounded p-1 text-sm hover:bg-background-300 hover:text-text"
       >
-        <Share1Icon
-          width={20}
-          height={20}
-          className="group-hover:text-gray-700"
-        />
+        <Share1Icon width={20} height={20} className="group-hover:text-text" />
         <h3 className="text-xs">Share</h3>
       </Link>
       <div>
@@ -193,7 +189,7 @@ const PostFooter: FC<PostFooterProps> = ({ post, deletePost }) => {
           modalProps={{ postId: post.id, deletePost }}
           modalClassName="max-w-xs text-center"
         >
-          <div className="align-center group flex w-auto gap-1 rounded p-1 text-sm hover:bg-gray-200 hover:text-red-500">
+          <div className="align-center group flex w-auto gap-1 rounded p-1 text-sm hover:bg-background-300 hover:text-red-500">
             <TrashIcon
               width={20}
               height={20}

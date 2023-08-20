@@ -60,7 +60,7 @@ const EditReddit: FC<modalProps<{ redditId: number }>> = ({
         ) : (
           <input
             type="submit"
-            className="rounded-full border border-gray-200 bg-blue-500 py-[0.15rem] text-xs font-bold text-white hover:bg-blue-400"
+            className="rounded-full border border-gray-200 bg-primary py-[0.15rem] text-xs font-bold text-background hover:bg-primary/80"
             value="Save changes"
           />
         )}

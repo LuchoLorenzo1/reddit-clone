@@ -90,7 +90,7 @@ const ArrowButton: FC<ArrowButtonProps> = ({ className, onClick }) => {
   return (
     <button
       onClick={onClick}
-      className="group rounded-sm px-1 py-1  hover:bg-gray-200 focus:bg-gray-200 focus:outline-none hover:focus:bg-gray-300"
+      className="group rounded-sm px-1 py-1 hover:bg-background/70 focus:bg-background/60 focus:outline-none hover:focus:bg-background/90"
     >
       <svg
         className={className}

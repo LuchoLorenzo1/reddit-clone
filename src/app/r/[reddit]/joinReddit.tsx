@@ -69,11 +69,11 @@ const joinReddit = ({
     <button
       onClick={() => toggleJoin()}
       className={twMerge(
-        "group min-w-[5rem] rounded-3xl border-2 border-blue-500 py-[0.15rem] text-xs font-bold",
+        "group min-w-[5rem] rounded-3xl border-2 border-primary py-[0.15rem] text-xs font-bold",
         className,
         isMember
-          ? "bg-white text-blue-500 hover:bg-gray-100/50"
-          : "bg-blue-500 text-white hover:border-blue-400 hover:bg-blue-400",
+          ? "bg-background-300 text-text hover:bg-background-100/80"
+          : "bg-primary text-background hover:bg-primary/80",
       )}
     >
       <span className="inline group-hover:hidden">

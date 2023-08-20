@@ -1,6 +1,6 @@
 "use client";
 import { MoonIcon, SunIcon } from "@radix-ui/react-icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const ToggleDarkMode = () => {
   const [dark, setDark] = useState(false);
@@ -17,10 +17,20 @@ const ToggleDarkMode = () => {
     }
   };
 
+  useEffect(() => {
+    if (localStorage.theme && localStorage.theme === "dark") {
+      document.documentElement.classList.add("dark");
+      setDark(true);
+    } else {
+      document.documentElement.classList.remove("dark");
+      setDark(false);
+    }
+  }, []);
+
   return (
     <button
-      className="rounded-md p-1 text-center shadow transition-all duration-75 hover:bg-gray-100"
-      onClick={() => toggleDarkMode()}
+      className="rounded-md p-1 text-center shadow-sm shadow-background transition-all duration-75 hover:bg-background/60"
+      onClick={toggleDarkMode}
     >
       {dark ? (
         <SunIcon width={30} height={30} />

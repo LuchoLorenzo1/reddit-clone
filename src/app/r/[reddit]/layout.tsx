@@ -59,13 +59,13 @@ const Reddit404 = () => {
       <div className="flex gap-5">
         <Link
           href="/r/create"
-          className="rounded-3xl border-2 border-background bg-blue-500 px-5 py-[0.15rem] text-sm font-bold text-white transition-all duration-100 hover:border-blue-500 hover:bg-white hover:text-blue-500 hover:shadow-md"
+          className="rounded-3xl border-2 border-background bg-primary px-5 py-[0.15rem] text-sm font-bold text-white transition-all duration-100 hover:border-blue-500 hover:bg-white hover:text-blue-500 hover:shadow-md"
         >
           Create Community
         </Link>
         <Link
           href="/"
-          className="rounded-3xl border-2 border-background bg-blue-500 px-5 py-[0.15rem] text-sm font-bold text-white transition-all duration-100 hover:border-blue-500 hover:bg-white hover:text-blue-500 hover:shadow-md"
+          className="rounded-3xl border-2 border-background bg-primary px-5 py-[0.15rem] text-sm font-bold text-white transition-all duration-100 hover:border-blue-500 hover:bg-white hover:text-blue-500 hover:shadow-md"
         >
           Go Home
         </Link>
@@ -78,14 +78,14 @@ const RedditNavbar = ({ reddit }: { reddit: Reddit }) => {
   return (
     <section
       className={twMerge(
-        "relative flex w-full max-w-full flex-col items-center bg-white",
+        "relative flex w-full max-w-full flex-col items-center bg-background-300",
         reddit.bannerId ? "h-52" : "h-36",
       )}
     >
       <picture
         className={twMerge(
           "relative mb-5 min-h-[60%] w-screen",
-          reddit.bannerId ? "min-h-[70%]" : "min-h-[55%] bg-blue-500",
+          reddit.bannerId ? "min-h-[70%]" : "min-h-[55%] bg-primary",
         )}
       >
         {reddit.bannerId ? (
@@ -144,8 +144,8 @@ const RedditNavbar = ({ reddit }: { reddit: Reddit }) => {
 
 const AboutReddit = ({ reddit }: { reddit: Reddit }) => {
   return (
-    <aside className="hidden h-max flex-col rounded-sm border border-slate-500 bg-white lg:col-span-1 lg:flex">
-      <h1 className="w-full rounded-tl-sm rounded-tr-sm bg-blue-500 px-2 py-2 text-left text-sm font-bold text-white ">
+    <aside className="hidden h-max flex-col rounded-sm bg-background-100 lg:col-span-1 lg:flex">
+      <h1 className="w-full rounded-tl-sm rounded-tr-sm bg-primary px-2 py-2 text-left text-sm font-bold text-background">
         About community
       </h1>
       <div className="flex flex-col gap-2 p-2">
@@ -156,7 +156,7 @@ const AboutReddit = ({ reddit }: { reddit: Reddit }) => {
         <p className="text-sm text-text/70">Members: {reddit.member_count}</p>
         <Link
           href={`/post?r=${reddit.id}`}
-          className="overflow-hidden overflow-ellipsis rounded-xl bg-blue-500 px-2 py-1 text-center text-sm font-bold text-white hover:bg-blue-400"
+          className="overflow-hidden overflow-ellipsis rounded-xl bg-primary px-2 py-1 text-center text-sm font-bold text-background hover:bg-primary/80"
         >
           Post on r/{reddit.name}
         </Link>

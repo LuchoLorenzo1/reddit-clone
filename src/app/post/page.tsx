@@ -84,20 +84,20 @@ const Page: FC<{}> = () => {
     <Tabs.Root
       value={selected}
       onValueChange={(v) => setSelected(v)}
-      className="mt-3 flex w-full flex-col items-center rounded-sm bg-white shadow shadow-gray-300 md:mx-0 md:w-3/4 md:max-w-2xl"
+      className="mt-3 flex w-full flex-col items-center rounded-sm border border-white bg-background-300 md:mx-0 md:w-3/4 md:max-w-2xl"
       defaultValue="post"
     >
-      <Tabs.List className="grid w-full grid-cols-3 border-b border-gray-200">
+      <Tabs.List className="border-text-200 grid w-full grid-cols-3 border-b">
         <Tabs.Trigger
           value="post"
-          className="align-center flex justify-center gap-2 p-3 font-bold hover:bg-gray-100 focus:outline-none data-[state=active]:border-b-2 data-[state=active]:border-blue-500 data-[state=active]:bg-blue-100/40 data-[state=active]:text-blue-500"
+          className="align-center flex justify-center gap-2 p-3 font-bold hover:bg-primary/10 focus:outline-none data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-primary/40 data-[state=active]:text-primary"
         >
           <FileTextIcon width={30} height={30} />
           Post
         </Tabs.Trigger>
         <Tabs.Trigger
           value="image"
-          className="align-center flex justify-center gap-2 p-3 font-bold hover:bg-gray-100 focus:outline-none data-[state=active]:border-b-2 data-[state=active]:border-blue-500 data-[state=active]:bg-blue-100/40 data-[state=active]:text-blue-500"
+          className="align-center flex justify-center gap-2 p-3 font-bold hover:bg-primary/10 focus:outline-none data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-blue-100/40 data-[state=active]:text-primary"
         >
           <ImageIcon width={30} height={30} />
           Image
@@ -114,20 +114,20 @@ const Page: FC<{}> = () => {
             placeholder="Title"
             maxLength={200}
             required
-            className="h-8 w-full rounded border border-gray-200 px-2"
+            className="h-8 w-full rounded border border-white bg-background-100 px-2"
           />
           <Tabs.Content tabIndex={-1} value="post" className="w-full">
             <textarea
               name="content"
               maxLength={20000}
               placeholder="Text (optional)"
-              className="block max-h-52 min-h-[4rem] w-full rounded border border-gray-200 p-2 text-xs"
+              className="block max-h-52 min-h-[4rem] w-full rounded border border-white bg-background-100 p-2 text-xs"
             />
           </Tabs.Content>
           <Tabs.Content tabIndex={-1} value="image" className="w-full">
             <InputImage
               name="image"
-              className="w-full rounded border border-gray-200 p-3"
+              className="w-full rounded border border-white bg-background-100 p-3"
             />
           </Tabs.Content>
           <PostRedditSelector />
@@ -139,7 +139,7 @@ const Page: FC<{}> = () => {
           <input
             type="submit"
             value="Post"
-            className="w-auto rounded-full bg-blue-500 px-4 py-1 font-bold text-white transition-all duration-100 hover:bg-blue-600"
+            className="w-auto rounded-full bg-primary px-4 py-1 font-bold text-background transition-all duration-100 hover:opacity-50"
           />
         )}
         {error ? (
@@ -173,7 +173,7 @@ const PostRedditSelector = () => {
   return (
     <Select.Root value={value} required name="redditId">
       <Select.Trigger
-        className="flex min-w-[15rem] items-center justify-between gap-2 rounded border border-gray-200 px-3 py-2"
+        className="flex min-w-[15rem] items-center justify-between gap-2 rounded border border-white bg-background-100 px-3 py-2"
         aria-label="Community"
       >
         <Select.Value placeholder={<SelectPlaceholder />} />
@@ -183,7 +183,7 @@ const PostRedditSelector = () => {
       </Select.Trigger>
       <Select.Portal>
         <Select.Content
-          className="max-h-32 w-60 overflow-hidden border border-x-2 border-gray-200 bg-white"
+          className="max-h-32 w-60 overflow-hidden border border-x-2 border-white bg-background-100"
           sideOffset={0}
           position="popper"
         >
@@ -196,7 +196,7 @@ const PostRedditSelector = () => {
                 <SelectItem key={r.redditId} value={r.redditId}>
                   <div className="flex w-full items-center gap-3">
                     <Image
-                      className="rounded-full"
+                      className="rounded-full bg-white"
                       width={25}
                       height={25}
                       src={
@@ -228,7 +228,7 @@ const SelectItem = forwardRef(
   ) => {
     return (
       <Select.Item
-        className="flex items-center justify-start px-3 py-1 hover:bg-gray-100 focus:bg-gray-200 focus:outline-none"
+        className="flex items-center justify-start px-3 py-1 hover:bg-background-300/80 focus:bg-background-300/80 focus:outline-none"
         value={value.toString()}
         ref={forwardedRef}
       >
