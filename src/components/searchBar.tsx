@@ -1,4 +1,5 @@
 "use client";
+
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import {
   Dispatch,
@@ -13,6 +14,7 @@ import Image from "next/image";
 import { RedditInfo } from "@/types/reddit";
 import { twMerge } from "tailwind-merge";
 import * as Dialog from "@radix-ui/react-dialog";
+import Spinner from "./spinner";
 
 interface searchBarProps {}
 
@@ -46,7 +48,7 @@ const SearchBar: FC<searchBarProps> = ({}) => {
     <div
       id="searchBarContainer"
       className={twMerge(
-        "relative box-content flex w-full max-w-md flex-row items-center gap-1 border-2 border-transparent bg-background-100 px-2 py-1 hover:border-text",
+        "relative box-content flex w-full max-w-md flex-row items-center border border-transparent bg-background-100 py-1 hover:border-text sm:gap-1 sm:border-2 md:px-2",
         open && query != "" ? "rounded-t-2xl border-text" : "rounded-full",
       )}
     >
@@ -57,18 +59,18 @@ const SearchBar: FC<searchBarProps> = ({}) => {
         defaultOpen={false}
       >
         <MagnifyingGlassIcon
-          width={30}
-          height={30}
-          className="pl-1 opacity-50"
+          width={25}
+          height={25}
+          className="min-h-[20px] min-w-[20px] pl-1 opacity-50"
         />
         <input
           onChange={onInputChange}
           type="text"
-          className="left-5 w-full rounded-full bg-transparent px-2 text-xs outline-none"
+          className="w-full rounded-full bg-transparent px-1 text-xs outline-none md:left-5 md:px-2"
           placeholder="Search Reddit"
         />
         <Dialog.Portal
-          container={document.getElementById("searchBarContainer")}
+          container={document?.getElementById("searchBarContainer")}
         >
           <Dialog.Content onOpenAutoFocus={(e) => e.preventDefault()}>
             {open && query != "" ? (
@@ -146,3 +148,10 @@ const useDebouncedQuery = () => {
 };
 
 export default SearchBar;
+
+export const loadingSearchBar = () => (
+  <h1 className="relative box-content flex w-full max-w-md flex-row items-center gap-1 rounded-full border-2 border-transparent bg-background-100 px-2 py-1 hover:border-text">
+    {" "}
+    <Spinner className="h-[20px] w-[20px] border-background-300" />{" "}
+  </h1>
+);

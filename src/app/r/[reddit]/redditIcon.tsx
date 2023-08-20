@@ -45,14 +45,14 @@ const EditReddit: FC<modalProps<{ redditId: number }>> = ({
           <h2 className="text-sm">Update icon</h2>
           <InputImage
             name="image"
-            className="w-full rounded border border-gray-200 px-3 py-2"
+            className="w-full rounded border border-white bg-background-100 px-3 py-2"
           />
         </label>
         <label>
           <h2 className="text-sm">Update banner</h2>
           <InputImage
             name="banner"
-            className="w-full rounded border border-gray-200 px-3 py-2"
+            className="w-full rounded border border-white bg-background-100 px-3 py-2"
           />
         </label>
         {loading ? (
@@ -60,7 +60,7 @@ const EditReddit: FC<modalProps<{ redditId: number }>> = ({
         ) : (
           <input
             type="submit"
-            className="rounded-full border border-gray-200 bg-primary py-[0.15rem] text-xs font-bold text-background hover:bg-primary/80"
+            className="rounded-full bg-primary py-[0.15rem] text-xs font-bold text-background hover:bg-primary/80 focus:bg-primary/80 focus:outline-none focus:hover:bg-primary/90"
             value="Save changes"
           />
         )}

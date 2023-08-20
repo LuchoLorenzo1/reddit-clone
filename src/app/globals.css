@@ -20,7 +20,6 @@
     --color-accent-2: "#969BA7";
   }
 
-  /* @media (prefers-color-scheme: dark){} */
   :root[class~="dark"] {
     --color-primary: 215 218 228;
     --color-text: 255 255 255;
@@ -35,6 +34,24 @@
     --color-background-300: 26 26 25;
     --color-accent-1: "#C2C5CC";
     --color-accent-2: "#969BA7";
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-primary: 215 218 228;
+      --color-text: 255 255 255;
+      --color-secondary: 248 119 24;
+      --color-success: 0 200 81;
+      --color-info: 51 181 229;
+      --color-warn: 255 187 51;
+      --color-error: 254 78 78;
+
+      --color-background: 3 3 3;
+      --color-background-100: 39 39 41;
+      --color-background-300: 26 26 25;
+      --color-accent-1: "#C2C5CC";
+      --color-accent-2: "#969BA7";
+    }
   }
 }
 

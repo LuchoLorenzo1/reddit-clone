@@ -16,7 +16,7 @@ const EditPage: FC<editPageProps> = () => {
 
   return (
     <Tabs.Root
-      className="mt-2 w-full border border-white bg-background-300 sm:min-w-[30rem] md:w-3/4 md:max-w-2xl"
+      className="mt-2 w-full bg-background-300 sm:min-w-[30rem] md:w-3/4 md:max-w-2xl"
       defaultValue="edit"
     >
       <Tabs.List className="grid w-full grid-cols-2 border-b border-text">

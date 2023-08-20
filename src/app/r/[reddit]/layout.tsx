@@ -31,7 +31,7 @@ const RedditLayout: FC<RedditProps> = async ({ children, params }) => {
   return (
     <div className="flex w-full flex-col items-center">
       <RedditNavbar reddit={redditData} />
-      <section className="mt-3 grid w-full max-w-3xl grid-cols-3 justify-center gap-5 sm:px-5">
+      <section className="mt-3 grid w-full max-w-4xl grid-cols-3 justify-center gap-5 sm:px-5">
         <main className="col-span-3 lg:col-span-2">
           <RedditDataProvider redditData={redditData}>
             {children}
@@ -79,12 +79,12 @@ const RedditNavbar = ({ reddit }: { reddit: Reddit }) => {
     <section
       className={twMerge(
         "relative flex w-full max-w-full flex-col items-center bg-background-300",
-        reddit.bannerId ? "h-52" : "h-36",
+        reddit.bannerId ? "h-64" : "h-48",
       )}
     >
       <picture
         className={twMerge(
-          "relative mb-5 min-h-[60%] w-screen",
+          "relative mb-5 min-h-[60%] w-full",
           reddit.bannerId ? "min-h-[70%]" : "min-h-[55%] bg-primary",
         )}
       >
@@ -105,30 +105,31 @@ const RedditNavbar = ({ reddit }: { reddit: Reddit }) => {
       </picture>
       <div
         className={twMerge(
-          "absolute flex w-full max-w-3xl items-end justify-start gap-2 px-2 sm:px-5",
+          "absolute flex w-full max-w-4xl items-end justify-start gap-2 px-5",
           reddit.bannerId ? "top-[65%]" : "top-[50%]",
         )}
       >
-        <picture className="relative h-16 w-16 max-w-full rounded-full bg-white">
+        <picture className="relative h-20 w-20 max-w-full rounded-full bg-white">
           <Dialog<{ redditId: number }>
             Modal={EditReddit}
             modalProps={{ redditId: reddit.id }}
+            modalClassName="bg-background-300 p-3"
           >
             <Image
-              className="min-h-[80px] min-w-[80px] rounded-full border-4 border-white"
+              className="max-h-[80px] max-w-[80px] rounded-full border-2 border-white"
               loading="lazy"
               src={
                 !!reddit.imageId
                   ? `https://f005.backblazeb2.com/b2api/v1/b2_download_file_by_id?fileId=${reddit.imageId}`
                   : "/r.svg"
               }
-              width={100}
-              height={100}
+              width={80}
+              height={80}
               alt="profile picture"
             />
           </Dialog>
         </picture>
-        <div className="w-3/4 md:w-full">
+        <div className="relative bottom-2 w-3/4 md:w-full">
           <div className="flex max-w-fit items-center justify-center gap-3">
             <h1 className="overflow-hidden overflow-ellipsis text-2xl font-bold md:text-3xl">
               {reddit.name}

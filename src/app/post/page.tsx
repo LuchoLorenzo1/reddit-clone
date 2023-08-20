@@ -84,7 +84,7 @@ const Page: FC<{}> = () => {
     <Tabs.Root
       value={selected}
       onValueChange={(v) => setSelected(v)}
-      className="mt-3 flex w-full flex-col items-center rounded-sm border border-white bg-background-300 md:mx-0 md:w-3/4 md:max-w-2xl"
+      className="mt-3 flex w-full flex-col items-center rounded-sm bg-background-300 md:mx-0 md:w-3/4 md:max-w-2xl"
       defaultValue="post"
     >
       <Tabs.List className="border-text-200 grid w-full grid-cols-3 border-b">

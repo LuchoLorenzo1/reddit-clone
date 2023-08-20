@@ -33,7 +33,7 @@ const Navigator = () => {
     <Select.Root value={value} defaultValue="/" onValueChange={onValueChange}>
       {" "}
       <Select.Trigger
-        className="focus:border-gray active:border-gray flex min-w-[3rem] items-center justify-between rounded-md px-1 py-2 shadow-sm shadow-background hover:border-gray-200 hover:bg-background md:min-w-[12rem] md:max-w-[12rem]"
+        className="focus:border-gray active:border-gray flex max-h-12 min-w-[3rem] items-center justify-between rounded-md px-1 py-2 shadow-sm shadow-background hover:border-gray-200 hover:bg-background md:min-w-[12rem] md:max-w-[12rem]"
         aria-label="Community"
       >
         <Select.Value />
@@ -54,11 +54,15 @@ const Navigator = () => {
               </Select.Label>
               <hr />
 
-              <SelectItem value="/" name="Home" icon={<Home />} />
+              <SelectItem
+                value="/"
+                name="Home"
+                icon={<Home width={20} height={20} />}
+              />
               <SelectItem
                 value="/post"
                 name="Post"
-                icon={<PlusIcon width={25} height={25} />}
+                icon={<PlusIcon width={20} height={20} />}
               />
 
               {reddits.length > 0 ? (
@@ -103,7 +107,7 @@ const SelectItem = forwardRef(
   ) => {
     return (
       <Select.Item
-        className="flex items-center justify-start p-1 pl-2 hover:bg-background-100 focus:bg-background-100 focus:outline-none"
+        className="flex items-center justify-start p-1 pl-2 hover:bg-background focus:bg-background focus:outline-none"
         value={value}
         ref={forwardedRef}
       >
@@ -113,8 +117,8 @@ const SelectItem = forwardRef(
               {icon ?? (
                 <Image
                   className="rounded-full bg-white"
-                  width={25}
-                  height={25}
+                  width={20}
+                  height={20}
                   src={
                     imageId
                       ? `https://f005.backblazeb2.com/b2api/v1/b2_download_file_by_id?fileId=${imageId}`
@@ -135,12 +139,12 @@ const SelectItem = forwardRef(
   },
 );
 
-const Home = () => {
+const Home = ({ width, height }: { width: number; height: number }) => {
   return (
     <svg
       className="fill-text"
-      height="25px"
-      width="25px"
+      height={height}
+      width={width}
       version="1.1"
       id="Capa_1"
       xmlns="http://www.w3.org/2000/svg"

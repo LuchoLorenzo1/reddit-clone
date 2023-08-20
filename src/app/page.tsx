@@ -15,9 +15,9 @@ export default async function Home() {
   const user = await getUserById(session.user.id);
 
   return (
-    <section className="mt-3 grid w-full max-w-3xl grid-cols-3 justify-center gap-5 sm:px-5">
+    <section className="mt-3 grid w-full max-w-4xl grid-cols-3 justify-center gap-5 sm:px-5">
       <main className="col-span-3 md:col-span-2">
-        <CreatePost
+        <CreatePostBar
           imageSrc={
             user?.imageId
               ? `https://f005.backblazeb2.com/b2api/v1/b2_download_file_by_id?fileId=${user.imageId}`
@@ -36,12 +36,12 @@ export default async function Home() {
   );
 }
 
-const CreatePost = ({ imageSrc }: { imageSrc: string }) => {
+const CreatePostBar = ({ imageSrc }: { imageSrc: string }) => {
   return (
     <div className="mb-3 flex w-full items-center gap-2 rounded-sm border border-background-300/40 bg-background-300 p-2 py-2">
       <Image
-        width={40}
-        height={40}
+        width={35}
+        height={35}
         src={imageSrc}
         className="rounded-full"
         alt="profile picture"

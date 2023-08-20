@@ -2,15 +2,21 @@ import Link from "next/link";
 import Image from "next/image";
 import ToggleDarkMode from "@/components/toggleDarkMode";
 import { twMerge } from "tailwind-merge";
-import { PlusIcon, MagnifyingGlassIcon } from "@radix-ui/react-icons";
+import { PlusIcon } from "@radix-ui/react-icons";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { ReactNode } from "react";
-import Navigator from "./navigator";
+import Navigator from "@/components/navigator";
+import { loadingSearchBar } from "@/components/searchBar";
+
+import dynamic from "next/dynamic";
+const DynamicSearchBar = dynamic(() => import("./searchBar"), {
+  ssr: false,
+  loading: loadingSearchBar,
+});
 
 import { getUserById } from "@/controllers/users";
 import User from "@/types/user";
-import SearchBar from "./searchBar";
 
 const Navbar = async () => {
   const session = await getServerSession(authOptions);
@@ -18,10 +24,10 @@ const Navbar = async () => {
   if (session) user = await getUserById(session.user.id);
 
   return (
-    <nav className="flex items-center justify-center gap-2 border-black bg-background-300 px-4 py-1 sm:gap-3 md:gap-4">
+    <nav className="flex max-h-12 items-center justify-center gap-2 border-black bg-background-300 px-4 py-1 sm:gap-3 md:gap-4">
       <Logo />
       <Navigator />
-      <SearchBar />
+      <DynamicSearchBar />
       <NavLink href="/post">
         <PlusIcon width={30} height={30} />
       </NavLink>
@@ -34,8 +40,8 @@ const Navbar = async () => {
                 ? `https://f005.backblazeb2.com/b2api/v1/b2_download_file_by_id?fileId=${user.imageId}`
                 : session.user?.image ?? "/r.svg"
             }
-            width={40}
-            height={40}
+            width={35}
+            height={35}
             alt="profile picture"
             className="min-w-[1.75rem] rounded-full hover:opacity-50"
           />
@@ -54,8 +60,8 @@ const Logo = () => {
     <Link href="/" className="flex gap-2">
       <Image
         src="/logo.svg"
-        width={40}
-        height={40}
+        width={30}
+        height={30}
         alt="reddit logo"
         className="min-w-[1.75rem]"
       />
