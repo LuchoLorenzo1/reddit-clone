@@ -1,5 +1,5 @@
 "use client";
-import Posts from "@/components/posts";
+import Posts from "@/components/posts/posts";
 import { FC } from "react";
 
 const RedditPage: FC<{}> = () => {

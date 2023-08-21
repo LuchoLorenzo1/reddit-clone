@@ -43,7 +43,7 @@ const Navbar = async () => {
             width={35}
             height={35}
             alt="profile picture"
-            className="min-w-[1.75rem] rounded-full hover:opacity-50"
+            className="min-w-[35px] rounded-full hover:opacity-50"
           />
         </Link>
       ) : (
@@ -60,10 +60,10 @@ const Logo = () => {
     <Link href="/" className="flex gap-2">
       <Image
         src="/logo.svg"
-        width={30}
-        height={30}
+        width={35}
+        height={35}
         alt="reddit logo"
-        className="min-w-[1.75rem]"
+        className="min-w-[35px]"
       />
       <LogoText />
     </Link>

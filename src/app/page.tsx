@@ -1,4 +1,4 @@
-import Posts from "@/components/posts";
+import Posts from "@/components/posts/posts";
 import { getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]/route";
 import Image from "next/image";
