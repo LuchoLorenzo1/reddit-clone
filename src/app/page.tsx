@@ -76,6 +76,7 @@ const HomeAside = () => {
       <picture className="relative h-7">
         <Image
           fill={true}
+          loading="lazy"
           style={{ objectFit: "cover" }}
           src="/home_banner.png"
           alt="Reddit Banner"
@@ -83,7 +84,13 @@ const HomeAside = () => {
       </picture>
       <div className="relative bottom-2 left-2">
         <div className="flex items-end justify-start gap-3">
-          <Image width={40} height={40} src="/toy.png" alt="Reddit Banner" />
+          <Image
+            loading="lazy"
+            width={40}
+            height={40}
+            src="/toy.png"
+            alt="Reddit Banner"
+          />
           <h1 className="w-full rounded-tl-sm rounded-tr-sm text-left text-sm font-bold">
             HOME
           </h1>
@@ -97,7 +104,7 @@ const HomeAside = () => {
       <div className="flex flex-col gap-2 p-2">
         <Link
           href="/post"
-          className="rounded-full border border-background bg-primary py-[0.15rem] text-center text-xs font-bold text-background hover:bg-primary/80"
+          className="rounded-full border border-primary bg-primary py-[0.15rem] text-center text-xs font-bold text-background-300 hover:bg-primary/80"
         >
           Create Post
         </Link>

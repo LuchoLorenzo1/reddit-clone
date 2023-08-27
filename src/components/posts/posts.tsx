@@ -9,6 +9,7 @@ import PostNavbar from "./postNavbar";
 import PostContent from "./postContent";
 import PostFooter from "./postFooter";
 import LoadingPost from "./loadingPost";
+import Link from "next/link";
 
 const SCROLL_SIZE = 5;
 
@@ -41,7 +42,7 @@ const Posts: FC = () => {
             key={post.id}
             className="flex max-w-full rounded-sm border border-background hover:border-background-300"
           >
-            <section className="rounded-l-sm bg-background-300 px-1 py-2">
+            <section className="flex flex-col items-center justify-start rounded-l-sm bg-background-300 px-1 py-2 text-center">
               <Vote
                 downvotes={post.downvotes}
                 upvotes={post.upvotes}
@@ -51,9 +52,18 @@ const Posts: FC = () => {
             </section>
 
             <div className="relative w-full max-w-full rounded-r-sm bg-background-100 px-2 pb-1 hover:text-opacity-100">
-              <PostNavbar post={post} />
-              <PostContent post={post} />
-              <PostFooter post={post} deletePost={deletePost} />
+              <section className="flex w-full max-w-full items-center gap-1 pt-1 text-[0.5rem] text-gray-500 sm:gap-2 sm:text-xs">
+                <PostNavbar post={post} />
+              </section>
+              <Link
+                href={`/post/${post.id}`}
+                className="w-full max-w-full overflow-hidden"
+              >
+                <PostContent post={post} />
+              </Link>
+              <section className="flex items-center gap-2 text-gray-500">
+                <PostFooter post={post} deletePost={deletePost} />
+              </section>
             </div>
           </div>
         ))}
@@ -119,7 +129,7 @@ const useInfiniteScrolling = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data.posts) {
-          if (data.posts.length < SCROLL_SIZE) return setScrollEnd(true);
+          if (data.posts.length < SCROLL_SIZE) setScrollEnd(true);
           setPosts([...posts, ...data.posts]);
           setOffset(offset + SCROLL_SIZE);
         }

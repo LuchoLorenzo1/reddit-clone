@@ -18,42 +18,44 @@ export interface removePostProps {
 
 const PostFooter: FC<PostFooterProps> = ({ post, deletePost }) => {
   return (
-    <div className="align-center flex gap-2 text-gray-500">
+    <>
       <Link
         href={`post/${post.id}`}
-        className="align-center group flex w-auto gap-1 rounded p-1 text-sm hover:bg-background-300 hover:text-text"
+        className="group flex w-auto items-center gap-1 rounded p-1 text-sm hover:bg-background-300 hover:text-text"
       >
         <ChatBubbleIcon
-          width={20}
-          height={20}
+          width={15}
+          height={15}
           className="group-hover:text-text"
         />
         <h3 className="text-xs">{`${post.comments} Comments`}</h3>
       </Link>
-      <Link
-        href={`/post/${post.id}`}
-        className="align-center group flex w-auto gap-1 rounded p-1 text-sm hover:bg-background-300 hover:text-text"
+      <button
+        onClick={() =>
+          navigator.clipboard.writeText(`localhost:3000/post/${post.id}`)
+        }
+        className="group flex w-auto items-center gap-1 rounded p-1 text-sm hover:bg-background-300 hover:text-text"
       >
-        <Share1Icon width={20} height={20} className="group-hover:text-text" />
+        <Share1Icon width={15} height={15} className="group-hover:text-text" />
         <h3 className="text-xs">Share</h3>
-      </Link>
+      </button>
       <div>
         <Dialog<removePostProps>
           Modal={removePost}
           modalProps={{ postId: post.id, deletePost }}
           modalClassName="max-w-xs text-center p-3 bg-background-100"
         >
-          <div className="align-center group flex w-auto gap-1 rounded p-1 text-sm hover:bg-background-300 hover:text-red-500">
+          <div className="group flex w-auto items-center gap-1 rounded p-1 text-sm hover:bg-background-300 hover:text-red-500">
             <TrashIcon
-              width={20}
-              height={20}
+              width={15}
+              height={15}
               className="gray-400 group-hover:text-red-500"
             />
             <h3 className="text-xs">Remove</h3>
           </div>
         </Dialog>
       </div>
-    </div>
+    </>
   );
 };
 

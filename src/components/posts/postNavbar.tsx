@@ -13,7 +13,7 @@ interface PostNavbarProps {
 const PostNavbar: FC<PostNavbarProps> = ({ post }) => {
   const reddit = useRedditData();
   return (
-    <div className="flex w-full max-w-full items-center gap-1 pt-1 text-[0.5rem] text-gray-500 sm:gap-2 sm:text-xs">
+    <>
       {reddit ? (
         ""
       ) : (
@@ -50,7 +50,7 @@ const PostNavbar: FC<PostNavbarProps> = ({ post }) => {
           {timeAgo(post.created_at)}
         </h1>
       </div>
-    </div>
+    </>
   );
 };
 

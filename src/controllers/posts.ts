@@ -2,16 +2,18 @@ import { FieldPacket, ResultSetHeader, RowDataPacket } from "mysql2";
 import pool from "@/database/db";
 import Post, { SubmitPostData } from "@/types/post";
 
-export const getPostById = async (postId: number) => {
+export const getPostById = async (postId: number, userId: number) => {
   const res: [RowDataPacket[], FieldPacket[]] = await pool.query(
-    `SELECT posts.id, title, content, r.name as reddit, u.name as username, upvotes, downvotes, posts.created_at, posts.image_id as imageId, num_comments as comments
+    `SELECT posts.id, title, content, r.name as reddit, u.name as username, upvotes, downvotes, posts.created_at, posts.image_id as imageId, num_comments as comments, v.is_upvote as isUpvote
 	  	FROM posts
 		JOIN reddits r
 			ON posts.reddit_id = r.id
 		JOIN users u
 			ON posts.author_id = u.id
+		LEFT JOIN votes v
+			ON posts.id = v.post_id AND v.user_id = ?
 		WHERE posts.id = ?`,
-    [postId],
+    [userId, postId],
   );
 
   return res[0][0] as Post | undefined;

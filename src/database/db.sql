@@ -56,6 +56,16 @@ CREATE TABLE votes (
 	PRIMARY KEY(user_id, post_id)
 );
 
+CREATE TABLE comments (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	post_id INT NOT NULL,
+	author_id INT NOT NULL,
+	content VARCHAR(10000),
+	created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+	FOREIGN KEY(author_id) REFERENCES users(id) ON DELETE CASCADE,
+	FOREIGN KEY(post_id) REFERENCES posts(id) ON DELETE CASCADE
+);
+
 DELIMITER $$
 CREATE TRIGGER joining_a_reddit AFTER INSERT ON members
 FOR EACH ROW
@@ -99,6 +109,18 @@ BEGIN
 		ELSE
 			UPDATE posts SET upvotes = upvotes - 1 WHERE id = OLD.post_id;
 		END IF;
+END $$
+
+CREATE TRIGGER create_comment AFTER INSERT ON comments
+FOR EACH ROW
+BEGIN
+		UPDATE posts SET num_comments = num_comments + 1 WHERE id = NEW.post_id;
+END $$
+
+CREATE TRIGGER delete_comment AFTER DELETE ON comments
+FOR EACH ROW
+BEGIN
+		UPDATE posts SET num_comments = num_comments - 1 WHERE id = OLD.post_id;
 END $$
 DELIMITER ;
 

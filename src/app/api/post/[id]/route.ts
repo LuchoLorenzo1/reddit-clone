@@ -4,11 +4,14 @@ import { NextResponse } from "next/server";
 import { authOptions } from "../../auth/[...nextauth]/route";
 
 export async function GET(_: Request, { params }: { params: { id: number } }) {
+  const session = await getServerSession(authOptions);
+  if (!session) return NextResponse.json("", { status: 403 });
+
   if (isNaN(params.id))
     return NextResponse.json({ error: "ID is invalid" }, { status: 400 });
 
   try {
-    const post = await getPostById(params.id);
+    const post = await getPostById(params.id, session.user.id);
     if (!post)
       return NextResponse.json({ error: "ID not found" }, { status: 404 });
     return NextResponse.json({ post }, { status: 200 });

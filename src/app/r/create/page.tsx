@@ -57,7 +57,7 @@ const Page: FC<{}> = () => {
     <div className="mx-2 mt-3 flex w-full flex-col items-center md:mx-0">
       <form
         onSubmit={handleSubmit}
-        className="mx-1 flex w-full max-w-2xl flex-col items-center justify-center gap-5 rounded-sm bg-white p-5 shadow-xl shadow-gray-300 md:w-3/4"
+        className="mx-1 flex w-full max-w-2xl flex-col items-center justify-center gap-5 rounded-sm bg-background-300 p-5 md:w-3/4"
       >
         <h1 className="text-start text-xl">Create a community</h1>
         <div className="relative flex w-full">
@@ -70,27 +70,27 @@ const Page: FC<{}> = () => {
             required
             placeholder="name"
             maxLength={21}
-            className="w-full rounded border border-gray-200 py-2 pl-6"
+            className="w-full rounded border border-gray-200 bg-background-100 py-2 pl-6"
           />
         </div>
         <input
           type="text"
           name="description"
           placeholder="description"
-          className="w-full rounded border border-gray-200 px-3 py-2"
+          className="w-full rounded border border-gray-200 bg-background-100 px-3 py-2"
         />
         <label className="flex w-full flex-col gap-2">
           Subreddit Icon
           <InputImage
             name="image"
-            className="w-full rounded border border-gray-200 px-3 py-2"
+            className="w-full rounded border border-gray-200 bg-background-100 px-3 py-2"
           />
         </label>
         <label className="flex w-full flex-col gap-2">
           Subreddit Banner
           <InputImage
             name="banner"
-            className="w-full rounded border border-gray-200 px-3 py-2"
+            className="w-full rounded border border-gray-200 bg-background-100 px-3 py-2"
           />
         </label>
         {loading ? (
@@ -99,7 +99,7 @@ const Page: FC<{}> = () => {
           <input
             type="submit"
             value="Create Community"
-            className="w-auto rounded-full bg-orange-500 p-1 px-5 text-base font-bold text-white transition-all duration-100 hover:bg-orange-600"
+            className="w-auto rounded-full bg-primary p-1 px-5 text-base font-bold text-background hover:bg-primary/80"
           />
         )}
         {error ? (

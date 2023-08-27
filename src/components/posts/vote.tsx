@@ -15,7 +15,7 @@ const Vote: FC<VoteProps> = ({ upvotes, downvotes, isUpvote, postId }) => {
   const [vote, createVote] = useVote(isUpvote, postId);
 
   return (
-    <div className="flex flex-col items-center justify-center text-center">
+    <>
       <ArrowButton
         onClick={() => createVote(1)}
         className={twMerge(
@@ -39,7 +39,7 @@ const Vote: FC<VoteProps> = ({ upvotes, downvotes, isUpvote, postId }) => {
           vote == -1 ? "fill-blue-500 stroke-blue-500" : "",
         )}
       />
-    </div>
+    </>
   );
 };
 
